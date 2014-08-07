@@ -3,12 +3,12 @@
 namespace PHPOrchestra\FrontBundle\Routing;
 
 use PHPOrchestra\BaseBundle\Cache\CacheManagerInterface;
+use PHPOrchestra\ModelBundle\Model\NodeInterface;
 use PHPOrchestra\ModelBundle\Repository\NodeRepository;
 use Symfony\Bundle\FrameworkBundle\Routing\RedirectableUrlMatcher;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RequestContext;
-use Model\PHPOrchestraCMSBundle\Node;
 
 /**
  * Dynamic routing based on url
@@ -79,7 +79,7 @@ class PhpOrchestraUrlMatcher extends RedirectableUrlMatcher
     protected function dynamicMatch($pathinfo)
     {
         $slugs = explode('/', $pathinfo);
-        $nodeId = Node::ROOT_NODE_ID;
+        $nodeId = NodeInterface::ROOT_NODE_ID;
         $nodeFound = false;
         $parameters = array();
 
