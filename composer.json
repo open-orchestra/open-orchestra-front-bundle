@@ -37,6 +37,13 @@
         "itkg/phporchestra-indexation-bundle": "dev-master",
         "itkg/phporchestra-theme-bundle": "dev-master"
     },
+    "require-dev": {
+        "phpunit/phpunit" : "4.0.14",
+        "phake/phake": "*"
+    },
+    "config" : {
+        "bin-dir" : "bin"
+    },
     "autoload": {
         "psr-0": {
             "PHPOrchestra\\FrontBundle": ""
