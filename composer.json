@@ -1,5 +1,5 @@
 {
-    "name": "itkg/phporchestra-cms-bundle",
+    "name": "itkg/phporchestra-front-bundle",
     "license": "MIT",
     "authors": [
         {
@@ -8,10 +8,6 @@
         }
     ],
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/itkg/phporchestra-translation-bundle"
-        },
         {
             "type": "vcs",
             "url": "https://github.com/itkg/phporchestra-model-bundle"
@@ -36,7 +32,6 @@
     "minimum-stability": "dev",
     "require": {
         "itkg/phporchestra-base-bundle": "dev-master",
-        "itkg/phporchestra-translation-bundle": "dev-master",
         "itkg/phporchestra-display-bundle": "dev-master",
         "itkg/phporchestra-model-bundle": "dev-master",
         "itkg/phporchestra-indexation-bundle": "dev-master",
@@ -44,10 +39,7 @@
     },
     "autoload": {
         "psr-0": {
-            "PHPOrchestra\\CMSBundle": "",
-            "PHPOrchestra\\FrontBundle": "",
-            "PHPOrchestra\\BackofficeBundle": "",
-            "PHPOrchestra\\ApiBundle": ""
+            "PHPOrchestra\\FrontBundle": ""
         }
     },
     "target-dir": "PHPOrchestra"
