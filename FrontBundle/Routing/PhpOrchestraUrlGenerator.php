@@ -2,13 +2,13 @@
 
 namespace PHPOrchestra\FrontBundle\Routing;
 
+use PHPOrchestra\ModelBundle\Model\NodeInterface;
 use PHPOrchestra\ModelBundle\Repository\NodeRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
-use Model\PHPOrchestraCMSBundle\Node;
 
 /**
  * Class PhpOrchestraUrlGenerator
@@ -104,7 +104,7 @@ class PhpOrchestraUrlGenerator extends UrlGenerator
     {
         $alias = '';
 
-        if ($nodeId != Node::ROOT_NODE_ID) {
+        if ($nodeId != NodeInterface::ROOT_NODE_ID) {
             $node = $this->nodeRepository->findOneByNodeId($nodeId);
 
             if (isset($node)) {
