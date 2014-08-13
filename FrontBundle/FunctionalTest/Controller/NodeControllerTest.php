@@ -68,7 +68,7 @@ class NodeControllerTest extends WebTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertGreaterThanOrEqual(19, $crawler->filter('a'));
+        $this->assertGreaterThanOrEqual(19, $crawler->filter('a')->count());
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Le bottin mondain")')->count());
 
@@ -101,7 +101,7 @@ class NodeControllerTest extends WebTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertGreaterThanOrEqual(15, $crawler->filter('a'));
+        $this->assertGreaterThanOrEqual(15, $crawler->filter('a')->count());
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Lorem ipsum dolor sit amet")')->count());
 
