@@ -93,7 +93,7 @@ class NodeControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/node/fixture_search');
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("php_orchestra_cms.search_result.no_result_found")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("No result found")')->count());
 
         $form = $crawler->selectButton('Rechercher')->form();
 
