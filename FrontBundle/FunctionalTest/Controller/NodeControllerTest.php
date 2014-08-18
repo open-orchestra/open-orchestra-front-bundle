@@ -105,7 +105,7 @@ class NodeControllerTest extends WebTestCase
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Lorem ipsum dolor sit amet")')->count());
 
-        $this->assertCount(2, $crawler->filter('img'));
+        $this->assertGreaterThanOrEqual(2, $crawler->filter('img')->count());
 
         $link = $crawler->filter('a:contains("Bien vivre en France")')->link();
 
