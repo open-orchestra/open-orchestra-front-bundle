@@ -35,8 +35,7 @@
         "itkg/phporchestra-display-bundle": "dev-master",
         "itkg/phporchestra-model-bundle": "dev-master",
         "itkg/phporchestra-indexation-bundle": "dev-master",
-        "itkg/phporchestra-theme-bundle": "dev-master",
-        "jms/aop-bundle": "1.1.*@dev"
+        "itkg/phporchestra-theme-bundle": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit" : "4.0.14",
