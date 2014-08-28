@@ -1,3 +1,12 @@
 parameters:
-
+    php_orchestra_front.subscriber.dynamic_routing.class: PHPOrchestra\FrontBundle\EventSubscriber\DynamicRoutingSubscriber
+    php_orchestra_front.manager.dynamic_routing.class: PHPOrchestra\FrontBundle\Manager\DynamicRoutingManager
 services:
+    php_orchestra_front.subscriber.dynamic_routing:
+        class: %php_orchestra_front.subscriber.dynamic_routing.class%
+        arguments: [ @php_orchestra_front.manager.dynamic_routing ]
+        tags:
+            - { name: kernel.event_subscriber }
+    php_orchestra_front.manager.dynamic_routing:
+        class: %php_orchestra_front.manager.dynamic_routing.class%
+        arguments: [ @php_orchestra_model.repository.node ]

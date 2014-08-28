@@ -2,8 +2,10 @@
 
 namespace PHPOrchestra\FrontBundle\Controller;
 
-use PHPOrchestra\CMSBundle\Exception\NonExistingDocumentException;
+use PHPOrchestra\FrontBundle\Exception\NonExistingDocumentException;
+use PHPOrchestra\ModelBundle\Model\NodeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 
@@ -27,7 +29,7 @@ class NodeController extends Controller
     {
         $node = $this->get('php_orchestra_model.repository.node')->findOneByNodeId($nodeId);
         if (is_null($node)) {
-            throw new NonExistingDocumentException("Node not found");
+            throw new NonExistingDocumentException();
         }
 
         $response = $this->render(
@@ -44,6 +46,4 @@ class NodeController extends Controller
 
         return $response;
     }
-
 }
- 
