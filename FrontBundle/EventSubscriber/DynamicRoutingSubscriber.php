@@ -2,6 +2,7 @@
 
 namespace PHPOrchestra\FrontBundle\EventSubscriber;
 
+use PHPOrchestra\FrontBundle\Exception\DynamicRoutingUsedException;
 use PHPOrchestra\FrontBundle\Manager\DynamicRoutingManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -38,9 +39,10 @@ class DynamicRoutingSubscriber implements EventSubscriberInterface
         $attributes = $this->dynamicRoutingManager->getRouteParameterFromRequestPathInfo($request->getPathInfo());
 
         $request = $request->duplicate(null, null, $attributes);
-        $request->setMethod('GET');
 
         $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
+//        Change the returned status
+        $event->setException(new DynamicRoutingUsedException());
         $event->setResponse($response);
         $event->stopPropagation();
     }
