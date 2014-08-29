@@ -76,7 +76,7 @@ class NodeControllerTest extends WebTestCase
 
         $client->click($link);
 
-        $this->assertEquals(404, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
     /**
@@ -111,6 +111,6 @@ class NodeControllerTest extends WebTestCase
 
         $client->click($link);
 
-        $this->assertEquals(404, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 }
