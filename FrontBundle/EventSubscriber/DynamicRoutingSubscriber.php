@@ -42,7 +42,7 @@ class DynamicRoutingSubscriber implements EventSubscriberInterface
 
         $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
 //        Change the returned status
-        $event->setException(new DynamicRoutingUsedException());
+        $response->headers->set('X-status-Code', 200);
         $event->setResponse($response);
         $event->stopPropagation();
     }

@@ -21,6 +21,7 @@ class DynamicRoutingSubscriberTest extends \PHPUnit_Framework_TestCase
 
     protected $event;
     protected $kernel;
+    protected $headers;
     protected $request;
     protected $response;
     protected $exception;
@@ -41,7 +42,7 @@ class DynamicRoutingSubscriberTest extends \PHPUnit_Framework_TestCase
             ->getRouteParameterFromRequestPathInfo(Phake::anyParameters())
             ->thenReturn($this->attributes);
 
-        $this->response = Phake::mock('Symfony\Component\HttpFoundation\Response');
+        $this->response = new \Symfony\Component\HttpFoundation\Response('', 200, array());
 
         $this->kernel = Phake::mock('Symfony\Component\HttpKernel\Kernel');
         Phake::when($this->kernel)->handle(Phake::anyParameters())->thenReturn($this->response);
@@ -86,8 +87,9 @@ class DynamicRoutingSubscriberTest extends \PHPUnit_Framework_TestCase
         Phake::verify($this->dynamicRoutingManager)->getRouteParameterFromRequestPathInfo($this->pathInfo);
         Phake::verify($this->request)->duplicate(null, null, $this->attributes);
         Phake::verify($this->kernel)->handle($this->request, HttpKernelInterface::SUB_REQUEST, true);
-        Phake::verify($this->event)->setException(Phake::anyParameters());
         Phake::verify($this->event)->setResponse($this->response);
         Phake::verify($this->event)->stopPropagation();
+        $this->assertTrue($this->response->headers->has('X-Status-Code'));
+        $this->assertSame(200, $this->response->headers->get('X-Status-Code'));
     }
 }
