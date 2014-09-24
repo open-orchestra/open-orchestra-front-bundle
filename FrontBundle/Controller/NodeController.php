@@ -27,7 +27,7 @@ class NodeController extends Controller
      */
     public function showAction($nodeId)
     {
-        $nodes = $this->get('php_orchestra_model.repository.node')->findOneByStatusAndVersion($nodeId);
+        $nodes = $this->get('php_orchestra_model.repository.node')->findWithPublishedAndLastVersion($nodeId);
         $node = $nodes->toArray();
 
         if (is_null($node)) {
