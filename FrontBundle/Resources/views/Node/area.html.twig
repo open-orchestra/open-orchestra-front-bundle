@@ -11,8 +11,8 @@
 {% endfor %}
 {% for blockReference in area.blocks %}
     <div>
-        {# <legend style="background-color:#5D88B3;border:1px solid #000000;">NodeId : {{ blockReference.nodeId }} BlockId : {{ blockReference.blockId}} </legend>#}
-        {% if blockReference.nodeId == 0 %}
+         {#<legend style="background-color:#5D88B3;border:1px solid #000000;">NodeId : {{ blockReference.nodeId }} BlockId : {{ blockReference.blockId}} </legend>#}
+        {% if blockReference.nodeId is sameas(0) %}
             {% set nodeReference = nodeId %}
         {% else %}
             {% set nodeReference = blockReference.nodeId %}

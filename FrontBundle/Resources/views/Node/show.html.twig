@@ -27,9 +27,9 @@
         <div id="orchestra">
             {#<span>datetime : {{ datetime }}</span>#}
             <div id="orchestra-main">
-        {% for area in node.areas %}
-            {% include "PHPOrchestraFrontBundle:Node:area.html.twig" with {"area": area, 'nodeId': node.nodeId } only %}
-        {% endfor %}
+                {% for area in node.areas %}
+                    {% include "PHPOrchestraFrontBundle:Node:area.html.twig" with {"area": area, 'nodeId': node.nodeId } only %}
+                {% endfor %}
             </div>
         </div>
         

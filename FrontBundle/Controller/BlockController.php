@@ -26,7 +26,7 @@ class BlockController extends Controller
      */
     public function showAction($nodeId, $blockId)
     {
-        $node = $this->get('php_orchestra_model.repository.node')->findOneByNodeId($nodeId);
+        $node = $this->get('php_orchestra_model.repository.node')->findWithPublishedAndLastVersion($nodeId);
 
         if (null !== ($block = $node->getBlocks()->get($blockId))) {
             return $this->get('php_orchestra_display.display_block_manager')
