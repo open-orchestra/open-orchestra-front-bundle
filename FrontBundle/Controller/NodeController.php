@@ -27,8 +27,7 @@ class NodeController extends Controller
      */
     public function showAction($nodeId)
     {
-        $nodes = $this->get('php_orchestra_model.repository.node')->findWithPublishedAndLastVersion($nodeId);
-        $node = $nodes->toArray();
+        $node = $this->get('php_orchestra_model.repository.node')->findWithPublishedAndLastVersion($nodeId);
 
         if (is_null($node)) {
             throw new NonExistingDocumentException();
@@ -37,7 +36,7 @@ class NodeController extends Controller
         $response = $this->render(
             'PHPOrchestraFrontBundle:Node:show.html.twig',
             array(
-                'node' => array_shift($node),
+                'node' => $node,
                 'datetime' => time()
             )
         );
