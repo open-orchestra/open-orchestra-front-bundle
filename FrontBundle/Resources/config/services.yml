@@ -9,4 +9,6 @@ services:
             - { name: kernel.event_subscriber }
     php_orchestra_front.manager.dynamic_routing:
         class: %php_orchestra_front.manager.dynamic_routing.class%
-        arguments: [ @php_orchestra_model.repository.node ]
+        arguments:
+            - @php_orchestra_model.repository.node
+            - @php_orchestra_display.manager.site

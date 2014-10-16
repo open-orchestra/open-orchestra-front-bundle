@@ -2,6 +2,7 @@
 
 namespace PHPOrchestra\FrontBundle\Manager;
 
+use PHPOrchestra\DisplayBundle\Manager\SiteManager;
 use PHPOrchestra\ModelBundle\Model\NodeInterface;
 use PHPOrchestra\ModelBundle\Repository\NodeRepository;
 
@@ -11,13 +12,16 @@ use PHPOrchestra\ModelBundle\Repository\NodeRepository;
 class DynamicRoutingManager
 {
     protected $nodeRepository;
+    protected $siteManager;
 
     /**
      * @param NodeRepository $nodeRepository
+     * @param SiteManager    $siteManager
      */
-    public function __construct(NodeRepository $nodeRepository)
+    public function __construct(NodeRepository $nodeRepository, SiteManager $siteManager)
     {
         $this->nodeRepository = $nodeRepository;
+        $this->siteManager = $siteManager;
     }
 
     /**
@@ -64,7 +68,8 @@ class DynamicRoutingManager
     {
         $criteria = array(
             'parentId' => (string) $parentId,
-            'alias' => $slug
+            'alias' => $slug,
+            'siteId' => $this->siteManager->getSiteId(),
         );
 
         return $this->nodeRepository->findOneBy($criteria);

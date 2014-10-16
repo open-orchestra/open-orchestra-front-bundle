@@ -16,12 +16,17 @@ class DynamicRoutingManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $manager;
 
+    protected $siteManager;
     protected $repository;
+    protected $siteId = "1";
     protected $nodeId;
     protected $node;
 
     public function setUp()
     {
+        $this->siteManager = Phake::mock('PHPOrchestra\DisplayBundle\Manager\SiteManager');
+        Phake::when($this->siteManager)->getSiteId()->thenReturn($this->siteId);
+
         $this->nodeId = 'nodeId';
         $this->node = Phake::mock('PHPOrchestra\ModelBundle\Model\NodeInterface');
         Phake::when($this->node)->getNodeId()->thenReturn($this->nodeId);
@@ -29,14 +34,16 @@ class DynamicRoutingManagerTest extends \PHPUnit_Framework_TestCase
         $this->repository = Phake::mock('PHPOrchestra\ModelBundle\Repository\NodeRepository');
         Phake::when($this->repository)->findOneBy(array(
             'parentId' => NodeInterface::ROOT_NODE_ID,
-            'alias' => 'node'
+            'alias' => 'node',
+            'siteId' => $this->siteId
         ))->thenReturn($this->node);
         Phake::when($this->repository)->findOneBy(array(
             'parentId' => 'parent',
-            'alias' => 'node'
+            'alias' => 'node',
+            'siteId' => $this->siteId
         ))->thenReturn($this->node);
 
-        $this->manager = new DynamicRoutingManager($this->repository);
+        $this->manager = new DynamicRoutingManager($this->repository, $this->siteManager);
     }
 
     /**
