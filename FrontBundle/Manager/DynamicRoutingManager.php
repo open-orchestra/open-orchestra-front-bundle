@@ -69,7 +69,7 @@ class DynamicRoutingManager
         $criteria = array(
             'parentId' => (string) $parentId,
             'alias' => $slug,
-            'siteId' => $this->siteManager->getSiteId(),
+            'siteId' => $this->siteManager->getCurrentSiteId(),
         );
 
         return $this->nodeRepository->findOneBy($criteria);

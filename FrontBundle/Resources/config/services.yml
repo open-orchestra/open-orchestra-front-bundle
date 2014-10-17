@@ -12,3 +12,5 @@ services:
         arguments:
             - @php_orchestra_model.repository.node
             - @php_orchestra_display.manager.site
+    php_orchestra.manager.current_site:
+        alias: php_orchestra_display.manager.site

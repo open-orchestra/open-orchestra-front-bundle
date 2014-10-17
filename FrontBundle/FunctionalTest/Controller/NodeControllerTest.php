@@ -15,6 +15,7 @@ class NodeControllerTest extends WebTestCase
     public function testShowActionFixtureHome()
     {
         $client = static::createClient();
+        $client->setServerParameter('SYMFONY__SITE', '1');
 
         $crawler = $client->request('GET', '');
 

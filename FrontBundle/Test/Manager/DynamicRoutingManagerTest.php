@@ -25,7 +25,7 @@ class DynamicRoutingManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->siteManager = Phake::mock('PHPOrchestra\DisplayBundle\Manager\SiteManager');
-        Phake::when($this->siteManager)->getSiteId()->thenReturn($this->siteId);
+        Phake::when($this->siteManager)->getCurrentSiteId()->thenReturn($this->siteId);
 
         $this->nodeId = 'nodeId';
         $this->node = Phake::mock('PHPOrchestra\ModelBundle\Model\NodeInterface');
