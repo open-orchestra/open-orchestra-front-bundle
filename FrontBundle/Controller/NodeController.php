@@ -27,7 +27,8 @@ class NodeController extends Controller
      */
     public function showAction($nodeId)
     {
-        $node = $this->get('php_orchestra_model.repository.node')->findWithPublishedAndLastVersion($nodeId);
+        $node = $this->get('php_orchestra_model.repository.node')
+            ->findWithPublishedAndLastVersionAndSiteId($nodeId);
 
         if (is_null($node)) {
             throw new NonExistingDocumentException();

@@ -15,10 +15,26 @@ class NodeControllerTest extends WebTestCase
     public function testShowActionFixtureHome()
     {
         $client = static::createClient();
+        $client->setServerParameter('SYMFONY__SITE', '1');
 
         $crawler = $client->request('GET', '');
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")')->count());
+        $this->assertEquals(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")')->count());
+    }
+
+    /**
+     * Test fixture_home
+     */
+    public function testShowActionFixtureHomeSecondSite()
+    {
+        $client = static::createClient();
+        $client->setServerParameter('SYMFONY__SITE', '2');
+
+        $crawler = $client->request('GET', '');
+
+        $this->assertEquals(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")')->count());
     }
 
     /**
