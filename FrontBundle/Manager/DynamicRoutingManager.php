@@ -2,7 +2,7 @@
 
 namespace PHPOrchestra\FrontBundle\Manager;
 
-use PHPOrchestra\DisplayBundle\Manager\SiteManager;
+use PHPOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 use PHPOrchestra\ModelBundle\Model\NodeInterface;
 use PHPOrchestra\ModelBundle\Repository\NodeRepository;
 
@@ -15,10 +15,10 @@ class DynamicRoutingManager
     protected $siteManager;
 
     /**
-     * @param NodeRepository $nodeRepository
-     * @param SiteManager    $siteManager
+     * @param NodeRepository         $nodeRepository
+     * @param CurrentSiteIdInterface $siteManager
      */
-    public function __construct(NodeRepository $nodeRepository, SiteManager $siteManager)
+    public function __construct(NodeRepository $nodeRepository, CurrentSiteIdInterface $siteManager)
     {
         $this->nodeRepository = $nodeRepository;
         $this->siteManager = $siteManager;
