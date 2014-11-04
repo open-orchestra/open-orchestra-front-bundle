@@ -32,6 +32,8 @@ class NodeController extends Controller
 
         if (is_null($node)) {
             throw new NonExistingDocumentException();
+        } elseif (!is_null($node->getRole()) && !$this->get('security.context')->isGranted($node->getRole())) {
+            return $this->redirect($this->get('request')->getBaseUrl());
         }
 
         $response = $this->render(
