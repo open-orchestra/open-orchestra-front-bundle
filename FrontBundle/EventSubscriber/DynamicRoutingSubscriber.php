@@ -40,7 +40,7 @@ class DynamicRoutingSubscriber implements EventSubscriberInterface
 
         $request = $request->duplicate(null, null, $attributes);
 
-        $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
+        $response = $event->getKernel()->handle($request, HttpKernelInterface::MASTER_REQUEST, true);
 //        Change the returned status
         $response->headers->set('X-status-Code', 200);
         $event->setResponse($response);
