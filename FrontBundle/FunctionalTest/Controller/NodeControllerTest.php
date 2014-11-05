@@ -49,6 +49,12 @@ class NodeControllerTest extends WebTestCase
         $client = static::createClient();
         $client->setServerParameter('SYMFONY__SITE', '1');
 
+        $crawler = $client->request('GET', '');
+        $form = $crawler->selectButton('Login')->form();
+        $form['_username'] = 'nicolas';
+        $form['_password'] = 'nicolas';
+        $crawler = $client->submit($form);
+
         $crawler = $client->request('GET', '/node/fixture_full');
 
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Qui sommes-nous?")')->count());
@@ -75,6 +81,12 @@ class NodeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->setServerParameter('SYMFONY__SITE', '1');
+
+        $crawler = $client->request('GET', '');
+        $form = $crawler->selectButton('Login')->form();
+        $form['_username'] = 'nicolas';
+        $form['_password'] = 'nicolas';
+        $crawler = $client->submit($form);
 
         $crawler = $client->request('GET', '/node/fixture_full');
 
