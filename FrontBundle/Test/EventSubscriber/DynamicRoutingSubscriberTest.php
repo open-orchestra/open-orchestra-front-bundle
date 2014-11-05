@@ -86,7 +86,7 @@ class DynamicRoutingSubscriberTest extends \PHPUnit_Framework_TestCase
         Phake::verify($this->event)->getRequest();
         Phake::verify($this->dynamicRoutingManager)->getRouteParameterFromRequestPathInfo($this->pathInfo);
         Phake::verify($this->request)->duplicate(null, null, $this->attributes);
-        Phake::verify($this->kernel)->handle($this->request, HttpKernelInterface::SUB_REQUEST, true);
+        Phake::verify($this->kernel)->handle($this->request, HttpKernelInterface::MASTER_REQUEST, true);
         Phake::verify($this->event)->setResponse($this->response);
         Phake::verify($this->event)->stopPropagation();
         $this->assertTrue($this->response->headers->has('X-Status-Code'));
