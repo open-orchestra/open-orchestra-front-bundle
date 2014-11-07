@@ -7,14 +7,15 @@
 <html>
     <head>
         <title>{% block title %}{{ node.name }}{% endblock %}</title>
-        {% block stylesheets %}
-            {{ phpOrchestraCss(node.theme) }}
-        {% endblock %}
-        {% stylesheets
-            '@PHPOrchestraFrontBundle/Resources/public/css/jquery-ui.css'
+        {% stylesheets 
+            '@PHPOrchestraFrontBundle/Resources/public/css/jquery-ui.css' 
         %}
             <link rel="stylesheet" href="{{ asset_url }}"/>
         {% endstylesheets %}
+        {% block stylesheets %}
+            {{ phpOrchestraCss(node.theme) }}
+        {% endblock %}
+
         {% javascripts
             '@PHPOrchestraFrontBundle/Resources/public/js/libs/jquery-2.0.2.min.js'
             '@PHPOrchestraFrontBundle/Resources/public/js/libs/jquery-ui-1.10.3.min.js'
