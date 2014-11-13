@@ -33,7 +33,7 @@ class BlockController extends Controller
             $node = $this->get('php_orchestra_model.repository.node')->find($decryptedToken);
         } else {
             $node = $this->get('php_orchestra_model.repository.node')
-                ->findWithPublishedAndLastVersionAndSiteId($nodeId);
+                ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($nodeId, $request->getLocale());
         }
 
         if (null !== ($block = $node->getBlocks()->get($blockId))) {
