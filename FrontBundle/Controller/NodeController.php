@@ -17,7 +17,8 @@ class NodeController extends Controller
     /**
      * Render Node
      *
-     * @param int $nodeId
+     * @param Request $request
+     * @param int     $nodeId
      *
      * @Config\Route("/node/{nodeId}", name="php_orchestra_front_node")
      * @Config\Method({"GET"})
@@ -25,10 +26,10 @@ class NodeController extends Controller
      * @throws NonExistingDocumentException
      * @return Response
      */
-    public function showAction($nodeId)
+    public function showAction(Request $request, $nodeId)
     {
         $node = $this->get('php_orchestra_model.repository.node')
-            ->findWithPublishedAndLastVersionAndSiteId($nodeId);
+            ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($nodeId, $request->getLocale());
 
         if (is_null($node)) {
             throw new NonExistingDocumentException();

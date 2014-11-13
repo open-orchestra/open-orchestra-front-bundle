@@ -5,6 +5,7 @@ namespace PHPOrchestra\FrontBundle\Manager;
 use PHPOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 use PHPOrchestra\ModelBundle\Model\NodeInterface;
 use PHPOrchestra\ModelBundle\Repository\NodeRepository;
+use PHPOrchestra\ModelBundle\Repository\SiteRepository;
 
 /**
  * Class DynamicRoutingManager
@@ -12,15 +13,18 @@ use PHPOrchestra\ModelBundle\Repository\NodeRepository;
 class DynamicRoutingManager
 {
     protected $nodeRepository;
+    protected $siteRepository;
     protected $siteManager;
 
     /**
      * @param NodeRepository         $nodeRepository
      * @param CurrentSiteIdInterface $siteManager
+     * @param SiteRepository         $siteRepository
      */
-    public function __construct(NodeRepository $nodeRepository, CurrentSiteIdInterface $siteManager)
+    public function __construct(NodeRepository $nodeRepository, CurrentSiteIdInterface $siteManager, SiteRepository $siteRepository)
     {
         $this->nodeRepository = $nodeRepository;
+        $this->siteRepository = $siteRepository;
         $this->siteManager = $siteManager;
     }
 
@@ -40,20 +44,27 @@ class DynamicRoutingManager
         $nodeFound = false;
         $parameters = $slugs;
 
+        $locale = $this->siteManager->getCurrentSiteDefaultLanguage();
         foreach ($slugs as $position => $slug) {
-            $node = $this->getNode($slug, $nodeId);
-            if ($node) {
-                $nodeId = $node->getNodeId();
-                $nodeFound = true;
+            if (1 == $position && in_array($slug, $this->findLanguagesAccepted())) {
+                $locale = $slug;
                 $parameters = array_slice($slugs, $position);
-            } elseif ($nodeFound) {
-                break;
+            } else {
+                $node = $this->getNode($slug, $nodeId);
+                if ($node) {
+                    $nodeId = $node->getNodeId();
+                    $nodeFound = true;
+                    $parameters = array_slice($slugs, $position);
+                } elseif ($nodeFound) {
+                    break;
+                }
             }
         }
 
         return array(
             "_route" => "php_orchestra_front_node",
             "_controller" => 'PHPOrchestra\FrontBundle\Controller\NodeController::showAction',
+            "_locale" => $locale,
             "nodeId" => $nodeId,
             "module_parameters" => $parameters
         );
@@ -73,5 +84,12 @@ class DynamicRoutingManager
         );
 
         return $this->nodeRepository->findOneBy($criteria);
+    }
+
+    protected function findLanguagesAccepted()
+    {
+        $site = $this->siteRepository->findOneBySiteId($this->siteManager->getCurrentSiteId());
+
+        return $site->getLanguages();
     }
 }
