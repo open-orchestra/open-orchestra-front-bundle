@@ -28,17 +28,20 @@ class BlockController extends Controller
      */
     public function showAction(Request $request, $nodeId, $blockId)
     {
+        $newNodeId = null;
         if ($token = $request->get('token')) {
             $decryptedToken = $this->get('php_orchestra_base.manager.encryption')->decrypt($token);
             $node = $this->get('php_orchestra_model.repository.node')->find($decryptedToken);
-        } else {
+            $newNodeId = $node->getNodeId();
+        }
+        if (is_null($newNodeId) || $newNodeId != $nodeId) {
             $node = $this->get('php_orchestra_model.repository.node')
                 ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($nodeId, $request->getLocale());
         }
 
         if (null !== ($block = $node->getBlocks()->get($blockId))) {
             return $this->get('php_orchestra_display.display_block_manager')
-                ->show($node->getBlocks()->get($blockId));
+                ->show($block);
         }
 
         throw new NotFoundHttpException();
