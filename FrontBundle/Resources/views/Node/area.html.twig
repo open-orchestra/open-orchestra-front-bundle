@@ -11,7 +11,7 @@
             {% else %}
                 {% set nodeReference = blockReference.nodeId %}
             {% endif %}
-            {% set queryParams = app.request.query.all|merge({'nodeId': nodeReference, 'blockId': blockReference.blockId }) %}
+            {% set queryParams = app.request.query.all|merge({'module_parameters': app.request.attributes.get('module_parameters')})|merge({'nodeId': nodeReference, 'blockId': blockReference.blockId }) %}
             {{ render_esi(url('php_orchestra_front_block', queryParams)) }}
         </div>
     {% endfor %}
