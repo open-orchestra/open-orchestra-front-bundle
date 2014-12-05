@@ -11,9 +11,10 @@ php:
 
 before_install:
   - phpenv config-add .travis.php.ini
+  - composer self-update
 
 install:
-  - composer install
+  - composer install --prefer-dist --no-progress
 
 script: ./bin/phpunit
 
