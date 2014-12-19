@@ -4,8 +4,8 @@ namespace PHPOrchestra\FrontBundle\Manager;
 
 use PHPOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 use PHPOrchestra\ModelInterface\Model\NodeInterface;
-use PHPOrchestra\ModelBundle\Repository\NodeRepository;
-use PHPOrchestra\ModelBundle\Repository\SiteRepository;
+use PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
+use PHPOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
 
 /**
  * Class DynamicRoutingManager
@@ -17,11 +17,11 @@ class DynamicRoutingManager
     protected $siteManager;
 
     /**
-     * @param NodeRepository         $nodeRepository
-     * @param CurrentSiteIdInterface $siteManager
-     * @param SiteRepository         $siteRepository
+     * @param NodeRepositoryInterface $nodeRepository
+     * @param CurrentSiteIdInterface  $siteManager
+     * @param SiteRepositoryInterface $siteRepository
      */
-    public function __construct(NodeRepository $nodeRepository, CurrentSiteIdInterface $siteManager, SiteRepository $siteRepository)
+    public function __construct(NodeRepositoryInterface $nodeRepository, CurrentSiteIdInterface $siteManager, SiteRepositoryInterface $siteRepository)
     {
         $this->nodeRepository = $nodeRepository;
         $this->siteRepository = $siteRepository;
@@ -71,19 +71,16 @@ class DynamicRoutingManager
     }
 
     /**
-     * @param $slug
-     * @param $parentId
+     * @param string $slug
+     * @param string $parentId
+     *
      * @return mixed
      */
     protected function getNode($slug, $parentId)
     {
-        $criteria = array(
-            'parentId' => (string) $parentId,
-            'alias' => $slug,
-            'siteId' => $this->siteManager->getCurrentSiteId(),
-        );
+        $siteId = $this->siteManager->getCurrentSiteId();
 
-        return $this->nodeRepository->findOneBy($criteria);
+        return $this->nodeRepository->findOneByParendIdAndAliasAndSiteId((string) $parentId, $slug, $siteId);
     }
 
     protected function findLanguagesAccepted()
