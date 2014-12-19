@@ -3,7 +3,7 @@
 namespace PHPOrchestra\FrontBundle\Controller;
 
 use PHPOrchestra\FrontBundle\Exception\NonExistingDocumentException;
-use PHPOrchestra\ModelBundle\Model\NodeInterface;
+use PHPOrchestra\ModelInterface\Model\NodeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
