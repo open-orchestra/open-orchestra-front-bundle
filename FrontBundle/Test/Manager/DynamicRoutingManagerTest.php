@@ -33,7 +33,7 @@ class DynamicRoutingManagerTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->site)->getDefaultLanguage()->thenReturn($this->defaultLanguage);
         Phake::when($this->site)->getLanguages()->thenReturn($this->languages);
 
-        $this->siteRepository = Phake::mock('PHPOrchestra\ModelBundle\Repository\SiteRepository');
+        $this->siteRepository = Phake::mock('PHPOrchestra\ModelInterface\Repository\SiteRepositoryInterface');
         Phake::when($this->siteRepository)->findOneBySiteId(Phake::anyParameters())->thenReturn($this->site);
 
         $this->siteManager = Phake::mock('PHPOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
@@ -44,17 +44,10 @@ class DynamicRoutingManagerTest extends \PHPUnit_Framework_TestCase
         $this->node = Phake::mock('PHPOrchestra\ModelInterface\Model\NodeInterface');
         Phake::when($this->node)->getNodeId()->thenReturn($this->nodeId);
 
-        $this->repository = Phake::mock('PHPOrchestra\ModelBundle\Repository\NodeRepository');
-        Phake::when($this->repository)->findOneBy(array(
-            'parentId' => NodeInterface::ROOT_NODE_ID,
-            'alias' => 'node',
-            'siteId' => $this->siteId
-        ))->thenReturn($this->node);
-        Phake::when($this->repository)->findOneBy(array(
-            'parentId' => 'parent',
-            'alias' => 'node',
-            'siteId' => $this->siteId
-        ))->thenReturn($this->node);
+        $this->repository = Phake::mock('PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface');
+        Phake::when($this->repository)->findOneByParendIdAndAliasAndSiteId(NodeInterface::ROOT_NODE_ID, 'node', $this->siteId)
+            ->thenReturn($this->node);
+        Phake::when($this->repository)->findOneByParendIdAndAliasAndSiteId('parent', 'node', $this->siteId)->thenReturn($this->node);
 
         $this->manager = new DynamicRoutingManager($this->repository, $this->siteManager, $this->siteRepository);
     }
