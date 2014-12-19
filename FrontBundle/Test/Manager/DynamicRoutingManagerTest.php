@@ -4,7 +4,7 @@ namespace PHPOrchestra\FrontBundle\Test\Manager;
 
 use Phake;
 use PHPOrchestra\FrontBundle\Manager\DynamicRoutingManager;
-use PHPOrchestra\ModelBundle\Model\NodeInterface;
+use PHPOrchestra\ModelInterface\Model\NodeInterface;
 
 /**
  * Class DynamicRoutingManagerTest
@@ -29,7 +29,7 @@ class DynamicRoutingManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->languages = array('en', 'fr');
-        $this->site = Phake::mock('PHPOrchestra\ModelBundle\Model\SiteInterface');
+        $this->site = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteInterface');
         Phake::when($this->site)->getDefaultLanguage()->thenReturn($this->defaultLanguage);
         Phake::when($this->site)->getLanguages()->thenReturn($this->languages);
 
@@ -41,7 +41,7 @@ class DynamicRoutingManagerTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->siteManager)->getCurrentSiteDefaultLanguage()->thenReturn($this->defaultLanguage);
 
         $this->nodeId = 'nodeId';
-        $this->node = Phake::mock('PHPOrchestra\ModelBundle\Model\NodeInterface');
+        $this->node = Phake::mock('PHPOrchestra\ModelInterface\Model\NodeInterface');
         Phake::when($this->node)->getNodeId()->thenReturn($this->nodeId);
 
         $this->repository = Phake::mock('PHPOrchestra\ModelBundle\Repository\NodeRepository');
