@@ -14,6 +14,10 @@
         },
         {
             "type": "vcs",
+            "url": "https://github.com/itkg/phporchestra-media-bundle"
+        },
+        {
+            "type": "vcs",
             "url": "https://github.com/itkg/phporchestra-theme-bundle"
         },
         {
@@ -33,11 +37,12 @@
     "require": {
         "itkg/phporchestra-base-bundle": "dev-master",
         "itkg/phporchestra-display-bundle": "dev-master",
-        "itkg/phporchestra-model-bundle": "dev-master",
+        "itkg/phporchestra-media-bundle": "dev-master",
         "itkg/phporchestra-indexation-bundle": "dev-master",
         "itkg/phporchestra-theme-bundle": "dev-master"
     },
     "require-dev": {
+        "itkg/phporchestra-model-bundle": "dev-master",
         "phpunit/phpunit" : "4.0.14",
         "scrutinizer/ocular": "1.1.1",
         "phake/phake": "*"
