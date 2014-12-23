@@ -14,6 +14,10 @@
         },
         {
             "type": "vcs",
+            "url": "https://github.com/itkg/phporchestra-model-interface"
+        },
+        {
+            "type": "vcs",
             "url": "https://github.com/itkg/phporchestra-media-bundle"
         },
         {
@@ -39,6 +43,7 @@
         "itkg/phporchestra-display-bundle": "dev-master",
         "itkg/phporchestra-media-bundle": "dev-master",
         "itkg/phporchestra-indexation-bundle": "dev-master",
+        "itkg/phporchestra-model-interface": "dev-master",
         "itkg/phporchestra-theme-bundle": "dev-master"
     },
     "require-dev": {
