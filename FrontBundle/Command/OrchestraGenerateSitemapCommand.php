@@ -65,11 +65,12 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
         $nodes = $this->getSitemapNodesFromSite($site);
         $filename = 'sitemap.' . $site->getDomain() . '.xml';
 
-        $encoders = array(new XmlEncoder(), new JsonEncoder());
+        $encoders = array(new XmlEncoder('urlset'), new JsonEncoder());
         $normalizers = array(new GetSetMethodNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
- 
-        file_put_contents('web/' . $filename, $serializer->serialize($nodes, 'xml'));
+        $map['url'] = $nodes;
+        
+        file_put_contents('web/' . $filename, $serializer->serialize($map, 'xml'));
         $output->writeln("<comment>-> " . $filename . " generated</comment>\n");
 
         return true;
