@@ -21,9 +21,9 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('orchestra:sitemap:generate')
-            ->setDescription('Generate sitemaps')
-            ->addOption('siteId', null, InputOption::VALUE_REQUIRED, 'If set, will only generate sitemap for this site');
+            ->setName('orchestra:sitemaps:generate')
+            ->setDescription('Generate all sitemaps')
+            ->addOption('siteId', null, InputOption::VALUE_REQUIRED, 'If set, will generate sitemap only for this site');
     }
 
     /**
