@@ -17,13 +17,15 @@ use Symfony\Component\Serializer\Serializer;
 class SitemapManager
 {
     protected $nodeRepository;
+    protected $router;
 
     /**
      * @param NodeRepository $nodeRepository
      */
-    public function __construct(NodeRepository $nodeRepository)
+    public function __construct(NodeRepository $nodeRepository, $router)
     {
         $this->nodeRepository = $nodeRepository;
+        $this->router = $router;
     }
 
     /**
@@ -68,7 +70,7 @@ class SitemapManager
                     $lastmod = $lastmod->format('Y-m-d');
 
                 $nodes[] = array(
-                    'loc' => $site->getDomain() . '/' . $this->getPath($node),
+                    'loc' => $site->getDomain() . $this->router->generate($node->getNodeId()),
                     'lastmod' => $lastmod,
                     'changefreq' => $node->getSitemapChangefreq(),
                     'priority' => $node->getSitemapPriority()
@@ -77,28 +79,5 @@ class SitemapManager
         }
 
         return $nodes;
-    }
-
-    /**
-     * Recursive generation of $node Path
-     * 
-     * @param NodeInterface $node
-     * @param string        $path
-     */
-    protected function getPath(NodeInterface $node, $path = array())
-    {
-        if (NodeInterface::ROOT_NODE_ID == $node->getNodeId()) {
-            return implode('/', array_reverse($path));
-        } else {
-            $path[] = $node->getAlias();
-            $node = $this->nodeRepository
-               // ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($node->getParentId(), $node->getLanguage());
-                ->findOneByNodeId($node->getParentId());
-            if ($node) {
-                return $this->getPath($node, $path);
-            } else {
-                return '!Error while computing node path!';
-            }
-        }
     }
 }

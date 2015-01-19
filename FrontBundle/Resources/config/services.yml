@@ -20,3 +20,4 @@ services:
         class: %php_orchestra_front.manager.sitemap.class%
         arguments:
             - @php_orchestra_model.repository.node
+            - @router
