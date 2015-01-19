@@ -69,8 +69,10 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
         $normalizers = array(new GetSetMethodNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
         $map['url'] = $nodes;
-        
-        file_put_contents('web/' . $filename, $serializer->serialize($map, 'xml'));
+        $xmlContent = $serializer->serialize($map, 'xml');
+        $xmlContent = str_replace('<urlset>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', $xmlContent);
+
+        file_put_contents('web/' . $filename, $xmlContent);
         $output->writeln("<comment>-> " . $filename . " generated</comment>\n");
 
         return true;
@@ -97,7 +99,7 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
                     $lastmod = $lastmod->format('Y-m-d');
 
                 $nodes[] = array(
-                    'loc' => $site->getDomain() . '/' . $node->getPath(),
+                    'loc' => $site->getDomain() . '/' . $this->getPath($node),
                     'lastmod' => $lastmod,
                     'changefreq' => $node->getSitemapChangefreq(),
                     'priority' => $node->getSitemapPriority()
@@ -106,5 +108,28 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
         }
 
         return $nodes;
+    }
+
+    /**
+     * Recursive generation of $node Path
+     * 
+     * @param NodeInterface $node
+     * @param string        $path
+     */
+    protected function getPath(NodeInterface $node, $path = array())
+    {
+        if (NodeInterface::ROOT_NODE_ID == $node->getNodeId()) {
+            return implode('/', array_reverse($path));
+        } else {
+            $path[] = $node->getAlias();
+            $node = $this->getContainer()->get('php_orchestra_model.repository.node')
+               // ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($node->getParentId(), $node->getLanguage());
+                ->findOneByNodeId($node->getParentId());
+            if ($node) {
+                return $this->getPath($node, $path);
+            } else {
+                return '!Error while computing node path!';
+            }
+        }
     }
 }
