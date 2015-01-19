@@ -3,13 +3,10 @@
 namespace PHPOrchestra\FrontBundle\Manager;
 
 use PHPOrchestra\ModelBundle\Repository\NodeRepository;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use PHPOrchestra\ModelInterface\Model\SiteInterface;
 use PHPOrchestra\ModelInterface\Model\NodeInterface;
-
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class SitemapManager
@@ -18,14 +15,16 @@ class SitemapManager
 {
     protected $nodeRepository;
     protected $router;
+    protected $serializer;
 
     /**
      * @param NodeRepository $nodeRepository
      */
-    public function __construct(NodeRepository $nodeRepository, $router)
+    public function __construct(NodeRepository $nodeRepository, UrlGeneratorInterface $router, SerializerInterface $serializer)
     {
         $this->nodeRepository = $nodeRepository;
         $this->router = $router;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -37,14 +36,13 @@ class SitemapManager
     {
         $nodes = $this->getSitemapNodesFromSite($site);
         $filename = 'sitemap.' . $site->getDomain() . '.xml';
-
-        $encoders = array(new XmlEncoder('urlset'), new JsonEncoder());
-        $normalizers = array(new GetSetMethodNormalizer());
-        $serializer = new Serializer($normalizers, $encoders);
         $map['url'] = $nodes;
-        $xmlContent = $serializer->serialize($map, 'xml');
-        $xmlContent = str_replace('<urlset>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', $xmlContent);
 
+        $xmlContent = str_replace(
+            array('</response>', '<response>'),
+            array('</urlset>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'),
+            $this->serializer->serialize($map, 'xml')
+        );
         file_put_contents('web/' . $filename, $xmlContent);
 
         return $filename;

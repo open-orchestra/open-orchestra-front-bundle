@@ -21,3 +21,4 @@ services:
         arguments:
             - @php_orchestra_model.repository.node
             - @router
+            - @serializer
