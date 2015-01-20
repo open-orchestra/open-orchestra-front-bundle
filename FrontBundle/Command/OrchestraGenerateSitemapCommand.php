@@ -31,7 +31,11 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
     {
         if ($siteId = $input->getOption('siteId')) {
             $site = $this->getContainer()->get('php_orchestra_model.repository.site')->findOneBySiteId($siteId);
-            $this->generateSitemap($site, $output);
+            if ($site) {
+                $this->generateSitemap($site, $output);
+            } else {
+                $output->writeln("<error>No website found with siteId " . $siteId . ".</error>");
+            }
         } else {
             $siteCollection = $this->getContainer()->get('php_orchestra_model.repository.site')->findByDeleted(false);
             if ($siteCollection) {
@@ -53,7 +57,7 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
     protected function generateSitemap(SiteInterface $site, OutputInterface $output)
     {
         $sitemapManager = $this->getContainer()->get('php_orchestra_front.manager.sitemap');
-        $output->writeln("<info>Generating sitemap for site " . $site->getSiteId() . " on domain " . $site->getDomain() . "</info>");
+        $output->writeln("<info>Generating sitemap for siteId " . $site->getSiteId() . " on domain " . $site->getDomain() . "</info>");
 
         $filename = $sitemapManager->generateSitemap($site);
 
