@@ -27,7 +27,7 @@ class NodeControllerTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '');
 
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Bienvenue sur le site de démo issu des fixtures.")')->count());
         $this->assertEquals(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")')->count());
     }
 
