@@ -22,3 +22,4 @@ services:
             - @php_orchestra_model.repository.node
             - @router
             - @serializer
+            - @filesystem

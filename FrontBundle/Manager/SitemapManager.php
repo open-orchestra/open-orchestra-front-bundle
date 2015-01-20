@@ -4,6 +4,7 @@ namespace PHPOrchestra\FrontBundle\Manager;
 
 use PHPOrchestra\ModelBundle\Repository\NodeRepository;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use PHPOrchestra\ModelInterface\Model\SiteInterface;
 use PHPOrchestra\ModelInterface\Model\NodeInterface;
@@ -16,15 +17,21 @@ class SitemapManager
     protected $nodeRepository;
     protected $router;
     protected $serializer;
+    protected $filesystem;
 
     /**
      * @param NodeRepository $nodeRepository
      */
-    public function __construct(NodeRepository $nodeRepository, UrlGeneratorInterface $router, SerializerInterface $serializer)
-    {
+    public function __construct(
+        NodeRepository $nodeRepository,
+        UrlGeneratorInterface $router,
+        SerializerInterface $serializer,
+        Filesystem $filesystem
+    ) {
         $this->nodeRepository = $nodeRepository;
         $this->router = $router;
         $this->serializer = $serializer;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -43,7 +50,7 @@ class SitemapManager
             array('</urlset>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'),
             $this->serializer->serialize($map, 'xml')
         );
-        file_put_contents('web/' . $filename, $xmlContent);
+        $this->filesystem->dumpFile('web/' . $filename, $xmlContent);
 
         return $filename;
     }
