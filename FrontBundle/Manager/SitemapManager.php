@@ -20,7 +20,10 @@ class SitemapManager
     protected $filesystem;
 
     /**
-     * @param NodeRepository $nodeRepository
+     * @param NodeRepository        $nodeRepository
+     * @param UrlGeneratorInterface $router
+     * @param SerializerInterface   $serializer
+     * @param Filesystem            $filesystem
      */
     public function __construct(
         NodeRepository $nodeRepository,

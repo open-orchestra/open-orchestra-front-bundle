@@ -27,6 +27,9 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
 
     protected $mapArray;
 
+    /**
+     * Set up the test
+     */
     public function setUp()
     {
         $this->updatedDate = new \DateTime();
@@ -65,6 +68,9 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test generateSitemap
+     */
     public function testGenerateSitemap()
     {
         $site = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteInterface');
