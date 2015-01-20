@@ -25,7 +25,7 @@ class OrchestraGenerateSitemapCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->container = $this->container = Phake::mock('Symfony\Component\DependencyInjection\Container');
+        $this->container = Phake::mock('Symfony\Component\DependencyInjection\Container');
 
         $this->command = new OrchestraGenerateSitemapCommand();
         $this->command->setContainer($this->container);
