@@ -30,6 +30,7 @@ class RobotsManager
         $txtContent = $site->getRobotsTxt();
         $filename = 'robots.' . $site->getDomain() . '.txt';
         $this->filesystem->dumpFile('web/' . $filename, $txtContent);
+
         return $filename;
     }
 }
