@@ -37,7 +37,7 @@
         "itkg/phporchestra-theme-bundle": "*"
     },
     "require-dev": {
-        "itkg/phporchestra-model-bundle": "*",
+        "itkg/phporchestra-model-bundle": "dev-master",
         "phpunit/phpunit" : "4.0.14",
         "scrutinizer/ocular": "1.1.1",
         "phake/phake": "*"
