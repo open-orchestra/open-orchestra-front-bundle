@@ -31,13 +31,13 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "itkg/phporchestra-base-bundle": "dev-master",
-        "itkg/phporchestra-display-bundle": "dev-master",
-        "itkg/phporchestra-model-interface": "dev-master",
-        "itkg/phporchestra-theme-bundle": "dev-master"
+        "itkg/phporchestra-base-bundle": "*",
+        "itkg/phporchestra-display-bundle": "*",
+        "itkg/phporchestra-model-interface": "*",
+        "itkg/phporchestra-theme-bundle": "*"
     },
     "require-dev": {
-        "itkg/phporchestra-model-bundle": "dev-master",
+        "itkg/phporchestra-model-bundle": "*",
         "phpunit/phpunit" : "4.0.14",
         "scrutinizer/ocular": "1.1.1",
         "phake/phake": "*"
