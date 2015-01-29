@@ -2,7 +2,7 @@
 
 namespace PHPOrchestra\FrontBundle\Controller;
 
-use PHPOrchestra\FrontBundle\Exception\NonExistingDocumentException;
+use PHPOrchestra\FrontBundle\Exception\NonExistingNodeException;
 use PHPOrchestra\ModelInterface\Model\NodeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,7 @@ class NodeController extends Controller
      * @Config\Route("/node/{nodeId}", name="php_orchestra_front_node")
      * @Config\Method({"GET"})
      *
-     * @throws NonExistingDocumentException
+     * @throws NonExistingNodeException
      * @return Response
      */
     public function showAction(Request $request, $nodeId)
@@ -32,7 +32,7 @@ class NodeController extends Controller
             ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($nodeId, $request->getLocale());
 
         if (is_null($node)) {
-            throw new NonExistingDocumentException();
+            throw new NonExistingNodeException();
         } elseif (!is_null($node->getRole()) && !$this->get('security.context')->isGranted($node->getRole())) {
             return $this->redirect($this->get('request')->getBaseUrl());
         }
