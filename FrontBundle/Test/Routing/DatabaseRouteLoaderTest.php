@@ -57,6 +57,9 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
         $this->loader->load($this->resource, 'database');
     }
 
+    /**
+     * Test load routes
+     */
     public function testLoad()
     {
         $nodeId = 'nodeId';

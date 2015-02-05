@@ -39,7 +39,7 @@ class BlockController extends Controller
                 ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($nodeId, $request->getLocale());
         }
 
-        if (null !== ($block = $node->getBlocks()->get($blockId))) {
+        if (null !== ($block = $node->getBlock($blockId))) {
             return $this->get('php_orchestra_display.display_block_manager')
                 ->show($block);
         }
