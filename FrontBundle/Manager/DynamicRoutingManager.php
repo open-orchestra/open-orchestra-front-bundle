@@ -83,6 +83,9 @@ class DynamicRoutingManager
         return $this->nodeRepository->findOneByParendIdAndAliasAndSiteId((string) $parentId, $slug, $siteId);
     }
 
+    /**
+     * @return array
+     */
     protected function findLanguagesAccepted()
     {
         $site = $this->siteRepository->findOneBySiteId($this->siteManager->getCurrentSiteId());
