@@ -31,7 +31,7 @@ class NodeControllerTest extends WebTestCase
         $this->client->setServerParameter('HTTP_HOST', 'demo-phporchestra-front.dev');
         $crawler = $this->client->request('GET', '');
 
-        $this->assertEquals(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")')->count());
+        $this->assertCount(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")'));
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")')->count());
     }
 
@@ -43,8 +43,15 @@ class NodeControllerTest extends WebTestCase
         $this->client->setServerParameter('HTTP_HOST', 'echonext.phporchestra.dev');
         $crawler = $this->client->request('GET', '/fr');
 
-        $this->assertEquals(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")')->count());
-        $this->assertEquals(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")')->count());
+        $this->assertCount(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")'));
+        $this->assertCount(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")'));
+        $this->assertCount(1755, $crawler->filter('#contentNewsList > div'));
+        foreach ($crawler->filter('a')->extract('href') as $link) {
+            if (strpos($link, 'echonext.phporchestra.dev')) {
+                $this->assertRegExp('/fr/', $link);
+                $this->assertNotRegExp('/\/en\//', $link);
+            }
+        }
     }
 
     /**
