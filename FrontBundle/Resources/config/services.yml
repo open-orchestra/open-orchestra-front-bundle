@@ -34,5 +34,6 @@ services:
         class: %php_orchestra_front.database.route_loader.class%
         arguments:
             - @php_orchestra_model.repository.node
+            - @php_orchestra_model.repository.site
         tags:
             - { name: routing.loader }

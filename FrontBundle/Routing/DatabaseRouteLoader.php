@@ -3,7 +3,10 @@
 namespace PHPOrchestra\FrontBundle\Routing;
 
 use PHPOrchestra\ModelInterface\Model\NodeInterface;
+use PHPOrchestra\ModelInterface\Model\SiteAliasInterface;
+use PHPOrchestra\ModelInterface\Model\SiteInterface;
 use PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
+use PHPOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -15,13 +18,17 @@ class DatabaseRouteLoader extends Loader
 {
     protected $loaded = false;
     protected $nodeRepository;
+    protected $siteRepository;
+    protected $orderedNodes = array();
 
     /**
      * @param NodeRepositoryInterface $nodeRepository
+     * @param SiteRepositoryInterface $siteRepository
      */
-    public function __construct(NodeRepositoryInterface $nodeRepository)
+    public function __construct(NodeRepositoryInterface $nodeRepository, SiteRepositoryInterface $siteRepository)
     {
         $this->nodeRepository = $nodeRepository;
+        $this->siteRepository = $siteRepository;
     }
 
     /**
@@ -40,20 +47,21 @@ class DatabaseRouteLoader extends Loader
 
         $routes = new RouteCollection();
 
-        $nodes = $this->nodeRepository->findByNodeType();
-        /** @var NodeInterface $node */
-        foreach ($nodes as $node) {
-            $route = new Route(
-                $node->getRoutePattern(),
-                array(
-                    '_controller' => 'PHPOrchestra\FrontBundle\Controller\NodeController::showAction',
-                    'nodeId' => $node->getNodeId(),
-                )
-            );
-            $routes->add($node->getId(), $route);
+        $sites = $this->siteRepository->findByDeleted(false);
+        /** @var SiteInterface $site */
+        foreach ($sites as $site) {
+            foreach ($site->getLanguages() as $language) {
+                $nodes = $this->initializeNodes($language, $site);
+                /** @var NodeInterface $node */
+                foreach ($nodes as $node) {
+                    $this->generateRoutesForNode($site, $node, $routes);
+
+                }
+            }
         }
 
         $this->loaded = true;
+
 
         return $routes;
     }
@@ -71,4 +79,71 @@ class DatabaseRouteLoader extends Loader
         return 'database' === $type;
     }
 
+    /**
+     * @param NodeInterface $node
+     *
+     * @return string
+     */
+    protected function generateRoutePattern(NodeInterface $node)
+    {
+        if (is_null($node->getParentId()) || !array_key_exists($node->getParentId(), $this->orderedNodes)) {
+            return $node->getRoutePattern();
+        }
+
+        return str_replace('//', '/', $this->generateRoutePattern($this->orderedNodes[$node->getParentId()]) . '/' . $node->getRoutePattern());
+    }
+
+    /**
+     * @param array $nodes
+     */
+    protected function orderNodes(array $nodes)
+    {
+        /** @var NodeInterface $node */
+        foreach ($nodes as $node) {
+            $this->orderedNodes[$node->getNodeId()] = $node;
+        }
+    }
+
+    /**
+     * @param $language
+     * @param $site
+     * @return array
+     */
+    protected function initializeNodes($language, $site)
+    {
+        $this->orderedNodes = array();
+        $nodes = $this->nodeRepository->findLastPublishedVersionByLanguageAndSiteId($language, $site->getSiteId());
+        $this->orderNodes($nodes);
+
+        return $nodes;
+    }
+
+    /**
+     * @param SiteInterface   $site
+     * @param NodeInterface   $node
+     * @param RouteCollection $routes
+     */
+    protected function generateRoutesForNode($site, $node, $routes)
+    {
+        /** @var SiteAliasInterface $alias */
+        foreach ($site->getAliases() as $key => $alias) {
+            $nodeLanguage = $node->getLanguage();
+            if (in_array($nodeLanguage, $alias->getLanguages())) {
+                $route = new Route(
+                    $this->generateRoutePattern($node),
+                    array(
+                        '_controller' => 'PHPOrchestra\FrontBundle\Controller\NodeController::showAction',
+                        '_locale' => $nodeLanguage,
+                        'nodeId' => $node->getNodeId(),
+                        'siteId' => $site->getSiteId(),
+                        'aliasId' => $key,
+                    ),
+                    array(),
+                    array(),
+                    $alias->getDomain()
+                );
+                $routes->add($key . '_' . $node->getId(), $route);
+            }
+        }
+    }
 }

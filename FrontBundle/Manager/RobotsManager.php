@@ -23,12 +23,14 @@ class RobotsManager
     /**
      * Generate robots.txt for $site
      * 
-     * @param SiteInterface   $site
+     * @param SiteInterface $site
+     *
+     * @return string
      */
     public function generateRobots(SiteInterface $site)
     {
         $txtContent = $site->getRobotsTxt();
-        $filename = 'robots.' . $site->getDomain() . '.txt';
+        $filename = str_replace(' ', '_', 'robots.' . $site->getName() . '.txt');
         $this->filesystem->dumpFile('web/' . $filename, $txtContent);
 
         return $filename;

@@ -3,12 +3,16 @@
 namespace PHPOrchestra\FrontBundle\FunctionalTest\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Client;
 
 /**
  * Class NodeControllerTest
  */
 class NodeControllerTest extends WebTestCase
 {
+    /**
+     * @var Client
+     */
     protected $client;
 
     /**
@@ -17,20 +21,6 @@ class NodeControllerTest extends WebTestCase
     public function setUp()
     {
         $this->client = static::createClient();
-        $this->client->setServerParameter('SYMFONY__SITE', '1');
-    }
-
-    /**
-     * Test fixture_home
-     */
-    public function testShowActionFixtureHome()
-    {
-        $this->markTestSkipped();
-
-        $crawler = $this->client->request('GET', '');
-
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Bienvenue sur le site de démo issu des fixtures.")')->count());
-        $this->assertEquals(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")')->count());
     }
 
     /**
@@ -38,12 +28,46 @@ class NodeControllerTest extends WebTestCase
      */
     public function testShowActionFixtureHomeSecondSite()
     {
-        $this->client->setServerParameter('SYMFONY__SITE', '2');
-
+        $this->client->setServerParameter('HTTP_HOST', 'demo-phporchestra-front.dev');
         $crawler = $this->client->request('GET', '');
 
-        $this->assertEquals(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")')->count());
+        $this->assertCount(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")'));
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")')->count());
+    }
+
+    /**
+     * Test fixture_home
+     *
+     * @param string $currentLanguage
+     * @param string $otherLanguage
+     *
+     * @dataProvider provideLanguageAndOtherLanguage
+     */
+    public function testShowActionFixtureHomeSiteEchonext($currentLanguage, $otherLanguage)
+    {
+        $this->client->setServerParameter('HTTP_HOST', 'echonext.phporchestra.dev');
+        $crawler = $this->client->request('GET', '/' . $currentLanguage);
+
+        $this->assertCount(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")'));
+        $this->assertCount(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")'));
+        $this->assertCount(1755, $crawler->filter('#contentNewsList > div'));
+        foreach ($crawler->filter('a')->extract('href') as $link) {
+            if (strpos($link, 'echonext.phporchestra.dev') && strpos($link, 'news')) {
+                $this->assertRegExp('/'. $currentLanguage . '/', $link);
+                $this->assertNotRegExp('/\/' . $otherLanguage . '\//', $link);
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function provideLanguageAndOtherLanguage()
+    {
+        return array(
+            array('en', 'fr'),
+            array('fr', 'en'),
+        );
     }
 
     /**

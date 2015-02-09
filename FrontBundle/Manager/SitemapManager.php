@@ -40,12 +40,14 @@ class SitemapManager
     /**
      * Generate sitemap for $site
      * 
-     * @param SiteInterface   $site
+     * @param SiteInterface $site
+     *
+     * @return string
      */
     public function generateSitemap(SiteInterface $site)
     {
         $nodes = $this->getSitemapNodesFromSite($site);
-        $filename = 'sitemap.' . $site->getDomain() . '.xml';
+        $filename = str_replace(' ', '_', 'sitemap.' . $site->getName() . '.xml');
         $map['url'] = $nodes;
 
         $xmlContent = str_replace(
