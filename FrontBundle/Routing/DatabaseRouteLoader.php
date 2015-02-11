@@ -90,7 +90,17 @@ class DatabaseRouteLoader extends Loader
             return $node->getRoutePattern();
         }
 
-        return str_replace('//', '/', $this->generateRoutePattern($this->orderedNodes[$node->getParentId()]) . '/' . $node->getRoutePattern());
+        return $this->suppressDoubleSlashes($this->generateRoutePattern($this->orderedNodes[$node->getParentId()]) . '/' . $node->getRoutePattern());
+    }
+
+    /**
+     * @param string $route
+     *
+     * @return string
+     */
+    protected function suppressDoubleSlashes($route)
+    {
+        return str_replace('//', '/', $route);
     }
 
     /**
@@ -128,9 +138,13 @@ class DatabaseRouteLoader extends Loader
         /** @var SiteAliasInterface $alias */
         foreach ($site->getAliases() as $key => $alias) {
             $nodeLanguage = $node->getLanguage();
-            if (in_array($nodeLanguage, $alias->getLanguages())) {
+            if ($nodeLanguage == $alias->getLanguage()) {
+                $pattern = $this->generateRoutePattern($node);
+                if ($alias->getPrefix()) {
+                    $pattern = $this->suppressDoubleSlashes($alias->getPrefix() . '/' . $pattern);
+                }
                 $route = new Route(
-                    $this->generateRoutePattern($node),
+                    $pattern,
                     array(
                         '_controller' => 'PHPOrchestra\FrontBundle\Controller\NodeController::showAction',
                         '_locale' => $nodeLanguage,

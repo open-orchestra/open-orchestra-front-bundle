@@ -75,7 +75,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
         $keyFr = 0;
         $keyEn = 1;
         $siteAliasfr = $this->mockSiteAlias($frdomain, $frLocale);
-        $siteAliasen = $this->mockSiteAlias($endomain, $enLocale);
+        $siteAliasen = $this->mockSiteAlias($endomain, $enLocale, $enLocale);
         $siteAliases = new ArrayCollection();
         $siteAliases->set($keyFr, $siteAliasfr);
         $siteAliases->set($keyEn, $siteAliasen);
@@ -94,7 +94,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
         $grandSonId = 'grandSonId';
         // Define fr nodes
         $frMongoId = 'frMongoId';
-        $frPattern = 'fr';
+        $frPattern = '';
         $frNode = $this->mockNode($frMongoId, $nodeId, $frPattern, $frLocale);
         $frSonMongoId = 'frSonMongoId';
         $frSonPattern = '{variable}';
@@ -108,7 +108,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
 
         // Define en nodes
         $enMongoId = 'enMongoId';
-        $enPattern = '/en';
+        $enPattern = '';
         $enNode = $this->mockNode($enMongoId, $nodeId, $enPattern, $enLocale);
         $enSonMongoId = 'enSonMongoId';
         $enSonPattern = '/{variable}';
@@ -131,15 +131,15 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
 
         // Check the fr route
         $frRoute = $routeCollection->get($keyFr . '_' . $frMongoId);
-        $this->assertRoute($frLocale, '/fr', $frdomain, $nodeId, $siteId, $keyFr, $frRoute);
+        $this->assertRoute($frLocale, '/', $frdomain, $nodeId, $siteId, $keyFr, $frRoute);
         $frSonRoute = $routeCollection->get($keyFr . '_' . $frSonMongoId);
-        $this->assertRoute($frLocale, '/fr/{variable}', $frdomain, $sonId, $siteId, $keyFr, $frSonRoute);
+        $this->assertRoute($frLocale, '/{variable}', $frdomain, $sonId, $siteId, $keyFr, $frSonRoute);
         $frGrandSonRoute = $routeCollection->get($keyFr . '_' . $frGrandSonMongoId);
-        $this->assertRoute($frLocale, '/fr/{variable}/blog', $frdomain, $grandSonId, $siteId, $keyFr, $frGrandSonRoute);
+        $this->assertRoute($frLocale, '/{variable}/blog', $frdomain, $grandSonId, $siteId, $keyFr, $frGrandSonRoute);
 
         // Check the en route
         $enRoute = $routeCollection->get($keyEn . '_' . $enMongoId);
-        $this->assertRoute($enLocale, '/en', $endomain, $nodeId, $siteId, $keyEn, $enRoute);
+        $this->assertRoute($enLocale, '/en/', $endomain, $nodeId, $siteId, $keyEn, $enRoute);
         $enSonRoute = $routeCollection->get($keyEn . '_' . $enSonMongoId);
         $this->assertRoute($enLocale, '/en/{variable}', $endomain, $sonId, $siteId, $keyEn, $enSonRoute);
         $enGrandSonRoute = $routeCollection->get($keyEn . '_' . $enGrandSonMongoId);
@@ -172,16 +172,18 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $domain
-     * @param $locale
+     * @param string $domain
+     * @param string $locale
+     * @param string $prefix
      *
      * @return SiteAliasInterface
      */
-    protected function mockSiteAlias($domain, $locale)
+    protected function mockSiteAlias($domain, $locale, $prefix = null)
     {
         $siteAlias = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteAliasInterface');
         Phake::when($siteAlias)->getDomain()->thenReturn($domain);
-        Phake::when($siteAlias)->getLanguages()->thenReturn(array($locale));
+        Phake::when($siteAlias)->getLanguage()->thenReturn($locale);
+        Phake::when($siteAlias)->getPrefix()->thenReturn($prefix);
 
         return $siteAlias;
     }
