@@ -46,8 +46,10 @@ class NodeControllerTest extends WebTestCase
     public function testShowActionFixtureHomeSiteEchonext($currentLanguage, $otherLanguage)
     {
         $this->client->setServerParameter('HTTP_HOST', 'echonext.phporchestra.dev');
+        $this->client->followRedirects();
         $crawler = $this->client->request('GET', '/' . $currentLanguage);
 
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         $this->assertCount(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")'));
         $this->assertCount(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")'));
         $this->assertCount(1755, $crawler->filter('#contentNewsList > div'));
@@ -65,8 +67,8 @@ class NodeControllerTest extends WebTestCase
     public function provideLanguageAndOtherLanguage()
     {
         return array(
-            array('en', 'fr'),
             array('fr', 'en'),
+            array('en', 'fr'),
         );
     }
 
