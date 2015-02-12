@@ -80,10 +80,10 @@ class SitemapManager
                     $lastmod = $lastmod->format('Y-m-d');
 
                 $mainAlias = $site->getMainAlias();
-                $url = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
+                $alias = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
 
                 $nodes[] = array(
-                    'loc' => $url . $this->router->generate($node->getNodeId()),
+                    'loc' => $alias . $this->router->generate($node->getNodeId()),
                     'lastmod' => $lastmod,
                     'changefreq' => $node->getSitemapChangefreq(),
                     'priority' => $node->getSitemapPriority()
