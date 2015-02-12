@@ -79,8 +79,11 @@ class SitemapManager
                 if ($lastmod = $node->getUpdatedAt())
                     $lastmod = $lastmod->format('Y-m-d');
 
+                $mainAlias = $site->getMainAlias();
+                $url = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
+
                 $nodes[] = array(
-                    'loc' => $site->getDomain() . $this->router->generate($node->getNodeId()),
+                    'loc' => $url . $this->router->generate($node->getNodeId()),
                     'lastmod' => $lastmod,
                     'changefreq' => $node->getSitemapChangefreq(),
                     'priority' => $node->getSitemapPriority()
