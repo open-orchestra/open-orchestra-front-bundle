@@ -2,7 +2,7 @@
 
 namespace PHPOrchestra\FrontBundle\Manager;
 
-use PHPOrchestra\ModelBundle\Repository\NodeRepository;
+use PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -20,13 +20,13 @@ class SitemapManager
     protected $filesystem;
 
     /**
-     * @param NodeRepository        $nodeRepository
-     * @param UrlGeneratorInterface $router
-     * @param SerializerInterface   $serializer
-     * @param Filesystem            $filesystem
+     * @param NodeRepositoryInterface $nodeRepository
+     * @param UrlGeneratorInterface   $router
+     * @param SerializerInterface     $serializer
+     * @param Filesystem              $filesystem
      */
     public function __construct(
-        NodeRepository $nodeRepository,
+        NodeRepositoryInterface $nodeRepository,
         UrlGeneratorInterface $router,
         SerializerInterface $serializer,
         Filesystem $filesystem
