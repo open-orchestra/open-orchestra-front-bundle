@@ -49,6 +49,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
     public function testSupport()
     {
         $this->assertTrue($this->loader->supports($this->resource, 'database'));
+        $this->assertFalse($this->loader->supports($this->resource, 'redirection'));
     }
 
     /**

@@ -33,7 +33,7 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->updatedDate = new \DateTime();
-        $this->nodeRepository = Phake::mock('PHPOrchestra\ModelBundle\Repository\NodeRepository');
+        $this->nodeRepository = Phake::mock('PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface');
         $this->node = Phake::mock('PHPOrchestra\ModelInterface\Model\NodeInterface');
         Phake::when($this->node)->getUpdatedAt()->thenReturn($this->updatedDate);
         Phake::when($this->node)->getSitemapChangefreq()->thenReturn($this->changeFreq);

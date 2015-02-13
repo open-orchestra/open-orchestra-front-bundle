@@ -27,6 +27,8 @@ class DynamicRoutingSubscriber implements EventSubscriberInterface
 
     /**
      * @param GetResponseForExceptionEvent $event
+     *
+     * @deprecated use dynamic routing
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
