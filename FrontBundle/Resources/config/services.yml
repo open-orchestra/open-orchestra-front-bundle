@@ -4,6 +4,7 @@ parameters:
     php_orchestra_front.manager.sitemap.class: PHPOrchestra\FrontBundle\Manager\SitemapManager
     php_orchestra_front.manager.robots.class: PHPOrchestra\FrontBundle\Manager\RobotsManager
     php_orchestra_front.database.route_loader.class: PHPOrchestra\FrontBundle\Routing\DatabaseRouteLoader
+    php_orchestra_front.redirection.route_loader.class: PHPOrchestra\FrontBundle\Routing\RedirectionLoader
 
 services:
     php_orchestra_front.subscriber.dynamic_routing:
@@ -30,6 +31,14 @@ services:
         class: %php_orchestra_front.manager.robots.class%
         arguments:
             - @filesystem
+    php_orchestra_front.redirection.route_loader:
+        class: %php_orchestra_front.redirection.route_loader.class%
+        arguments:
+            - @php_orchestra_model.repository.redirection
+            - @php_orchestra_model.repository.node
+            - @php_orchestra_model.repository.site
+        tags:
+            - { name: routing.loader }
     php_orchestra_front.database.route_loader:
         class: %php_orchestra_front.database.route_loader.class%
         arguments:
