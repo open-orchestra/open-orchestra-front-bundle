@@ -62,7 +62,6 @@ class DatabaseRouteLoader extends Loader
 
         $this->loaded = true;
 
-
         return $routes;
     }
 

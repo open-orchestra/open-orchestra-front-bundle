@@ -45,9 +45,9 @@ class DynamicRoutingManagerTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->node)->getNodeId()->thenReturn($this->nodeId);
 
         $this->repository = Phake::mock('PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface');
-        Phake::when($this->repository)->findOneByParendIdAndAliasAndSiteId(NodeInterface::ROOT_NODE_ID, 'node', $this->siteId)
+        Phake::when($this->repository)->findOneByParendIdAndRoutePatternAndSiteId(NodeInterface::ROOT_NODE_ID, 'node', $this->siteId)
             ->thenReturn($this->node);
-        Phake::when($this->repository)->findOneByParendIdAndAliasAndSiteId('parent', 'node', $this->siteId)->thenReturn($this->node);
+        Phake::when($this->repository)->findOneByParendIdAndRoutePatternAndSiteId('parent', 'node', $this->siteId)->thenReturn($this->node);
 
         $this->manager = new DynamicRoutingManager($this->repository, $this->siteManager, $this->siteRepository);
     }

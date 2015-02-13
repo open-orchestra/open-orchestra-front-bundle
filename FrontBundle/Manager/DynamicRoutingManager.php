@@ -31,6 +31,8 @@ class DynamicRoutingManager
     /**
      * @param string $pathInfo
      *
+     * @deprecated use dynamic routing
+     *
      * @return array
      */
     public function getRouteParameterFromRequestPathInfo($pathInfo)
@@ -74,16 +76,20 @@ class DynamicRoutingManager
      * @param string $slug
      * @param string $parentId
      *
+     * @deprecated use dynamic routing
+     *
      * @return mixed
      */
     protected function getNode($slug, $parentId)
     {
         $siteId = $this->siteManager->getCurrentSiteId();
 
-        return $this->nodeRepository->findOneByParendIdAndAliasAndSiteId((string) $parentId, $slug, $siteId);
+        return $this->nodeRepository->findOneByParendIdAndRoutePatternAndSiteId((string) $parentId, $slug, $siteId);
     }
 
     /**
+     * @deprecated use dynamic routing
+     *
      * @return array
      */
     protected function findLanguagesAccepted()
