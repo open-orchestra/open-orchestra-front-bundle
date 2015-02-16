@@ -39,7 +39,7 @@ class SitemapManager
 
     /**
      * Generate sitemap for $site
-     * 
+     *
      * @param SiteInterface $site
      *
      * @return string
@@ -62,9 +62,9 @@ class SitemapManager
 
     /**
      * Return an array of sitemapNodes for $site
-     * 
+     *
      * @param SiteInterface $site
-     * 
+     *
      * @return array
      */
     protected function getSitemapNodesFromSite(SiteInterface $site)
@@ -76,8 +76,19 @@ class SitemapManager
 
         if ($nodesCollection) {
             foreach($nodesCollection as $node) {
-                if ($lastmod = $node->getUpdatedAt())
+                $sitemapChangefreq = $node->getSitemapChangefreq();
+                if (is_null($sitemapChangefreq)) {
+                    $sitemapChangefreq = $site->getSitemapChangefreq();
+                }
+
+                $sitemapPriority = $node->getSitemapPriority();
+                if (is_null($sitemapPriority)) {
+                    $sitemapPriority = $site->getSitemapPriority();
+                }
+
+                if ($lastmod = $node->getUpdatedAt()) {
                     $lastmod = $lastmod->format('Y-m-d');
+                }
 
                 $mainAlias = $site->getMainAlias();
                 $alias = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
@@ -85,8 +96,8 @@ class SitemapManager
                 $nodes[] = array(
                     'loc' => $alias . $this->router->generate($node->getNodeId()),
                     'lastmod' => $lastmod,
-                    'changefreq' => $node->getSitemapChangefreq(),
-                    'priority' => $node->getSitemapPriority()
+                    'changefreq' => $sitemapChangefreq,
+                    'priority' => $sitemapPriority
                 );
             }
         }
