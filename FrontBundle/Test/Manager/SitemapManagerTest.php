@@ -24,6 +24,8 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
     protected $updatedDate;
     protected $changeFreq = 'frequency';
     protected $priority = 'priority';
+    protected $prefix = 'fakePrefix';
+    protected $domain = 'fakeDomain';
 
     protected $mapArray;
 
@@ -55,11 +57,10 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
             $this->serializer,
             $this->filesystem
         );
-
         $this->mapArray = array(
             'url' => array(
                 array(
-                    'loc' => $this->siteDomain,
+                    'loc' => $this->domain.'/'.$this->prefix,
                     'lastmod' => $this->updatedDate->format('Y-m-d'),
                     'changefreq' => $this->changeFreq,
                     'priority' => $this->priority
@@ -73,9 +74,13 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateSitemap()
     {
-        $this->markTestSkipped();
+        $alias = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteAliasInterface');
+        Phake::when($alias)->getPrefix()->thenReturn($this->prefix);
+        Phake::when($alias)->getDomain()->thenReturn($this->domain);
+
         $site = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteInterface');
         Phake::when($site)->getName()->thenReturn($this->siteDomain);
+        Phake::when($site)->getMainAlias()->thenReturn($alias);
 
         $this->sitemapManager->generateSitemap($site);
 
