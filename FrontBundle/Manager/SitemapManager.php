@@ -77,15 +77,18 @@ class SitemapManager
         if ($nodesCollection) {
             foreach($nodesCollection as $node) {
                 $sitemapChangefreq = $node->getSitemapChangefreq();
-                if(is_null($sitemapChangefreq))
+                if (is_null($sitemapChangefreq)) {
                     $sitemapChangefreq = $site->getSitemapChangefreq();
+                }
 
                 $sitemapPriority = $node->getSitemapPriority();
-                if(is_null($sitemapPriority))
+                if (is_null($sitemapPriority)) {
                     $sitemapPriority = $site->getSitemapPriority();
+                }
 
-                if ($lastmod = $node->getUpdatedAt())
+                if ($lastmod = $node->getUpdatedAt()) {
                     $lastmod = $lastmod->format('Y-m-d');
+                }
 
                 $mainAlias = $site->getMainAlias();
                 $alias = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
