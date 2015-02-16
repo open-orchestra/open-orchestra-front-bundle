@@ -76,29 +76,31 @@ class SitemapManager
 
         if ($nodesCollection) {
             foreach($nodesCollection as $node) {
-                $sitemapChangefreq = $node->getSitemapChangefreq();
-                if (is_null($sitemapChangefreq)) {
-                    $sitemapChangefreq = $site->getSitemapChangefreq();
+                if (is_null($node->getRole())) {
+                    $sitemapChangefreq = $node->getSitemapChangefreq();
+                    if (is_null($sitemapChangefreq)) {
+                        $sitemapChangefreq = $site->getSitemapChangefreq();
+                    }
+
+                    $sitemapPriority = $node->getSitemapPriority();
+                    if (is_null($sitemapPriority)) {
+                        $sitemapPriority = $site->getSitemapPriority();
+                    }
+
+                    if ($lastmod = $node->getUpdatedAt()) {
+                        $lastmod = $lastmod->format('Y-m-d');
+                    }
+
+                    $mainAlias = $site->getMainAlias();
+                    $alias = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
+
+                    $nodes[] = array(
+                        'loc' => $alias . $this->router->generate($node->getNodeId()),
+                        'lastmod' => $lastmod,
+                        'changefreq' => $sitemapChangefreq,
+                        'priority' => $sitemapPriority
+                    );
                 }
-
-                $sitemapPriority = $node->getSitemapPriority();
-                if (is_null($sitemapPriority)) {
-                    $sitemapPriority = $site->getSitemapPriority();
-                }
-
-                if ($lastmod = $node->getUpdatedAt()) {
-                    $lastmod = $lastmod->format('Y-m-d');
-                }
-
-                $mainAlias = $site->getMainAlias();
-                $alias = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
-
-                $nodes[] = array(
-                    'loc' => $alias . $this->router->generate($node->getNodeId()),
-                    'lastmod' => $lastmod,
-                    'changefreq' => $sitemapChangefreq,
-                    'priority' => $sitemapPriority
-                );
             }
         }
 
