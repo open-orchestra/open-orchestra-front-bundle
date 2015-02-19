@@ -3,6 +3,7 @@
 namespace PHPOrchestra\FrontBundle\Routing;
 
 use PHPOrchestra\ModelInterface\Model\NodeInterface;
+use PHPOrchestra\ModelInterface\Model\SchemeAbilityInterface;
 use PHPOrchestra\ModelInterface\Model\SiteAliasInterface;
 use PHPOrchestra\ModelInterface\Model\SiteInterface;
 use PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
@@ -142,6 +143,10 @@ class DatabaseRouteLoader extends Loader
                 if ($alias->getPrefix()) {
                     $pattern = $this->suppressDoubleSlashes($alias->getPrefix() . '/' . $pattern);
                 }
+                $scheme = $node->getScheme();
+                if (is_null($scheme) || SchemeAbilityInterface::SCHEME_DEFAULT == $scheme) {
+                    $scheme = $alias->getScheme();
+                }
                 $route = new Route(
                     $pattern,
                     array(
@@ -153,7 +158,8 @@ class DatabaseRouteLoader extends Loader
                     ),
                     array(),
                     array(),
-                    $alias->getDomain()
+                    $alias->getDomain(),
+                    $scheme
                 );
                 $routes->add($key . '_' . $node->getId(), $route);
             }
