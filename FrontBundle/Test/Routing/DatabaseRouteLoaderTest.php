@@ -168,7 +168,8 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
                 'siteId' => $siteId,
                 'aliasId' => $key,
             ),
-            $route->getDefaults()
+            $route->getDefaults(),
+            'http'
         );
     }
 
@@ -185,6 +186,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
         Phake::when($siteAlias)->getDomain()->thenReturn($domain);
         Phake::when($siteAlias)->getLanguage()->thenReturn($locale);
         Phake::when($siteAlias)->getPrefix()->thenReturn($prefix);
+        Phake::when($siteAlias)->getScheme()->thenReturn('http');
 
         return $siteAlias;
     }
