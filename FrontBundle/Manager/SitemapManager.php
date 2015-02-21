@@ -1,13 +1,13 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Manager;
+namespace OpenOrchestra\FrontBundle\Manager;
 
-use PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
+use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use PHPOrchestra\ModelInterface\Model\SiteInterface;
-use PHPOrchestra\ModelInterface\Model\NodeInterface;
+use OpenOrchestra\ModelInterface\Model\SiteInterface;
+use OpenOrchestra\ModelInterface\Model\NodeInterface;
 
 /**
  * Class SitemapManager

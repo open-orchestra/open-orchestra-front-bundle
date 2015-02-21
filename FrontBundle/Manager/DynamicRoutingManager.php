@@ -1,11 +1,11 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Manager;
+namespace OpenOrchestra\FrontBundle\Manager;
 
-use PHPOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
-use PHPOrchestra\ModelInterface\Model\NodeInterface;
-use PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
-use PHPOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
+use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
+use OpenOrchestra\ModelInterface\Model\NodeInterface;
+use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
+use OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
 
 /**
  * Class DynamicRoutingManager
@@ -64,8 +64,8 @@ class DynamicRoutingManager
         }
 
         return array(
-            "_route" => "php_orchestra_front_node",
-            "_controller" => 'PHPOrchestra\FrontBundle\Controller\NodeController::showAction',
+            "_route" => "open_orchestra_front_node",
+            "_controller" => 'OpenOrchestra\FrontBundle\Controller\NodeController::showAction',
             "_locale" => $locale,
             "nodeId" => $nodeId,
             "module_parameters" => $parameters

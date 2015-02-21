@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Manager;
+namespace OpenOrchestra\FrontBundle\Manager;
 
 use Symfony\Component\Filesystem\Filesystem;
-use PHPOrchestra\ModelInterface\Model\SiteInterface;
+use OpenOrchestra\ModelInterface\Model\SiteInterface;
 
 /**
  * Class RobotsManager

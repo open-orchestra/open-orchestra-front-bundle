@@ -1,13 +1,13 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Routing;
+namespace OpenOrchestra\FrontBundle\Routing;
 
-use PHPOrchestra\ModelInterface\Model\NodeInterface;
-use PHPOrchestra\ModelInterface\Model\SchemeAbilityInterface;
-use PHPOrchestra\ModelInterface\Model\SiteAliasInterface;
-use PHPOrchestra\ModelInterface\Model\SiteInterface;
-use PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
-use PHPOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
+use OpenOrchestra\ModelInterface\Model\NodeInterface;
+use OpenOrchestra\ModelInterface\Model\SchemeAbilityInterface;
+use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
+use OpenOrchestra\ModelInterface\Model\SiteInterface;
+use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
+use OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -150,7 +150,7 @@ class DatabaseRouteLoader extends Loader
                 $route = new Route(
                     $pattern,
                     array(
-                        '_controller' => 'PHPOrchestra\FrontBundle\Controller\NodeController::showAction',
+                        '_controller' => 'OpenOrchestra\FrontBundle\Controller\NodeController::showAction',
                         '_locale' => $nodeLanguage,
                         'nodeId' => $node->getNodeId(),
                         'siteId' => $site->getSiteId(),

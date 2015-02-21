@@ -1,10 +1,10 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Test\Routing;
+namespace OpenOrchestra\FrontBundle\Test\Routing;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Phake;
-use PHPOrchestra\FrontBundle\Routing\RedirectionLoader;
+use OpenOrchestra\FrontBundle\Routing\RedirectionLoader;
 
 /**
  * Test RedirectionLoaderTest
@@ -34,26 +34,26 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $siteAliasFr1 = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteAliasInterface');
+        $siteAliasFr1 = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
         Phake::when($siteAliasFr1)->getLanguage()->thenReturn($this->localeFr);
         Phake::when($siteAliasFr1)->getDomain()->thenReturn($this->domainFr1);
-        $siteAliasFr2 = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteAliasInterface');
+        $siteAliasFr2 = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
         Phake::when($siteAliasFr2)->getLanguage()->thenReturn($this->localeFr);
         Phake::when($siteAliasFr2)->getDomain()->thenReturn($this->domainFr2);
-        $siteAliasEn = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteAliasInterface');
+        $siteAliasEn = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
         Phake::when($siteAliasEn)->getLanguage()->thenReturn($this->localeEn);
         Phake::when($siteAliasEn)->getDomain()->thenReturn($this->domainEn);
 
         $siteAliases = new ArrayCollection(array($siteAliasFr1, $siteAliasFr2, $siteAliasEn));
 
-        $site = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteInterface');
+        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
         Phake::when($site)->getAliases()->thenReturn($siteAliases);
 
-        $this->siteRepository = Phake::mock('PHPOrchestra\ModelInterface\Repository\SiteRepositoryInterface');
+        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface');
         Phake::when($this->siteRepository)->findOneBySiteId(Phake::anyParameters())->thenReturn($site);
 
-        $this->nodeRepository = Phake::mock('PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface');
-        $this->redirectionRepository = Phake::mock('PHPOrchestra\ModelInterface\Repository\RedirectionRepositoryInterface');
+        $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface');
+        $this->redirectionRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\RedirectionRepositoryInterface');
 
         $this->loader = new RedirectionLoader($this->redirectionRepository, $this->nodeRepository, $this->siteRepository);
     }
@@ -88,7 +88,7 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
         $permanent = true;
 
         // Define the redirection
-        $redirection = Phake::mock('PHPOrchestra\ModelInterface\Model\RedirectionInterface');
+        $redirection = Phake::mock('OpenOrchestra\ModelInterface\Model\RedirectionInterface');
         Phake::when($redirection)->getId()->thenReturn($redirectionMongoId);
         Phake::when($redirection)->getSiteId()->thenReturn($siteId);
         Phake::when($redirection)->getLocale()->thenReturn($this->localeFr);
@@ -99,7 +99,7 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->redirectionRepository)->findAll()->thenReturn(array($redirection));
 
         // Define the node
-        $node = Phake::mock('PHPOrchestra\ModelInterface\Model\NodeInterface');
+        $node = Phake::mock('OpenOrchestra\ModelInterface\Model\NodeInterface');
         Phake::when($node)->getId()->thenReturn($nodeMongoId);
         Phake::when($node)->getLanguage()->thenReturn($this->localeFr);
 
@@ -125,7 +125,7 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
         $permanent = true;
 
         // Define the redirection
-        $redirection = Phake::mock('PHPOrchestra\ModelInterface\Model\RedirectionInterface');
+        $redirection = Phake::mock('OpenOrchestra\ModelInterface\Model\RedirectionInterface');
         Phake::when($redirection)->getId()->thenReturn($redirectionMongoId);
         Phake::when($redirection)->getSiteId()->thenReturn($siteId);
         Phake::when($redirection)->getLocale()->thenReturn($this->localeFr);

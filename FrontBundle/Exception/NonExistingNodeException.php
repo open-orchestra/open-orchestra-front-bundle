@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Exception;
+namespace OpenOrchestra\FrontBundle\Exception;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

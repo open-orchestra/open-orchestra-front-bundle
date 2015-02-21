@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Test\EventSubscriber;
+namespace OpenOrchestra\FrontBundle\Test\EventSubscriber;
 
 use Phake;
-use PHPOrchestra\FrontBundle\EventSubscriber\DynamicRoutingSubscriber;
+use OpenOrchestra\FrontBundle\EventSubscriber\DynamicRoutingSubscriber;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -37,7 +37,7 @@ class DynamicRoutingSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->attributes = array('_controller' => 'NodeController');
 
-        $this->dynamicRoutingManager = Phake::mock('PHPOrchestra\FrontBundle\Manager\DynamicRoutingManager');
+        $this->dynamicRoutingManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\DynamicRoutingManager');
         Phake::when($this->dynamicRoutingManager)
             ->getRouteParameterFromRequestPathInfo(Phake::anyParameters())
             ->thenReturn($this->attributes);

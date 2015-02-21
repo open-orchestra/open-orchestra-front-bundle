@@ -1,12 +1,12 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Command;
+namespace OpenOrchestra\FrontBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use PHPOrchestra\ModelInterface\Model\SiteInterface;
+use OpenOrchestra\ModelInterface\Model\SiteInterface;
 
 class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
 {
@@ -30,14 +30,14 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($siteId = $input->getOption('siteId')) {
-            $site = $this->getContainer()->get('php_orchestra_model.repository.site')->findOneBySiteId($siteId);
+            $site = $this->getContainer()->get('open_orchestra_model.repository.site')->findOneBySiteId($siteId);
             if ($site) {
                 $this->generateSitemap($site, $output);
             } else {
                 $output->writeln("<error>No website found with siteId " . $siteId . ".</error>");
             }
         } else {
-            $siteCollection = $this->getContainer()->get('php_orchestra_model.repository.site')->findByDeleted(false);
+            $siteCollection = $this->getContainer()->get('open_orchestra_model.repository.site')->findByDeleted(false);
             if ($siteCollection) {
                 foreach ($siteCollection as $site) {
                     $this->generateSitemap($site, $output);
@@ -56,7 +56,7 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
      */
     protected function generateSitemap(SiteInterface $site, OutputInterface $output)
     {
-        $sitemapManager = $this->getContainer()->get('php_orchestra_front.manager.sitemap');
+        $sitemapManager = $this->getContainer()->get('open_orchestra_front.manager.sitemap');
         $mainAlias = $site->getMainAlias();
         $alias = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
 

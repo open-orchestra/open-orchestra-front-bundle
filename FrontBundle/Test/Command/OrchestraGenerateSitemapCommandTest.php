@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Test\Command;
+namespace OpenOrchestra\FrontBundle\Test\Command;
 
 use Phake;
-use PHPOrchestra\FrontBundle\Command\OrchestraGenerateSitemapCommand;
+use OpenOrchestra\FrontBundle\Command\OrchestraGenerateSitemapCommand;
 use Symfony\Component\Console\Application;
 
 /**
