@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Controller;
+namespace OpenOrchestra\FrontBundle\Controller;
 
-use PHPOrchestra\FrontBundle\Exception\NonExistingNodeException;
-use PHPOrchestra\ModelInterface\Model\NodeInterface;
+use OpenOrchestra\FrontBundle\Exception\NonExistingNodeException;
+use OpenOrchestra\ModelInterface\Model\NodeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +20,7 @@ class NodeController extends Controller
      * @param Request $request
      * @param int     $nodeId
      *
-     * @Config\Route("/node/{nodeId}", name="php_orchestra_front_node")
+     * @Config\Route("/node/{nodeId}", name="open_orchestra_front_node")
      * @Config\Method({"GET"})
      *
      * @throws NonExistingNodeException
@@ -28,7 +28,7 @@ class NodeController extends Controller
      */
     public function showAction(Request $request, $nodeId)
     {
-        $node = $this->get('php_orchestra_model.repository.node')
+        $node = $this->get('open_orchestra_model.repository.node')
             ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($nodeId, $request->getLocale());
 
         if (is_null($node)) {
@@ -43,7 +43,7 @@ class NodeController extends Controller
     /**
      * @param Request $request
      *
-     * @Config\Route("/preview", name="php_orchestra_front_node_preview")
+     * @Config\Route("/preview", name="open_orchestra_front_node_preview")
      * @Config\Method({"GET"})
      *
      * @return Response
@@ -51,8 +51,8 @@ class NodeController extends Controller
     public function previewAction(Request $request)
     {
         $token = $request->get('token');
-        $decryptedToken = $this->get('php_orchestra_base.manager.encryption')->decrypt($token);
-        $node = $this->get('php_orchestra_model.repository.node')->find($decryptedToken);
+        $decryptedToken = $this->get('open_orchestra_base.manager.encryption')->decrypt($token);
+        $node = $this->get('open_orchestra_model.repository.node')->find($decryptedToken);
 
         return $this->renderNode($node);
     }
@@ -65,7 +65,7 @@ class NodeController extends Controller
     protected function renderNode($node)
     {
         $response = $this->render(
-            'PHPOrchestraFrontBundle:Node:show.html.twig',
+            'OpenOrchestraFrontBundle:Node:show.html.twig',
             array(
                 'node' => $node,
                 'datetime' => time()

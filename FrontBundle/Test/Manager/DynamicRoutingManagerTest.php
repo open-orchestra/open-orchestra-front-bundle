@@ -1,10 +1,10 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Test\Manager;
+namespace OpenOrchestra\FrontBundle\Test\Manager;
 
 use Phake;
-use PHPOrchestra\FrontBundle\Manager\DynamicRoutingManager;
-use PHPOrchestra\ModelInterface\Model\NodeInterface;
+use OpenOrchestra\FrontBundle\Manager\DynamicRoutingManager;
+use OpenOrchestra\ModelInterface\Model\NodeInterface;
 
 /**
  * Class DynamicRoutingManagerTest
@@ -29,22 +29,22 @@ class DynamicRoutingManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->languages = array('en', 'fr');
-        $this->site = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteInterface');
+        $this->site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
         Phake::when($this->site)->getDefaultLanguage()->thenReturn($this->defaultLanguage);
         Phake::when($this->site)->getLanguages()->thenReturn($this->languages);
 
-        $this->siteRepository = Phake::mock('PHPOrchestra\ModelInterface\Repository\SiteRepositoryInterface');
+        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface');
         Phake::when($this->siteRepository)->findOneBySiteId(Phake::anyParameters())->thenReturn($this->site);
 
-        $this->siteManager = Phake::mock('PHPOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
+        $this->siteManager = Phake::mock('OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
         Phake::when($this->siteManager)->getCurrentSiteId()->thenReturn($this->siteId);
         Phake::when($this->siteManager)->getCurrentSiteDefaultLanguage()->thenReturn($this->defaultLanguage);
 
         $this->nodeId = 'nodeId';
-        $this->node = Phake::mock('PHPOrchestra\ModelInterface\Model\NodeInterface');
+        $this->node = Phake::mock('OpenOrchestra\ModelInterface\Model\NodeInterface');
         Phake::when($this->node)->getNodeId()->thenReturn($this->nodeId);
 
-        $this->repository = Phake::mock('PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface');
+        $this->repository = Phake::mock('OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface');
         Phake::when($this->repository)->findOneByParendIdAndRoutePatternAndSiteId(NodeInterface::ROOT_NODE_ID, 'node', $this->siteId)
             ->thenReturn($this->node);
         Phake::when($this->repository)->findOneByParendIdAndRoutePatternAndSiteId('parent', 'node', $this->siteId)->thenReturn($this->node);
@@ -69,8 +69,8 @@ class DynamicRoutingManagerTest extends \PHPUnit_Framework_TestCase
         $parameters = $this->manager->getRouteParameterFromRequestPathInfo($pathInfo);
 
         $this->assertSame(array(
-            "_route" => "php_orchestra_front_node",
-            "_controller" => 'PHPOrchestra\FrontBundle\Controller\NodeController::showAction',
+            "_route" => "open_orchestra_front_node",
+            "_controller" => 'OpenOrchestra\FrontBundle\Controller\NodeController::showAction',
             "_locale" => $localeExpected,
             "nodeId" => $nodeId,
             "module_parameters" => $moduleParameters

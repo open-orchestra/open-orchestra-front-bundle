@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Test;
+namespace OpenOrchestra\FrontBundle\Test;
 
 /**
  * Class DummyTest

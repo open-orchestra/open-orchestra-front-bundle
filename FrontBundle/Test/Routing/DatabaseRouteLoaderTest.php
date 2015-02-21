@@ -1,12 +1,12 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Test\Routing;
+namespace OpenOrchestra\FrontBundle\Test\Routing;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Phake;
-use PHPOrchestra\FrontBundle\Routing\DatabaseRouteLoader;
-use PHPOrchestra\ModelInterface\Model\NodeInterface;
-use PHPOrchestra\ModelInterface\Model\SiteAliasInterface;
+use OpenOrchestra\FrontBundle\Routing\DatabaseRouteLoader;
+use OpenOrchestra\ModelInterface\Model\NodeInterface;
+use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
 
 /**
  * Test DatabaseRouteLoaderTest
@@ -27,10 +27,10 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->siteRepository = Phake::mock('PHPOrchestra\ModelInterface\Repository\SiteRepositoryInterface');
+        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface');
         Phake::when($this->siteRepository)->findByDeleted(Phake::anyParameters())->thenReturn(array());
 
-        $this->nodeRepository = Phake::mock('PHPOrchestra\ModelInterface\Repository\NodeRepositoryInterface');
+        $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface');
 
         $this->loader = new DatabaseRouteLoader($this->nodeRepository, $this->siteRepository);
     }
@@ -83,7 +83,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
 
         // Define site
         $siteId = 'siteId';
-        $site = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteInterface');
+        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
         Phake::when($site)->getSiteId()->thenReturn($siteId);
         Phake::when($site)->getAliases()->thenReturn($siteAliases);
         Phake::when($site)->getLanguages()->thenReturn(array($enLocale, $frLocale));
@@ -162,7 +162,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($domain, $route->getHost());
         $this->assertSame(
             array(
-                '_controller' => 'PHPOrchestra\FrontBundle\Controller\NodeController::showAction',
+                '_controller' => 'OpenOrchestra\FrontBundle\Controller\NodeController::showAction',
                 '_locale' => $locale,
                 'nodeId' => $nodeId,
                 'siteId' => $siteId,
@@ -182,7 +182,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockSiteAlias($domain, $locale, $prefix = null)
     {
-        $siteAlias = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteAliasInterface');
+        $siteAlias = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
         Phake::when($siteAlias)->getDomain()->thenReturn($domain);
         Phake::when($siteAlias)->getLanguage()->thenReturn($locale);
         Phake::when($siteAlias)->getPrefix()->thenReturn($prefix);
@@ -202,7 +202,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockNode($mongoId, $nodeId, $pattern, $locale, $parentId = null)
     {
-        $node = Phake::mock('PHPOrchestra\ModelInterface\Model\NodeInterface');
+        $node = Phake::mock('OpenOrchestra\ModelInterface\Model\NodeInterface');
         Phake::when($node)->getId()->thenReturn($mongoId);
         Phake::when($node)->getNodeId()->thenReturn($nodeId);
         Phake::when($node)->getRoutePattern()->thenReturn($pattern);

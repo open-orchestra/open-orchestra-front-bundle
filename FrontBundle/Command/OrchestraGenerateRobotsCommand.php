@@ -1,12 +1,12 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Command;
+namespace OpenOrchestra\FrontBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use PHPOrchestra\ModelInterface\Model\SiteInterface;
+use OpenOrchestra\ModelInterface\Model\SiteInterface;
 
 /**
  * Class OrchestraGenerateRobotsCommand
@@ -34,14 +34,14 @@ class OrchestraGenerateRobotsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($siteId = $input->getOption('siteId')) {
-            $site = $this->getContainer()->get('php_orchestra_model.repository.site')->findOneBySiteId($siteId);
+            $site = $this->getContainer()->get('open_orchestra_model.repository.site')->findOneBySiteId($siteId);
             if ($site) {
                 $this->generateRobots($site, $output);
             } else {
                 $output->writeln("<error>No website found with siteId " . $siteId . ".</error>");
             }
         } else {
-            $siteCollection = $this->getContainer()->get('php_orchestra_model.repository.site')->findByDeleted(false);
+            $siteCollection = $this->getContainer()->get('open_orchestra_model.repository.site')->findByDeleted(false);
             if ($siteCollection) {
                 foreach ($siteCollection as $site) {
                     $this->generateRobots($site, $output);
@@ -60,7 +60,7 @@ class OrchestraGenerateRobotsCommand extends ContainerAwareCommand
      */
     protected function generateRobots(SiteInterface $site, OutputInterface $output)
     {
-        $robotsManager = $this->getContainer()->get('php_orchestra_front.manager.robots');
+        $robotsManager = $this->getContainer()->get('open_orchestra_front.manager.robots');
         $output->writeln("<info>Generating robots file for siteId " . $site->getSiteId() . " on domain " . $site->getDomain() . "</info>");
 
         $filename = $robotsManager->generateRobots($site);

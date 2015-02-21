@@ -1,5 +1,5 @@
 {
-    "name": "itkg/phporchestra-front-bundle",
+    "name": "itkg/open-orchestra-front-bundle",
     "license": "MIT",
     "authors": [
         {
@@ -31,13 +31,13 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "itkg/phporchestra-base-bundle": "*",
-        "itkg/phporchestra-display-bundle": "*",
-        "itkg/phporchestra-model-interface": "*",
-        "itkg/phporchestra-theme-bundle": "*"
+        "itkg/open-orchestra-base-bundle": "*",
+        "itkg/open-orchestra-display-bundle": "*",
+        "itkg/open-orchestra-model-interface": "*",
+        "itkg/open-orchestra-theme-bundle": "*"
     },
     "require-dev": {
-        "itkg/phporchestra-model-bundle": "dev-master",
+        "itkg/open-orchestra-model-bundle": "dev-master",
         "phpunit/phpunit" : "4.0.14",
         "scrutinizer/ocular": "1.1.1",
         "phake/phake": "*"
@@ -47,8 +47,8 @@
     },
     "autoload": {
         "psr-0": {
-            "PHPOrchestra\\FrontBundle": ""
+            "OpenOrchestra\\FrontBundle": ""
         }
     },
-    "target-dir": "PHPOrchestra"
+    "target-dir": "OpenOrchestra"
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\Test\Manager;
+namespace OpenOrchestra\FrontBundle\Test\Manager;
 
 use Phake;
-use PHPOrchestra\FrontBundle\Manager\RobotsManager;
+use OpenOrchestra\FrontBundle\Manager\RobotsManager;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -32,7 +32,7 @@ class RobotsManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateRobots()
     {
-        $site = Phake::mock('PHPOrchestra\ModelInterface\Model\SiteInterface');
+        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
         Phake::when($site)->getName()->thenReturn($this->siteDomain);
         Phake::when($site)->getRobotsTxt()->thenReturn($this->txtContent);
 

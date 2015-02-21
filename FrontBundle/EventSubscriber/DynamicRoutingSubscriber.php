@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPOrchestra\FrontBundle\EventSubscriber;
+namespace OpenOrchestra\FrontBundle\EventSubscriber;
 
-use PHPOrchestra\FrontBundle\Exception\DynamicRoutingUsedException;
-use PHPOrchestra\FrontBundle\Manager\DynamicRoutingManager;
+use OpenOrchestra\FrontBundle\Exception\DynamicRoutingUsedException;
+use OpenOrchestra\FrontBundle\Manager\DynamicRoutingManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
