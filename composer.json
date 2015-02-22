@@ -10,23 +10,23 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/itkg/phporchestra-model-bundle"
+            "url": "https://github.com/itkg/open-orchestra-model-bundle"
         },
         {
             "type": "vcs",
-            "url": "https://github.com/itkg/phporchestra-model-interface"
+            "url": "https://github.com/itkg/open-orchestra-model-interface"
         },
         {
             "type": "vcs",
-            "url": "https://github.com/itkg/phporchestra-theme-bundle"
+            "url": "https://github.com/itkg/open-orchestra-theme-bundle"
         },
         {
             "type": "vcs",
-            "url": "https://github.com/itkg/phporchestra-base-bundle"
+            "url": "https://github.com/itkg/open-orchestra-base-bundle"
         },
         {
             "type": "vcs",
-            "url": "https://github.com/itkg/phporchestra-display-bundle"
+            "url": "https://github.com/itkg/open-orchestra-display-bundle"
         }
     ],
     "minimum-stability": "dev",
