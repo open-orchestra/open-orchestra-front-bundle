@@ -28,7 +28,7 @@ class NodeControllerTest extends WebTestCase
      */
     public function testShowActionFixtureHomeSecondSite()
     {
-        $this->client->setServerParameter('HTTP_HOST', 'demo-phporchestra-front.dev');
+        $this->client->setServerParameter('HTTP_HOST', 'demo.openorchestra.dev');
         $crawler = $this->client->request('GET', '');
 
         $this->assertCount(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")'));
@@ -45,7 +45,7 @@ class NodeControllerTest extends WebTestCase
      */
     public function testShowActionFixtureHomeSiteEchonext($currentLanguage, $otherLanguage)
     {
-        $this->client->setServerParameter('HTTP_HOST', 'echonext.phporchestra.dev');
+        $this->client->setServerParameter('HTTP_HOST', 'echonext.openorchestra.dev');
         $this->client->followRedirects();
         $crawler = $this->client->request('GET', '/' . $currentLanguage);
 
