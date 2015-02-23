@@ -8,7 +8,7 @@
     <head>
         <title>{% block title %}{{ node.name }}{% endblock %}</title>
         {% block stylesheets %}
-            {{ phpOrchestraCss(node.theme) }}
+            {{ openOrchestraCss(node.theme) }}
         {% endblock %}
     </head>
     <body>
@@ -22,7 +22,7 @@
         </div>
         
         {% block javascripts %}
-            {{ phpOrchestraJs(node.theme) }}
+            {{ openOrchestraJs(node.theme) }}
         {% endblock %}
     </body>
 </html>
