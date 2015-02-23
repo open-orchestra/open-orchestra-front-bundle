@@ -30,7 +30,7 @@ class RobotsManager
     public function generateRobots(SiteInterface $site)
     {
         $txtContent = $site->getRobotsTxt();
-        $filename = str_replace(' ', '_', 'robots.' . $site->getName() . '.txt');
+        $filename = $site->getSiteId() . '/robots.txt';
         $this->filesystem->dumpFile('web/' . $filename, $txtContent);
 
         return $filename;
