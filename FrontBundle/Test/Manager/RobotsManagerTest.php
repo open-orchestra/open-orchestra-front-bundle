@@ -15,7 +15,7 @@ class RobotsManagerTest extends \PHPUnit_Framework_TestCase
     protected $robotsManager;
 
     protected $txtContent = 'txt';
-    protected $siteDomain = 'domain';
+    protected $siteId = 'siteId';
 
     /**
      * Set up the test
@@ -33,11 +33,11 @@ class RobotsManagerTest extends \PHPUnit_Framework_TestCase
     public function testGenerateRobots()
     {
         $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
-        Phake::when($site)->getName()->thenReturn($this->siteDomain);
+        Phake::when($site)->getSiteId()->thenReturn($this->siteId);
         Phake::when($site)->getRobotsTxt()->thenReturn($this->txtContent);
 
         $this->robotsManager->generateRobots($site);
 
-        Phake::verify($this->filesystem, Phake::times(1))->dumpFile('web/robots.' . $this->siteDomain . '.txt', $this->txtContent);
+        Phake::verify($this->filesystem, Phake::times(1))->dumpFile('web/' . $this->siteId . '/robots.txt', $this->txtContent);
     }
 }

@@ -47,7 +47,8 @@ class SitemapManager
     public function generateSitemap(SiteInterface $site)
     {
         $nodes = $this->getSitemapNodesFromSite($site);
-        $filename = str_replace(' ', '_', 'sitemap.' . $site->getName() . '.xml');
+        $filename = $site->getSiteId() . '/sitemap.xml';
+
         $map['url'] = $nodes;
 
         $xmlContent = str_replace(

@@ -21,6 +21,7 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
 
     protected $xmlContent = 'xml';
     protected $siteDomain = 'domain';
+    protected $siteId = 'siteId';
     protected $updatedDate;
     protected $changeFreq = 'frequency';
     protected $priority = 'priority';
@@ -79,12 +80,13 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
         Phake::when($alias)->getDomain()->thenReturn($this->domain);
 
         $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
+        Phake::when($site)->getSiteId()->thenReturn($this->siteId);
         Phake::when($site)->getName()->thenReturn($this->siteDomain);
         Phake::when($site)->getMainAlias()->thenReturn($alias);
 
         $this->sitemapManager->generateSitemap($site);
 
         Phake::verify($this->serializer, Phake::times(1))->serialize($this->mapArray, 'xml');
-        Phake::verify($this->filesystem, Phake::times(1))->dumpFile('web/sitemap.' . $this->siteDomain . '.xml', $this->xmlContent);
+        Phake::verify($this->filesystem, Phake::times(1))->dumpFile('web/' . $this->siteId . '/sitemap.xml', $this->xmlContent);
     }
 }

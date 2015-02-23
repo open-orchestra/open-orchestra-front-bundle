@@ -61,7 +61,9 @@ class OrchestraGenerateRobotsCommand extends ContainerAwareCommand
     protected function generateRobots(SiteInterface $site, OutputInterface $output)
     {
         $robotsManager = $this->getContainer()->get('open_orchestra_front.manager.robots');
-        $output->writeln("<info>Generating robots file for siteId " . $site->getSiteId() . " on domain " . $site->getDomain() . "</info>");
+        $mainAlias = $site->getMainAlias();
+        $alias = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
+        $output->writeln("<info>Generating robots file for siteId " . $site->getSiteId() . " with alias " . $alias . "</info>");
 
         $filename = $robotsManager->generateRobots($site);
 
