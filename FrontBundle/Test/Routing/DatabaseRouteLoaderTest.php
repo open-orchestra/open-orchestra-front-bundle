@@ -112,7 +112,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
         $enPattern = '';
         $enNode = $this->mockNode($enMongoId, $nodeId, $enPattern, $enLocale);
         $enSonMongoId = 'enSonMongoId';
-        $enSonPattern = '/{variable}';
+        $enSonPattern = '{variable}';
         $enSonNode = $this->mockNode($enSonMongoId, $sonId, $enSonPattern, $enLocale, $nodeId);
         $enGrandSonMongoId = 'enGrandSonMongoId';
         $enGrandSonPattern = 'blog';
@@ -145,6 +145,63 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertRoute($enLocale, '/en/{variable}', $endomain, $sonId, $siteId, $keyEn, $enSonRoute);
         $enGrandSonRoute = $routeCollection->get($keyEn . '_' . $enGrandSonMongoId);
         $this->assertRoute($enLocale, '/en/{variable}/blog', $endomain, $grandSonId, $siteId, $keyEn, $enGrandSonRoute);
+    }
+
+    /**
+     * Test load routes
+     */
+    public function testLoadWithFullUrl()
+    {
+        $frLocale = 'fr';
+
+        // Define site aliases
+        $frdomain = 'frdomain.com';
+        $keyFr = 0;
+        $siteAliasfr = $this->mockSiteAlias($frdomain, $frLocale);
+        $siteAliases = new ArrayCollection();
+        $siteAliases->set($keyFr, $siteAliasfr);
+
+        // Define site
+        $siteId = 'siteId';
+        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
+        Phake::when($site)->getSiteId()->thenReturn($siteId);
+        Phake::when($site)->getAliases()->thenReturn($siteAliases);
+        Phake::when($site)->getLanguages()->thenReturn(array($frLocale));
+
+        Phake::when($this->siteRepository)->findByDeleted(false)->thenReturn(array($site));
+
+        $nodeId = 'nodeId';
+        $sonId = 'sonId';
+        $grandSonId = 'grandSonId';
+        // Define fr nodes
+        $frMongoId = 'frMongoId';
+        $frPattern = '';
+        $frNode = $this->mockNode($frMongoId, $nodeId, $frPattern, $frLocale);
+        $frSonMongoId = 'frSonMongoId';
+        $frSonPattern = '{variable}';
+        $frSonNode = $this->mockNode($frSonMongoId, $sonId, $frSonPattern, $frLocale, $nodeId);
+        $frGrandSonMongoId = 'frGrandSonMongoId';
+        $frGrandSonPattern = '/full/blog';
+        $frGrandSonNode = $this->mockNode($frGrandSonMongoId, $grandSonId, $frGrandSonPattern, $frLocale, $sonId);
+        $frNodes[] = $frNode;
+        $frNodes[] = $frSonNode;
+        $frNodes[] = $frGrandSonNode;
+
+        // Define the repository return
+        Phake::when($this->nodeRepository)->findLastPublishedVersionByLanguageAndSiteId($frLocale, $siteId)->thenReturn($frNodes);
+
+        $routeCollection = $this->loader->load($this->resource, 'database');
+
+        $this->assertInstanceOf('Symfony\Component\Routing\RouteCollection', $routeCollection);
+        $this->assertCount(3, $routeCollection);
+
+        // Check the fr route
+        $frRoute = $routeCollection->get($keyFr . '_' . $frMongoId);
+        $this->assertRoute($frLocale, '/', $frdomain, $nodeId, $siteId, $keyFr, $frRoute);
+        $frSonRoute = $routeCollection->get($keyFr . '_' . $frSonMongoId);
+        $this->assertRoute($frLocale, '/{variable}', $frdomain, $sonId, $siteId, $keyFr, $frSonRoute);
+        $frGrandSonRoute = $routeCollection->get($keyFr . '_' . $frGrandSonMongoId);
+        $this->assertRoute($frLocale, '/full/blog', $frdomain, $grandSonId, $siteId, $keyFr, $frGrandSonRoute);
     }
 
     /**

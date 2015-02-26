@@ -86,11 +86,13 @@ class DatabaseRouteLoader extends Loader
      */
     protected function generateRoutePattern(NodeInterface $node)
     {
-        if (is_null($node->getParentId()) || !array_key_exists($node->getParentId(), $this->orderedNodes)) {
-            return $node->getRoutePattern();
+        $routePattern = $node->getRoutePattern();
+        $parentId = $node->getParentId();
+        if (is_null($parentId) || strstr($routePattern, '/') || !array_key_exists($parentId, $this->orderedNodes)) {
+            return $routePattern;
         }
 
-        return $this->suppressDoubleSlashes($this->generateRoutePattern($this->orderedNodes[$node->getParentId()]) . '/' . $node->getRoutePattern());
+        return $this->suppressDoubleSlashes($this->generateRoutePattern($this->orderedNodes[$parentId]) . '/' . $routePattern);
     }
 
     /**
