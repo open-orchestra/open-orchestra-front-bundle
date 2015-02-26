@@ -16,18 +16,3 @@ services:
         class: %open_orchestra_front.manager.robots.class%
         arguments:
             - @filesystem
-    open_orchestra_front.redirection.route_loader:
-        class: %open_orchestra_front.redirection.route_loader.class%
-        arguments:
-            - @open_orchestra_model.repository.redirection
-            - @open_orchestra_model.repository.node
-            - @open_orchestra_model.repository.site
-        tags:
-            - { name: routing.loader }
-    open_orchestra_front.database.route_loader:
-        class: %open_orchestra_front.database.route_loader.class%
-        arguments:
-            - @open_orchestra_model.repository.node
-            - @open_orchestra_model.repository.site
-        tags:
-            - { name: routing.loader }
