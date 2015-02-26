@@ -1,23 +1,8 @@
 parameters:
-    open_orchestra_front.subscriber.dynamic_routing.class: OpenOrchestra\FrontBundle\EventSubscriber\DynamicRoutingSubscriber
-    open_orchestra_front.manager.dynamic_routing.class: OpenOrchestra\FrontBundle\Manager\DynamicRoutingManager
     open_orchestra_front.manager.sitemap.class: OpenOrchestra\FrontBundle\Manager\SitemapManager
     open_orchestra_front.manager.robots.class: OpenOrchestra\FrontBundle\Manager\RobotsManager
-    open_orchestra_front.database.route_loader.class: OpenOrchestra\FrontBundle\Routing\DatabaseRouteLoader
-    open_orchestra_front.redirection.route_loader.class: OpenOrchestra\FrontBundle\Routing\RedirectionLoader
 
 services:
-    open_orchestra_front.subscriber.dynamic_routing:
-        class: %open_orchestra_front.subscriber.dynamic_routing.class%
-        arguments: [ @open_orchestra_front.manager.dynamic_routing ]
-        tags:
-            - { name: kernel.event_subscriber }
-    open_orchestra_front.manager.dynamic_routing:
-        class: %open_orchestra_front.manager.dynamic_routing.class%
-        arguments:
-            - @open_orchestra_model.repository.node
-            - @open_orchestra_display.manager.site
-            - @open_orchestra_model.repository.site
     open_orchestra.manager.current_site:
         alias: open_orchestra_display.manager.site
     open_orchestra_front.manager.sitemap:
@@ -31,18 +16,3 @@ services:
         class: %open_orchestra_front.manager.robots.class%
         arguments:
             - @filesystem
-    open_orchestra_front.redirection.route_loader:
-        class: %open_orchestra_front.redirection.route_loader.class%
-        arguments:
-            - @open_orchestra_model.repository.redirection
-            - @open_orchestra_model.repository.node
-            - @open_orchestra_model.repository.site
-        tags:
-            - { name: routing.loader }
-    open_orchestra_front.database.route_loader:
-        class: %open_orchestra_front.database.route_loader.class%
-        arguments:
-            - @open_orchestra_model.repository.node
-            - @open_orchestra_model.repository.site
-        tags:
-            - { name: routing.loader }
