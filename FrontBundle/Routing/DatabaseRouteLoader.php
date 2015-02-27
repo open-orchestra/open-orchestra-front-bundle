@@ -3,7 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Routing;
 
 use OpenOrchestra\ModelInterface\Model\NodeInterface;
-use OpenOrchestra\ModelInterface\Model\SchemeAbilityInterface;
+use OpenOrchestra\ModelInterface\Model\SchemeableInterface;
 use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
 use OpenOrchestra\ModelInterface\Model\SiteInterface;
 use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
@@ -146,7 +146,7 @@ class DatabaseRouteLoader extends Loader
                     $pattern = $this->suppressDoubleSlashes($alias->getPrefix() . '/' . $pattern);
                 }
                 $scheme = $node->getScheme();
-                if (is_null($scheme) || SchemeAbilityInterface::SCHEME_DEFAULT == $scheme) {
+                if (is_null($scheme) || SchemeableInterface::SCHEME_DEFAULT == $scheme) {
                     $scheme = $alias->getScheme();
                 }
                 $route = new Route(
