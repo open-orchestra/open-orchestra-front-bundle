@@ -11,7 +11,8 @@
             {% else %}
                 {% set nodeReference = blockReference.nodeId %}
             {% endif %}
-            {% set queryParams = app.request.query.all|merge({'module_parameters': app.request.attributes.get('_route_params')})|merge({'nodeId': nodeReference, 'blockId': blockReference.blockId }) %}
+            {% set routeParams = app.request.attributes.get('_route_params') %}
+            {% set queryParams = app.request.query.all|merge({'module_parameters': routeParams})|merge({'siteId': siteId, 'nodeId': nodeReference, 'blockId': blockReference.blockId, 'language': language}) %}
             {{ render_esi(url('open_orchestra_front_block', queryParams)) }}
         </div>
     {% endfor %}
