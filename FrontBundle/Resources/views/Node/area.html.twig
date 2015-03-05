@@ -1,7 +1,7 @@
 <div id="{{ area.areaId }}">
     {# <legend style="background-color:#BADFF4;border:1px solid #000000;">AREA | {{ area.areaId }}</legend> #}
     {% for subArea in area.areas %}
-        {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": subArea, 'nodeId': node.nodeId, 'siteId': siteId, 'language': language} only %}
+        {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": subArea, 'nodeId': nodeId, 'siteId': siteId, 'language': language} only %}
     {% endfor %}
     {% for blockReference in area.blocks %}
         <div>
