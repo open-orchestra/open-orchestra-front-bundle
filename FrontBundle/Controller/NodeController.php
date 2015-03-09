@@ -28,16 +28,21 @@ class NodeController extends Controller
      */
     public function showAction(Request $request, $nodeId)
     {
+        /** @var NodeInterface $node */
         $node = $this->get('open_orchestra_model.repository.node')
             ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($nodeId, $request->getLocale());
 
-        if (is_null($node)) {
+        if (!($node instanceof NodeInterface)) {
             throw new NonExistingNodeException();
         } elseif (!is_null($node->getRole()) && !$this->get('security.context')->isGranted($node->getRole())) {
             return $this->redirect($this->get('request')->getBaseUrl());
         }
 
-        return $this->renderNode($node);
+        $response = $this->renderNode($node);
+
+        $response = $this->get('open_orchestra_display.manager.cacheable')->setMaxAge($node->getMaxAge(), $response);
+
+        return $response;
     }
 
     /**
@@ -72,10 +77,6 @@ class NodeController extends Controller
                 'datetime' => time()
             )
         );
-
-        $response->setPublic();
-        $response->setSharedMaxAge(100);
-        $response->headers->addCacheControlDirective('must-revalidate', true);
 
         return $response;
     }
