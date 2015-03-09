@@ -39,6 +39,7 @@ class NodeController extends Controller
         }
 
         $response = $this->renderNode($node);
+        $this->get('fos_http_cache.cache_manager')->tagResponse($response, array('poc', 'node'));
 
         $response = $this->get('open_orchestra_display.manager.cacheable')->setMaxAge($node->getMaxAge(), $response);
 
