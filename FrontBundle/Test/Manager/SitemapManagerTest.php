@@ -43,7 +43,7 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->node)->getSitemapPriority()->thenReturn($this->priority);
         $this->nodeCollection = new ArrayCollection();
         $this->nodeCollection->add($this->node);
-        Phake::when($this->nodeRepository)->findLastVersionBySiteId(Phake::anyParameters())->thenReturn($this->nodeCollection);
+        Phake::when($this->nodeRepository)->findLastPublishedVersionByLanguageAndSiteId(Phake::anyParameters())->thenReturn($this->nodeCollection);
 
         $this->router = Phake::mock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
 

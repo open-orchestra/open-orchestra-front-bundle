@@ -3,6 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Manager;
 
 use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
+use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -73,7 +74,7 @@ class SitemapManager
         $nodes = array();
 
         // TODO : récupérer les noeuds en version published uniquement + vision publique
-        $nodesCollection = $this->nodeRepository->findLastVersionBySiteId(NodeInterface::TYPE_DEFAULT, $site->getSiteId());
+        $nodesCollection = $this->nodeRepository->findLastPublishedVersionByLanguageAndSiteId($site->getMainAlias()->getLanguage(), $site->getSiteId());
 
         if ($nodesCollection) {
             foreach($nodesCollection as $node) {
@@ -95,12 +96,17 @@ class SitemapManager
                     $mainAlias = $site->getMainAlias();
                     $alias = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
 
-                    $nodes[] = array(
-                        'loc' => $alias . $this->router->generate($node->getNodeId()),
-                        'lastmod' => $lastmod,
-                        'changefreq' => $sitemapChangefreq,
-                        'priority' => $sitemapPriority
-                    );
+                    try {
+                        $url = $this->router->generate($node->getId());
+                        $nodes[] = array(
+                            'loc' => $alias . $url,
+                            'lastmod' => $lastmod,
+                            'changefreq' => $sitemapChangefreq,
+                            'priority' => $sitemapPriority
+                        );
+                    } catch (MissingMandatoryParametersException $e) {
+
+                    }
                 }
             }
         }
