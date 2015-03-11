@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
+use OpenOrchestra\ModelInterface\Model\CacheableInterface;
 
 /**
  * Class NodeController
@@ -41,7 +42,11 @@ class NodeController extends Controller
         $response = $this->renderNode($node);
         $this->get('fos_http_cache.cache_manager')->tagResponse($response, array('poc', 'node'));
 
-        $response = $this->get('open_orchestra_display.manager.cacheable')->setMaxAge($node->getMaxAge(), $response);
+        $response = $this->get('open_orchestra_display.manager.cacheable')->setResponseCacheParameters(
+            $response,
+            $node->getMaxAge(),
+            CacheableInterface::CACHE_PUBLIC
+        );
 
         return $response;
     }
