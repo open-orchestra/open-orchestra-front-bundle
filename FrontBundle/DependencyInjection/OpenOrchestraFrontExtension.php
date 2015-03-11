@@ -22,8 +22,17 @@ class OpenOrchestraFrontExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('open_orchestra_front.devices', $config['devices']);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('routing.yml');
+        $loader->load('twig.yml');
+        $container->setAlias('templating', 'open_orchestra_front.twig.orchestra_twig_engine');
+        if ($container->getParameter('kernel.debug')) {
+            $loader->load('debug.yml');
+
+            $container->setAlias('templating', 'open_orchestra_front.twig.orchestra_timed_twig_engine');
+        }
     }
 }
