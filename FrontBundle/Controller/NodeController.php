@@ -40,7 +40,13 @@ class NodeController extends Controller
         }
 
         $response = $this->renderNode($node);
-        $this->get('fos_http_cache.cache_manager')->tagResponse($response, array('poc', 'node'));
+
+        $cacheTags = array(
+            'node-' . $node->getNodeId(),
+            'language-' . $node->getLanguage(),
+            'site-' . $node->getSiteId()
+        );
+        $this->get('fos_http_cache.cache_manager')->tagResponse($response, $cacheTags);
 
         $response = $this->get('open_orchestra_display.manager.cacheable')->setResponseCacheParameters(
             $response,
