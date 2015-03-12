@@ -5,6 +5,7 @@ namespace OpenOrchestra\FrontBundle\Test\Routing;
 use Doctrine\Common\Collections\ArrayCollection;
 use Phake;
 use OpenOrchestra\FrontBundle\Routing\RedirectionLoader;
+use Symfony\Component\Routing\Route;
 
 /**
  * Test RedirectionLoaderTest
@@ -88,13 +89,8 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
         $permanent = true;
 
         // Define the redirection
-        $redirection = Phake::mock('OpenOrchestra\ModelInterface\Model\RedirectionInterface');
-        Phake::when($redirection)->getId()->thenReturn($redirectionMongoId);
-        Phake::when($redirection)->getSiteId()->thenReturn($siteId);
-        Phake::when($redirection)->getLocale()->thenReturn($this->localeFr);
-        Phake::when($redirection)->getRoutePattern()->thenReturn($pattern);
+        $redirection = $this->generateRedirection($redirectionMongoId, $siteId, $pattern, $permanent);
         Phake::when($redirection)->getNodeId()->thenReturn($nodeId);
-        Phake::when($redirection)->isPermanent()->thenReturn($permanent);
 
         Phake::when($this->redirectionRepository)->findAll()->thenReturn(array($redirection));
 
@@ -116,6 +112,37 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test load with redirection to a node
      */
+    public function testLoadWithRedirectionWithNoPublishedNode()
+    {
+        $redirectionMongoId = 'redirectionMongoId';
+        $nodeMongoId = 'nodeMongoId';
+        $siteId = '1';
+        $pattern = '/news/welcome';
+        $nodeId = 'nodeId';
+        $permanent = true;
+
+        // Define the redirection
+        $redirection = $this->generateRedirection($redirectionMongoId, $siteId, $pattern, $permanent);
+        Phake::when($redirection)->getNodeId()->thenReturn($nodeId);
+
+        Phake::when($this->redirectionRepository)->findAll()->thenReturn(array($redirection));
+
+        // Define the node
+        $node = Phake::mock('OpenOrchestra\ModelInterface\Model\NodeInterface');
+        Phake::when($node)->getId()->thenReturn($nodeMongoId);
+        Phake::when($node)->getLanguage()->thenReturn($this->localeFr);
+
+        Phake::when($this->nodeRepository)->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($nodeId, $this->localeFr, $siteId)->thenReturn(null);
+
+        $routes = $this->loader->load($this->resource);
+
+        $this->assertInstanceOf('Symfony\Component\Routing\RouteCollection', $routes);
+        $this->assertCount(0, $routes);
+    }
+
+    /**
+     * Test load with redirection to a node
+     */
     public function testLoadWithRedirectionUrl()
     {
         $redirectionMongoId = 'redirectionMongoId';
@@ -125,13 +152,8 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
         $permanent = true;
 
         // Define the redirection
-        $redirection = Phake::mock('OpenOrchestra\ModelInterface\Model\RedirectionInterface');
-        Phake::when($redirection)->getId()->thenReturn($redirectionMongoId);
-        Phake::when($redirection)->getSiteId()->thenReturn($siteId);
-        Phake::when($redirection)->getLocale()->thenReturn($this->localeFr);
-        Phake::when($redirection)->getRoutePattern()->thenReturn($pattern);
+        $redirection = $this->generateRedirection($redirectionMongoId, $siteId, $pattern, $permanent);
         Phake::when($redirection)->getUrl()->thenReturn($url);
-        Phake::when($redirection)->isPermanent()->thenReturn($permanent);
 
         Phake::when($this->redirectionRepository)->findAll()->thenReturn(array($redirection));
 
@@ -144,13 +166,14 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $pattern
-     * @param $domain
-     * @param $routeParam
-     * @param $permanent
-     * @param $route
+     * @param string $pattern
+     * @param string $domain
+     * @param string $routeParam
+     * @param string $permanent
+     * @param string $redirectType
+     * @param Route  $route
      */
-    protected function assertRoute($pattern, $domain, $routeParam, $permanent, $redirectType, $route)
+    protected function assertRoute($pattern, $domain, $routeParam, $permanent, $redirectType, Route $route)
     {
         $key = ($redirectType == self::REDIRECT)? 'route': 'path';
 
@@ -165,5 +188,25 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
             ),
             $route->getDefaults()
         );
+    }
+
+    /**
+     * @param string $redirectionMongoId
+     * @param string $siteId
+     * @param string $pattern
+     * @param bool   $permanent
+     *
+     * @return mixed
+     */
+    protected function generateRedirection($redirectionMongoId, $siteId, $pattern, $permanent)
+    {
+        $redirection = Phake::mock('OpenOrchestra\ModelInterface\Model\RedirectionInterface');
+        Phake::when($redirection)->getId()->thenReturn($redirectionMongoId);
+        Phake::when($redirection)->getSiteId()->thenReturn($siteId);
+        Phake::when($redirection)->getLocale()->thenReturn($this->localeFr);
+        Phake::when($redirection)->getRoutePattern()->thenReturn($pattern);
+        Phake::when($redirection)->isPermanent()->thenReturn($permanent);
+
+        return $redirection;
     }
 }
