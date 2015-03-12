@@ -20,6 +20,17 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('open_orchestra_front');
 
+        $rootNode->children()
+            ->arrayNode('devices')
+                ->useAttributeAsKey('name')
+                ->prototype('array')
+                    ->children()
+                        ->scalarNode('parent')->defaultNull()->end()
+                    ->end()
+                ->end()
+            ->end()
+        ->end();
+
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
