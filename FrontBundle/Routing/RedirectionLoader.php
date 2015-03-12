@@ -61,9 +61,11 @@ class RedirectionLoader extends Loader
             if ($redirection->getNodeId()) {
                 /** @var NodeInterface $node */
                 $node = $this->nodeRepository->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($redirection->getNodeId(), $redirection->getLocale(), $redirection->getSiteId());
-                $parameterKey = 'route';
-                $nodeId = $node->getId();
-                $this->generateRouteForSite($site, $redirection, $parameterKey, $nodeId, null, $routes);
+                if ($node instanceof NodeInterface) {
+                    $parameterKey = 'route';
+                    $nodeId = $node->getId();
+                    $this->generateRouteForSite($site, $redirection, $parameterKey, $nodeId, null, $routes);
+                }
             } elseif ($redirection->getUrl()) {
                 $parameterKey = 'path';
                 $this->generateRouteForSite($site, $redirection, $parameterKey, null, $redirection->getUrl(), $routes);
