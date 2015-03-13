@@ -46,9 +46,9 @@ class NodeController extends Controller
             'language-' . $node->getLanguage(),
             'site-' . $node->getSiteId()
         );
-        $this->get('fos_http_cache.cache_manager')->tagResponse($response, $cacheTags);
-
-        $response = $this->get('open_orchestra_display.manager.cacheable')->setResponseCacheParameters(
+        $cacheableManager = $this->get('open_orchestra_display.manager.cacheable');
+        $cacheableManager->tagResponse($response, $cacheTags);
+        $response = $cacheableManager->setResponseCacheParameters(
             $response,
             $node->getMaxAge(),
             CacheableInterface::CACHE_PUBLIC
