@@ -52,7 +52,7 @@ class NodeController extends Controller
         $cacheTags = array(
             $tagManager->formatNodeIdTag($node->getNodeId()),
             $tagManager->formatLanguageTag($node->getLanguage()),
-            $tagManager->formatSiteTag($node->getSiteId())
+            $tagManager->formatSiteIdTag($node->getSiteId())
         );
         $cacheableManager->tagResponse($response, $cacheTags);
 
