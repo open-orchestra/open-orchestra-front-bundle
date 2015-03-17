@@ -44,6 +44,14 @@ class NodeController extends Controller
         return $this->updateNodeResponse($response, $node);
     }
 
+    /**
+     * Update response headers
+     * 
+     * @param Response      $response
+     * @param NodeInterface $node
+     * 
+     * @return Response
+     */
     protected function updateNodeResponse(Response $response, NodeInterface $node)
     {
         $tagManager = $this->get('open_orchestra_display.manager.tag');
