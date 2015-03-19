@@ -54,7 +54,7 @@ class NodeController extends Controller
      */
     protected function updateNodeResponse(Response $response, NodeInterface $node)
     {
-        $tagManager = $this->get('open_orchestra_display.manager.tag');
+        $tagManager = $this->get('open_orchestra_base.manager.tag');
         $cacheableManager = $this->get('open_orchestra_display.manager.cacheable');
 
         $cacheTags = array(
