@@ -41,13 +41,29 @@ class NodeController extends Controller
 
         $response = $this->renderNode($node);
 
-        $cacheTags = array(
-            'node-' . $node->getNodeId(),
-            'language-' . $node->getLanguage(),
-            'site-' . $node->getSiteId()
-        );
+        return $this->updateNodeResponse($response, $node);
+    }
+
+    /**
+     * Update response headers
+     * 
+     * @param Response      $response
+     * @param NodeInterface $node
+     * 
+     * @return Response
+     */
+    protected function updateNodeResponse(Response $response, NodeInterface $node)
+    {
+        $tagManager = $this->get('open_orchestra_base.manager.tag');
         $cacheableManager = $this->get('open_orchestra_display.manager.cacheable');
+
+        $cacheTags = array(
+            $tagManager->formatNodeIdTag($node->getNodeId()),
+            $tagManager->formatLanguageTag($node->getLanguage()),
+            $tagManager->formatSiteIdTag($node->getSiteId())
+        );
         $cacheableManager->tagResponse($response, $cacheTags);
+
         $response = $cacheableManager->setResponseCacheParameters(
             $response,
             $node->getMaxAge(),
