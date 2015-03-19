@@ -16,6 +16,11 @@ trait Renderable
     protected $request;
 
     /**
+     * @var array
+     */
+    protected $devices;
+
+    /**
      * @param string|TemplateReferenceInterface $name
      * @param array                             $parameters
      *
@@ -23,7 +28,7 @@ trait Renderable
      */
     public function render($name, array $parameters = array())
     {
-        $device = $this->request->get('X-UA-Device');
+        $device = $this->request->get('x-ua-device');
 
         if (!is_null($device) && '' !== $device) {
             $name = $this->getTemplate($name, $device);
@@ -40,6 +45,9 @@ trait Renderable
      */
     public function getTemplate($name, $device)
     {
+        if (is_array($device) && !empty($device)) {
+            return $this->getTemplate($name, $device[0]);
+        }
         if (!is_null($device) && '' !== $device) {
             $templateDevice = $this->replaceTemplateExtension($name, $device);
             if ($this->exists($templateDevice)) {

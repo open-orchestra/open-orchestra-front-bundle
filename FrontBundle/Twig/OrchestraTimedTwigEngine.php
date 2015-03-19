@@ -16,8 +16,6 @@ class OrchestraTimedTwigEngine extends TimedTwigEngine
 {
     use Renderable;
 
-    protected $devices;
-
     /**
      * Constructor.
      *
