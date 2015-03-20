@@ -15,8 +15,6 @@ class OrchestraTwigEngine extends TwigEngine
 {
     use Renderable;
 
-    protected $devices;
-
     /**
      * Constructor.
      *
