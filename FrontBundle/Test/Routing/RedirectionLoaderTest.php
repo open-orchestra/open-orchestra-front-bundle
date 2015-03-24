@@ -95,7 +95,7 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->redirectionRepository)->findAll()->thenReturn(array($redirection));
 
         // Define the node
-        $node = Phake::mock('OpenOrchestra\ModelInterface\Model\NodeInterface');
+        $node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
         Phake::when($node)->getId()->thenReturn($nodeMongoId);
         Phake::when($node)->getLanguage()->thenReturn($this->localeFr);
 
@@ -128,7 +128,7 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->redirectionRepository)->findAll()->thenReturn(array($redirection));
 
         // Define the node
-        $node = Phake::mock('OpenOrchestra\ModelInterface\Model\NodeInterface');
+        $node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
         Phake::when($node)->getId()->thenReturn($nodeMongoId);
         Phake::when($node)->getLanguage()->thenReturn($this->localeFr);
 

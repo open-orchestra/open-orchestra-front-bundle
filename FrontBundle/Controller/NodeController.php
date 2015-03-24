@@ -3,7 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Controller;
 
 use OpenOrchestra\FrontBundle\Exception\NonExistingNodeException;
-use OpenOrchestra\ModelInterface\Model\NodeInterface;
+use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,11 +29,11 @@ class NodeController extends Controller
      */
     public function showAction(Request $request, $nodeId)
     {
-        /** @var NodeInterface $node */
+        /** @var ReadNodeInterface $node */
         $node = $this->get('open_orchestra_model.repository.node')
             ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($nodeId, $request->getLocale());
 
-        if (!($node instanceof NodeInterface)) {
+        if (!($node instanceof ReadNodeInterface)) {
             throw new NonExistingNodeException();
         } elseif (!is_null($node->getRole()) && !$this->get('security.context')->isGranted($node->getRole())) {
             return $this->redirect($this->get('request')->getBaseUrl());
@@ -48,11 +48,11 @@ class NodeController extends Controller
      * Update response headers
      * 
      * @param Response      $response
-     * @param NodeInterface $node
+     * @param ReadNodeInterface $node
      * 
      * @return Response
      */
-    protected function updateNodeResponse(Response $response, NodeInterface $node)
+    protected function updateNodeResponse(Response $response, ReadNodeInterface $node)
     {
         $tagManager = $this->get('open_orchestra_base.manager.tag');
         $cacheableManager = $this->get('open_orchestra_display.manager.cacheable');
@@ -92,7 +92,7 @@ class NodeController extends Controller
     }
 
     /**
-     * @param NodeInterface $node
+     * @param ReadNodeInterface $node
      *
      * @return Response
      */

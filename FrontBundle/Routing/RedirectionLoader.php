@@ -2,7 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Routing;
 
-use OpenOrchestra\ModelInterface\Model\NodeInterface;
+use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Model\RedirectionInterface;
 use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
 use OpenOrchestra\ModelInterface\Model\SiteInterface;
@@ -59,9 +59,9 @@ class RedirectionLoader extends Loader
         foreach ($redirections as $redirection) {
             $site = $this->siteRepository->findOneBySiteId($redirection->getSiteId());
             if ($redirection->getNodeId()) {
-                /** @var NodeInterface $node */
+                /** @var ReadNodeInterface $node */
                 $node = $this->nodeRepository->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($redirection->getNodeId(), $redirection->getLocale(), $redirection->getSiteId());
-                if ($node instanceof NodeInterface) {
+                if ($node instanceof ReadNodeInterface) {
                     $parameterKey = 'route';
                     $nodeId = $node->getId();
                     $this->generateRouteForSite($site, $redirection, $parameterKey, $nodeId, null, $routes);

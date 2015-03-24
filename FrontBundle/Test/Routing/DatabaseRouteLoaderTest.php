@@ -5,7 +5,7 @@ namespace OpenOrchestra\FrontBundle\Test\Routing;
 use Doctrine\Common\Collections\ArrayCollection;
 use Phake;
 use OpenOrchestra\FrontBundle\Routing\DatabaseRouteLoader;
-use OpenOrchestra\ModelInterface\Model\NodeInterface;
+use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
 
 /**
@@ -255,11 +255,11 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
      * @param string      $locale
      * @param string|null $parentId
      *
-     * @return NodeInterface
+     * @return ReadNodeInterface
      */
     protected function mockNode($mongoId, $nodeId, $pattern, $locale, $parentId = null)
     {
-        $node = Phake::mock('OpenOrchestra\ModelInterface\Model\NodeInterface');
+        $node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
         Phake::when($node)->getId()->thenReturn($mongoId);
         Phake::when($node)->getNodeId()->thenReturn($nodeId);
         Phake::when($node)->getRoutePattern()->thenReturn($pattern);

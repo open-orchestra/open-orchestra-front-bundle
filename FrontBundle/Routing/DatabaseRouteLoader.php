@@ -2,7 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Routing;
 
-use OpenOrchestra\ModelInterface\Model\NodeInterface;
+use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Model\SchemeableInterface;
 use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
 use OpenOrchestra\ModelInterface\Model\SiteInterface;
@@ -53,7 +53,7 @@ class DatabaseRouteLoader extends Loader
         foreach ($sites as $site) {
             foreach ($site->getLanguages() as $language) {
                 $nodes = $this->initializeNodes($language, $site);
-                /** @var NodeInterface $node */
+                /** @var ReadNodeInterface $node */
                 foreach ($nodes as $node) {
                     $this->generateRoutesForNode($site, $node, $routes);
 
@@ -80,11 +80,11 @@ class DatabaseRouteLoader extends Loader
     }
 
     /**
-     * @param NodeInterface $node
+     * @param ReadNodeInterface $node
      *
      * @return string
      */
-    protected function generateRoutePattern(NodeInterface $node)
+    protected function generateRoutePattern(ReadNodeInterface $node)
     {
         $routePattern = $node->getRoutePattern();
         $parentId = $node->getParentId();
@@ -110,7 +110,7 @@ class DatabaseRouteLoader extends Loader
      */
     protected function orderNodes(array $nodes)
     {
-        /** @var NodeInterface $node */
+        /** @var ReadNodeInterface $node */
         foreach ($nodes as $node) {
             $this->orderedNodes[$node->getNodeId()] = $node;
         }
@@ -132,7 +132,7 @@ class DatabaseRouteLoader extends Loader
 
     /**
      * @param SiteInterface   $site
-     * @param NodeInterface   $node
+     * @param ReadNodeInterface   $node
      * @param RouteCollection $routes
      */
     protected function generateRoutesForNode($site, $node, $routes)

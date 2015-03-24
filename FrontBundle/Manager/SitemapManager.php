@@ -2,13 +2,13 @@
 
 namespace OpenOrchestra\FrontBundle\Manager;
 
+use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use OpenOrchestra\ModelInterface\Model\SiteInterface;
-use OpenOrchestra\ModelInterface\Model\NodeInterface;
 
 /**
  * Class SitemapManager
@@ -77,6 +77,7 @@ class SitemapManager
         $nodesCollection = $this->nodeRepository->findLastPublishedVersionByLanguageAndSiteId($site->getMainAlias()->getLanguage(), $site->getSiteId());
 
         if ($nodesCollection) {
+            /** @var ReadNodeInterface $node */
             foreach($nodesCollection as $node) {
                 if (is_null($node->getRole())) {
                     $sitemapChangefreq = $node->getSitemapChangefreq();

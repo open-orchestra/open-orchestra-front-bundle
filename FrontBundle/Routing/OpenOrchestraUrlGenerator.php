@@ -2,9 +2,6 @@
 
 namespace OpenOrchestra\FrontBundle\Routing;
 
-use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
-use OpenOrchestra\ModelInterface\Model\NodeInterface;
-use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGenerator;
