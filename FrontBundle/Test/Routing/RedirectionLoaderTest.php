@@ -47,7 +47,7 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
 
         $siteAliases = new ArrayCollection(array($siteAliasFr1, $siteAliasFr2, $siteAliasEn));
 
-        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
+        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
         Phake::when($site)->getAliases()->thenReturn($siteAliases);
 
         $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface');

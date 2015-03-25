@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use OpenOrchestra\ModelInterface\Model\SiteInterface;
+use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 
 class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
 {
@@ -51,10 +51,10 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
     /**
      * Call sitemap generation for $site
      * 
-     * @param SiteInterface $site
+     * @param ReadSiteInterface $site
      * @param OutputInterface $output
      */
-    protected function generateSitemap(SiteInterface $site, OutputInterface $output)
+    protected function generateSitemap(ReadSiteInterface $site, OutputInterface $output)
     {
         $sitemapManager = $this->getContainer()->get('open_orchestra_front.manager.sitemap');
         $mainAlias = $site->getMainAlias();

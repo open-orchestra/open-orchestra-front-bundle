@@ -5,7 +5,7 @@ namespace OpenOrchestra\FrontBundle\Routing;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Model\SchemeableInterface;
 use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
-use OpenOrchestra\ModelInterface\Model\SiteInterface;
+use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
 use OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
 use Symfony\Component\Config\Loader\Loader;
@@ -49,7 +49,7 @@ class DatabaseRouteLoader extends Loader
         $routes = new RouteCollection();
 
         $sites = $this->siteRepository->findByDeleted(false);
-        /** @var SiteInterface $site */
+        /** @var ReadSiteInterface $site */
         foreach ($sites as $site) {
             foreach ($site->getLanguages() as $language) {
                 $nodes = $this->initializeNodes($language, $site);
@@ -131,7 +131,7 @@ class DatabaseRouteLoader extends Loader
     }
 
     /**
-     * @param SiteInterface   $site
+     * @param ReadSiteInterface   $site
      * @param ReadNodeInterface   $node
      * @param RouteCollection $routes
      */

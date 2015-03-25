@@ -83,7 +83,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
 
         // Define site
         $siteId = 'siteId';
-        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
+        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
         Phake::when($site)->getSiteId()->thenReturn($siteId);
         Phake::when($site)->getAliases()->thenReturn($siteAliases);
         Phake::when($site)->getLanguages()->thenReturn(array($enLocale, $frLocale));
@@ -163,7 +163,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
 
         // Define site
         $siteId = 'siteId';
-        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
+        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
         Phake::when($site)->getSiteId()->thenReturn($siteId);
         Phake::when($site)->getAliases()->thenReturn($siteAliases);
         Phake::when($site)->getLanguages()->thenReturn(array($frLocale));

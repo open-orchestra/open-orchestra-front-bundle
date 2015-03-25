@@ -79,7 +79,7 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
         Phake::when($alias)->getPrefix()->thenReturn($this->prefix);
         Phake::when($alias)->getDomain()->thenReturn($this->domain);
 
-        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
+        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
         Phake::when($site)->getSiteId()->thenReturn($this->siteId);
         Phake::when($site)->getName()->thenReturn($this->siteDomain);
         Phake::when($site)->getMainAlias()->thenReturn($alias);

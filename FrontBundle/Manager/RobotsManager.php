@@ -3,7 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Manager;
 
 use Symfony\Component\Filesystem\Filesystem;
-use OpenOrchestra\ModelInterface\Model\SiteInterface;
+use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 
 /**
  * Class RobotsManager
@@ -23,11 +23,11 @@ class RobotsManager
     /**
      * Generate robots.txt for $site
      * 
-     * @param SiteInterface $site
+     * @param ReadSiteInterface $site
      *
      * @return string
      */
-    public function generateRobots(SiteInterface $site)
+    public function generateRobots(ReadSiteInterface $site)
     {
         $txtContent = $site->getRobotsTxt();
         $filename = $site->getSiteId() . '/robots.txt';
