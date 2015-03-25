@@ -32,7 +32,7 @@ class RobotsManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateRobots()
     {
-        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
+        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
         Phake::when($site)->getSiteId()->thenReturn($this->siteId);
         Phake::when($site)->getRobotsTxt()->thenReturn($this->txtContent);
 

@@ -2,10 +2,10 @@
 
 namespace OpenOrchestra\FrontBundle\Routing;
 
-use OpenOrchestra\ModelInterface\Model\NodeInterface;
-use OpenOrchestra\ModelInterface\Model\RedirectionInterface;
-use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
-use OpenOrchestra\ModelInterface\Model\SiteInterface;
+use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
+use OpenOrchestra\ModelInterface\Model\ReadRedirectionInterface;
+use OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface;
+use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
 use OpenOrchestra\ModelInterface\Repository\RedirectionRepositoryInterface;
 use OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
@@ -55,13 +55,13 @@ class RedirectionLoader extends Loader
 
         $redirections = $this->redirectionRepository->findAll();
 
-        /** @var RedirectionInterface $redirection */
+        /** @var ReadRedirectionInterface $redirection */
         foreach ($redirections as $redirection) {
             $site = $this->siteRepository->findOneBySiteId($redirection->getSiteId());
             if ($redirection->getNodeId()) {
-                /** @var NodeInterface $node */
+                /** @var ReadNodeInterface $node */
                 $node = $this->nodeRepository->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($redirection->getNodeId(), $redirection->getLocale(), $redirection->getSiteId());
-                if ($node instanceof NodeInterface) {
+                if ($node instanceof ReadNodeInterface) {
                     $parameterKey = 'route';
                     $nodeId = $node->getId();
                     $this->generateRouteForSite($site, $redirection, $parameterKey, $nodeId, null, $routes);
@@ -92,16 +92,16 @@ class RedirectionLoader extends Loader
     }
 
     /**
-     * @param SiteInterface        $site
-     * @param RedirectionInterface $redirection
+     * @param ReadSiteInterface        $site
+     * @param ReadRedirectionInterface $redirection
      * @param string               $parameterKey
      * @param string|null          $nodeId
      * @param string|null          $url
      * @param RouteCollection      $routes
      */
-    protected function generateRouteForSite(SiteInterface $site, RedirectionInterface $redirection, $parameterKey, $nodeId = null, $url = null, RouteCollection $routes)
+    protected function generateRouteForSite(ReadSiteInterface $site, ReadRedirectionInterface $redirection, $parameterKey, $nodeId = null, $url = null, RouteCollection $routes)
     {
-        /** @var SiteAliasInterface $alias */
+        /** @var ReadSiteAliasInterface $alias */
         foreach ($site->getAliases() as $key => $alias) {
             if ($redirection->getLocale() === $alias->getLanguage()) {
                 $parameter = $url;

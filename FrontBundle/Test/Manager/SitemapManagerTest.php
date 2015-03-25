@@ -37,7 +37,7 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->updatedDate = new \DateTime();
         $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface');
-        $this->node = Phake::mock('OpenOrchestra\ModelInterface\Model\NodeInterface');
+        $this->node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
         Phake::when($this->node)->getUpdatedAt()->thenReturn($this->updatedDate);
         Phake::when($this->node)->getSitemapChangefreq()->thenReturn($this->changeFreq);
         Phake::when($this->node)->getSitemapPriority()->thenReturn($this->priority);
@@ -75,11 +75,11 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateSitemap()
     {
-        $alias = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
+        $alias = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface');
         Phake::when($alias)->getPrefix()->thenReturn($this->prefix);
         Phake::when($alias)->getDomain()->thenReturn($this->domain);
 
-        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteInterface');
+        $site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
         Phake::when($site)->getSiteId()->thenReturn($this->siteId);
         Phake::when($site)->getName()->thenReturn($this->siteDomain);
         Phake::when($site)->getMainAlias()->thenReturn($alias);

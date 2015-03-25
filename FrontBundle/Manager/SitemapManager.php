@@ -2,13 +2,13 @@
 
 namespace OpenOrchestra\FrontBundle\Manager;
 
+use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use OpenOrchestra\ModelInterface\Model\SiteInterface;
-use OpenOrchestra\ModelInterface\Model\NodeInterface;
+use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 
 /**
  * Class SitemapManager
@@ -41,11 +41,11 @@ class SitemapManager
     /**
      * Generate sitemap for $site
      *
-     * @param SiteInterface $site
+     * @param ReadSiteInterface $site
      *
      * @return string
      */
-    public function generateSitemap(SiteInterface $site)
+    public function generateSitemap(ReadSiteInterface $site)
     {
         $nodes = $this->getSitemapNodesFromSite($site);
         $filename = $site->getSiteId() . '/sitemap.xml';
@@ -65,11 +65,11 @@ class SitemapManager
     /**
      * Return an array of sitemapNodes for $site
      *
-     * @param SiteInterface $site
+     * @param ReadSiteInterface $site
      *
      * @return array
      */
-    protected function getSitemapNodesFromSite(SiteInterface $site)
+    protected function getSitemapNodesFromSite(ReadSiteInterface $site)
     {
         $nodes = array();
 
@@ -77,6 +77,7 @@ class SitemapManager
         $nodesCollection = $this->nodeRepository->findLastPublishedVersionByLanguageAndSiteId($site->getMainAlias()->getLanguage(), $site->getSiteId());
 
         if ($nodesCollection) {
+            /** @var ReadNodeInterface $node */
             foreach($nodesCollection as $node) {
                 if (is_null($node->getRole())) {
                     $sitemapChangefreq = $node->getSitemapChangefreq();

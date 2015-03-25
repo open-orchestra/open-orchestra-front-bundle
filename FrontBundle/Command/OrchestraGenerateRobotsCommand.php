@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use OpenOrchestra\ModelInterface\Model\SiteInterface;
+use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 
 /**
  * Class OrchestraGenerateRobotsCommand
@@ -55,10 +55,10 @@ class OrchestraGenerateRobotsCommand extends ContainerAwareCommand
     /**
      * Call robots.txt generation for $site
      * 
-     * @param SiteInterface $site
+     * @param ReadSiteInterface $site
      * @param OutputInterface $output
      */
-    protected function generateRobots(SiteInterface $site, OutputInterface $output)
+    protected function generateRobots(ReadSiteInterface $site, OutputInterface $output)
     {
         $robotsManager = $this->getContainer()->get('open_orchestra_front.manager.robots');
         $mainAlias = $site->getMainAlias();
