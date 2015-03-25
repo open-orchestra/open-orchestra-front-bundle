@@ -3,7 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Routing;
 
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
-use OpenOrchestra\ModelInterface\Model\RedirectionInterface;
+use OpenOrchestra\ModelInterface\Model\ReadRedirectionInterface;
 use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
 use OpenOrchestra\ModelInterface\Model\SiteInterface;
 use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
@@ -55,7 +55,7 @@ class RedirectionLoader extends Loader
 
         $redirections = $this->redirectionRepository->findAll();
 
-        /** @var RedirectionInterface $redirection */
+        /** @var ReadRedirectionInterface $redirection */
         foreach ($redirections as $redirection) {
             $site = $this->siteRepository->findOneBySiteId($redirection->getSiteId());
             if ($redirection->getNodeId()) {
@@ -93,13 +93,13 @@ class RedirectionLoader extends Loader
 
     /**
      * @param SiteInterface        $site
-     * @param RedirectionInterface $redirection
+     * @param ReadRedirectionInterface $redirection
      * @param string               $parameterKey
      * @param string|null          $nodeId
      * @param string|null          $url
      * @param RouteCollection      $routes
      */
-    protected function generateRouteForSite(SiteInterface $site, RedirectionInterface $redirection, $parameterKey, $nodeId = null, $url = null, RouteCollection $routes)
+    protected function generateRouteForSite(SiteInterface $site, ReadRedirectionInterface $redirection, $parameterKey, $nodeId = null, $url = null, RouteCollection $routes)
     {
         /** @var SiteAliasInterface $alias */
         foreach ($site->getAliases() as $key => $alias) {

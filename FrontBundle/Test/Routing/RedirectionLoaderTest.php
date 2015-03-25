@@ -200,7 +200,7 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
      */
     protected function generateRedirection($redirectionMongoId, $siteId, $pattern, $permanent)
     {
-        $redirection = Phake::mock('OpenOrchestra\ModelInterface\Model\RedirectionInterface');
+        $redirection = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadRedirectionInterface');
         Phake::when($redirection)->getId()->thenReturn($redirectionMongoId);
         Phake::when($redirection)->getSiteId()->thenReturn($siteId);
         Phake::when($redirection)->getLocale()->thenReturn($this->localeFr);
