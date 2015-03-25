@@ -35,13 +35,13 @@ class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $siteAliasFr1 = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
+        $siteAliasFr1 = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface');
         Phake::when($siteAliasFr1)->getLanguage()->thenReturn($this->localeFr);
         Phake::when($siteAliasFr1)->getDomain()->thenReturn($this->domainFr1);
-        $siteAliasFr2 = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
+        $siteAliasFr2 = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface');
         Phake::when($siteAliasFr2)->getLanguage()->thenReturn($this->localeFr);
         Phake::when($siteAliasFr2)->getDomain()->thenReturn($this->domainFr2);
-        $siteAliasEn = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
+        $siteAliasEn = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface');
         Phake::when($siteAliasEn)->getLanguage()->thenReturn($this->localeEn);
         Phake::when($siteAliasEn)->getDomain()->thenReturn($this->domainEn);
 

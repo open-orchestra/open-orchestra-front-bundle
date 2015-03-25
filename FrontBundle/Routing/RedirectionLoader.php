@@ -4,7 +4,7 @@ namespace OpenOrchestra\FrontBundle\Routing;
 
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Model\ReadRedirectionInterface;
-use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
+use OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface;
 use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
 use OpenOrchestra\ModelInterface\Repository\RedirectionRepositoryInterface;
@@ -101,7 +101,7 @@ class RedirectionLoader extends Loader
      */
     protected function generateRouteForSite(ReadSiteInterface $site, ReadRedirectionInterface $redirection, $parameterKey, $nodeId = null, $url = null, RouteCollection $routes)
     {
-        /** @var SiteAliasInterface $alias */
+        /** @var ReadSiteAliasInterface $alias */
         foreach ($site->getAliases() as $key => $alias) {
             if ($redirection->getLocale() === $alias->getLanguage()) {
                 $parameter = $url;

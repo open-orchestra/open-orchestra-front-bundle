@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Phake;
 use OpenOrchestra\FrontBundle\Routing\DatabaseRouteLoader;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
-use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
+use OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface;
 
 /**
  * Test DatabaseRouteLoaderTest
@@ -235,11 +235,11 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
      * @param string $locale
      * @param string $prefix
      *
-     * @return SiteAliasInterface
+     * @return ReadSiteAliasInterface
      */
     protected function mockSiteAlias($domain, $locale, $prefix = null)
     {
-        $siteAlias = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
+        $siteAlias = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface');
         Phake::when($siteAlias)->getDomain()->thenReturn($domain);
         Phake::when($siteAlias)->getLanguage()->thenReturn($locale);
         Phake::when($siteAlias)->getPrefix()->thenReturn($prefix);

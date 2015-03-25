@@ -75,7 +75,7 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateSitemap()
     {
-        $alias = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
+        $alias = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface');
         Phake::when($alias)->getPrefix()->thenReturn($this->prefix);
         Phake::when($alias)->getDomain()->thenReturn($this->domain);
 

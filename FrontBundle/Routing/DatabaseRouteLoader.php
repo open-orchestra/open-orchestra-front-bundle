@@ -4,7 +4,7 @@ namespace OpenOrchestra\FrontBundle\Routing;
 
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Model\SchemeableInterface;
-use OpenOrchestra\ModelInterface\Model\SiteAliasInterface;
+use OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface;
 use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
 use OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
@@ -137,7 +137,7 @@ class DatabaseRouteLoader extends Loader
      */
     protected function generateRoutesForNode($site, $node, $routes)
     {
-        /** @var SiteAliasInterface $alias */
+        /** @var ReadSiteAliasInterface $alias */
         foreach ($site->getAliases() as $key => $alias) {
             $nodeLanguage = $node->getLanguage();
             if ($nodeLanguage == $alias->getLanguage()) {
