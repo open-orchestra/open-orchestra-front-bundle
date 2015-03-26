@@ -28,7 +28,7 @@ trait Renderable
      */
     public function render($name, array $parameters = array())
     {
-        $device = $this->request->get('x-ua-device');
+        $device = $this->request->get('X-UA-Device');
 
         if (!is_null($device) && '' !== $device) {
             $name = $this->getTemplate($name, $device);
