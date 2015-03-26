@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenOrchestra\FrontBundle\Test\Command;
+namespace OpenOrchestra\FrontBundle\Tests\Command;
 
 use Phake;
 use OpenOrchestra\FrontBundle\Command\OrchestraGenerateSitemapCommand;
