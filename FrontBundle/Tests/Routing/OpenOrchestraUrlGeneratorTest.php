@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenOrchestra\FrontBundle\Test\Routing;
+namespace OpenOrchestra\FrontBundle\Tests\Routing;
 
 use Phake;
 use OpenOrchestra\FrontBundle\Routing\OpenOrchestraUrlGenerator;

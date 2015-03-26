@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenOrchestra\FrontBundle\Test\Routing;
+namespace OpenOrchestra\FrontBundle\Tests\Routing;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Phake;

@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenOrchestra\FrontBundle\Test\Manager;
+namespace OpenOrchestra\FrontBundle\Tests\Manager;
 
 use Phake;
 use OpenOrchestra\FrontBundle\Manager\RobotsManager;

@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenOrchestra\FrontBundle\Test\Twig;
+namespace OpenOrchestra\FrontBundle\Tests\Twig;
 
 use OpenOrchestra\FrontBundle\Twig\OrchestraTimedTwigEngine;
 use Phake;
