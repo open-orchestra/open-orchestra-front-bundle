@@ -1,6 +1,6 @@
 {
     "name": "itkg/open-orchestra-front-bundle",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Nicolas Thal",
