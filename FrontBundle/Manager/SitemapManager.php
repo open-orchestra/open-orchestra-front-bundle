@@ -3,7 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Manager;
 
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
-use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
+use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -21,13 +21,13 @@ class SitemapManager
     protected $filesystem;
 
     /**
-     * @param NodeRepositoryInterface $nodeRepository
-     * @param UrlGeneratorInterface   $router
-     * @param SerializerInterface     $serializer
-     * @param Filesystem              $filesystem
+     * @param ReadNodeRepositoryInterface $nodeRepository
+     * @param UrlGeneratorInterface       $router
+     * @param SerializerInterface         $serializer
+     * @param Filesystem                  $filesystem
      */
     public function __construct(
-        NodeRepositoryInterface $nodeRepository,
+        ReadNodeRepositoryInterface $nodeRepository,
         UrlGeneratorInterface $router,
         SerializerInterface $serializer,
         Filesystem $filesystem
