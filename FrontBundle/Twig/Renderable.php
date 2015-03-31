@@ -2,16 +2,13 @@
 
 namespace OpenOrchestra\FrontBundle\Twig;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Templating\TemplateReferenceInterface;
-
 /**
  * trait Renderable
  */
 trait Renderable
 {
     /**
-     * @var Request
+     * @var \Symfony\Component\HttpFoundation\Request
      */
     protected $request;
 
@@ -21,8 +18,8 @@ trait Renderable
     protected $devices;
 
     /**
-     * @param string|TemplateReferenceInterface $name
-     * @param array                             $parameters
+     * @param string|\Symfony\Component\Templating\TemplateReferenceInterface $name
+     * @param array                                                           $parameters
      *
      * @return string
      */
@@ -70,12 +67,10 @@ trait Renderable
      */
     protected function replaceTemplateExtension($name, $device)
     {
-        if (strstr($name, 'twig'))
-        {
+        if (strstr($name, 'twig')) {
             return str_replace('html.twig', $device . '.html.twig', $name);
         }
-        if (strstr($name, 'smarty'))
-        {
+        if (strstr($name, 'smarty')) {
             return str_replace('html.smarty', $device . '.html.smarty', $name);
         }
 

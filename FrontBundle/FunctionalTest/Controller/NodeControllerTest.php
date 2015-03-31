@@ -96,7 +96,7 @@ class NodeControllerTest extends WebTestCase
 
         $link = $crawler->filter('a:contains("Fixture B&D")')->eq(1)->link();
         $crawler = $this->client->click($link);
-        //$this->assertGreaterThan(0, $crawler->filter('html:contains("Tout sur B&D ")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Tout sur B&D ")')->count());
 
         $crawler = $this->client->request('GET', '/fixture-full');
 
@@ -108,10 +108,10 @@ class NodeControllerTest extends WebTestCase
 
         $this->assertGreaterThanOrEqual(14, $crawler->filter('a')->count());
 
-//        $this->assertGreaterThan(0, $crawler->filter('html:contains("Le bottin mondain")')->count());
-//        $link = $crawler->filter('a:contains("Fixture Contact Us")')->eq(1)->link();
-//        $client->click($link);
-//        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Le bottin mondain")')->count());
+        $link = $crawler->filter('a:contains("Fixture Contact Us")')->eq(1)->link();
+        $this->client->click($link);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -138,12 +138,12 @@ class NodeControllerTest extends WebTestCase
 
         $this->assertGreaterThanOrEqual(14, $crawler->filter('a')->count());
 
-//        $this->assertGreaterThan(0, $crawler->filter('html:contains("Lorem ipsum dolor sit amet")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Lorem ipsum dolor sit amet")')->count());
 
-//        $link = $crawler->filter('a:contains("Directory")')->link();
+        $link = $crawler->filter('a:contains("Directory")')->link();
 
-//        $this->client->click($link);
+        $this->client->click($link);
 
-//        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 }

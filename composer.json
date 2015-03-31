@@ -1,5 +1,6 @@
 {
     "name": "itkg/open-orchestra-front-bundle",
+    "description": "A bundle for the frontend part of an OpenOrchestra project",
     "license": "Apache-2.0",
     "authors": [
         {
