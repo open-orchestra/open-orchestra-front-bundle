@@ -11,6 +11,9 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class OpenOrchestraRouterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var OpenOrchestraRouter
+     */
     protected $router;
 
     /**
@@ -42,9 +45,11 @@ class OpenOrchestraRouterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetGenerator()
     {
+        $generator = $this->router->getGenerator();
         $this->assertInstanceOf(
             'OpenOrchestra\\FrontBundle\\Routing\\OpenOrchestraUrlGenerator',
-            $this->router->getGenerator()
+            $generator
         );
+        $this->assertSame($generator, $this->router->getGenerator());
     }
 }
