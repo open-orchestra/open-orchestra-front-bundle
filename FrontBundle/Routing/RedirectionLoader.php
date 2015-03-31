@@ -6,7 +6,7 @@ use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Model\ReadRedirectionInterface;
 use OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface;
 use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
-use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
+use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
 use OpenOrchestra\ModelInterface\Repository\RedirectionRepositoryInterface;
 use OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
 use Symfony\Component\Config\Loader\Loader;
@@ -25,10 +25,10 @@ class RedirectionLoader extends Loader
 
     /**
      * @param RedirectionRepositoryInterface $redirectionRepository
-     * @param NodeRepositoryInterface        $nodeRepository
+     * @param ReadNodeRepositoryInterface    $nodeRepository
      * @param SiteRepositoryInterface        $siteRepository
      */
-    public function __construct(RedirectionRepositoryInterface $redirectionRepository, NodeRepositoryInterface $nodeRepository, SiteRepositoryInterface $siteRepository)
+    public function __construct(RedirectionRepositoryInterface $redirectionRepository, ReadNodeRepositoryInterface $nodeRepository, SiteRepositoryInterface $siteRepository)
     {
         $this->redirectionRepository = $redirectionRepository;
         $this->nodeRepository = $nodeRepository;
