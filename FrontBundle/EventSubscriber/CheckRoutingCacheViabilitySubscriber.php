@@ -21,18 +21,15 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
 {
     protected $router;
     protected $nodeRepository;
-    protected $siteRepository;
 
     /**
      * @param Router                      $router
      * @param ReadNodeRepositoryInterface $nodeRepository
-     * @param SiteRepositoryInterface     $siteRepository
      */
-    public function __construct(Router $router, ReadNodeRepositoryInterface $nodeRepository, SiteRepositoryInterface $siteRepository)
+    public function __construct(Router $router, ReadNodeRepositoryInterface $nodeRepository)
     {
         $this->router = $router;
         $this->nodeRepository = $nodeRepository;
-        $this->siteRepository = $siteRepository;
     }
 
     /**
@@ -86,8 +83,7 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
     {
         if (file_exists($cacheClass)) {
             $cacheAge = filemtime($cacheClass);
-            $site = $this->siteRepository->findByAliasDomain($request->getHost());
-            $lastPublishedNode = $this->nodeRepository->findLastPublished($site->getSiteId());
+            $lastPublishedNode = $this->nodeRepository->findLastPublished();
             if ($cacheAge < $lastPublishedNode->getUpdatedAt()->getTimestamp()) {
                 unlink($cacheClass);
 

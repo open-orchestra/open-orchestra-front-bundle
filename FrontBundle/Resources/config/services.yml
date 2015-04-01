@@ -24,6 +24,5 @@ services:
         arguments:
             - @router
             - @open_orchestra_model.repository.node
-            - @open_orchestra_model.repository.site
         tags:
             - { name: kernel.event_subscriber }

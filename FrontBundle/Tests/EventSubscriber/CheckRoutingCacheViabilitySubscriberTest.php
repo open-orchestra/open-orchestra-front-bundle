@@ -16,7 +16,6 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
      */
     protected $subscriber;
 
-    protected $site;
     protected $node;
     protected $host;
     protected $event;
@@ -25,7 +24,6 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
     protected $request;
     protected $cacheDir;
     protected $nodeRepository;
-    protected $siteRepository;
     protected $matcherCacheClass;
     protected $generatorCacheClass;
     protected $fullMatcherCacheClass;
@@ -48,10 +46,6 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
         Phake::when($this->router)->getOption('matcher_cache_class')->thenReturn($this->matcherCacheClass);
         Phake::when($this->router)->getOption('generator_cache_class')->thenReturn($this->generatorCacheClass);
 
-        $this->site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
-        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface');
-        Phake::when($this->siteRepository)->findByAliasDomain(Phake::anyParameters())->thenReturn($this->site);
-
         $this->node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
         $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface');
         Phake::when($this->nodeRepository)->findLastPublished(Phake::anyParameters())->thenReturn($this->node);
@@ -66,7 +60,7 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
         Phake::when($this->event)->getRequest()->thenReturn($this->request);
         Phake::when($this->event)->getKernel()->thenReturn($this->kernel);
 
-        $this->subscriber = new CheckRoutingCacheViabilitySubscriber($this->router, $this->nodeRepository, $this->siteRepository);
+        $this->subscriber = new CheckRoutingCacheViabilitySubscriber($this->router, $this->nodeRepository);
     }
 
     /**
