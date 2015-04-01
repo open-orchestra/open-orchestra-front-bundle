@@ -53,7 +53,7 @@ class OpenOrchestraUrlGenerator extends UrlGenerator
         } catch (RouteNotFoundException $e) {
             $aliasId = 0;
             if ($this->request) {
-                $aliasId = $this->request->get('aliasId', '0');
+                $aliasId = $this->request->get('aliasId', $aliasId);
             }
             $uri = parent::generate($aliasId . '_' . $name, $parameters, $referenceType);
         }
