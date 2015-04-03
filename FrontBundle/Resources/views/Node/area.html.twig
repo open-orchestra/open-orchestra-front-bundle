@@ -3,16 +3,14 @@
         {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": subArea, 'nodeId': nodeId, 'siteId': siteId, 'language': language} only %}
     {% endfor %}
     {% for blockReference in area.blocks %}
-        <div>
-            {% if blockReference.nodeId is sameas(0) %}
-                {% set nodeReference = nodeId %}
-            {% else %}
-                {% set nodeReference = blockReference.nodeId %}
-            {% endif %}
-            {% set routeParams = app.request.attributes.get('_route_params') %}
-            {% set device = app.request.headers.get('x-ua-device') %}
-            {% set queryParams = app.request.query.all|merge(routeParams)|merge({'siteId': siteId, 'nodeId': nodeReference, 'blockId': blockReference.blockId, 'language': language, 'x-ua-device': device}) %}
-            {{ render_esi(url('open_orchestra_front_block', queryParams)) }}
-        </div>
+        {% if blockReference.nodeId is sameas(0) %}
+            {% set nodeReference = nodeId %}
+        {% else %}
+            {% set nodeReference = blockReference.nodeId %}
+        {% endif %}
+        {% set routeParams = app.request.attributes.get('_route_params') %}
+        {% set device = app.request.headers.get('x-ua-device') %}
+        {% set queryParams = app.request.query.all|merge(routeParams)|merge({'siteId': siteId, 'nodeId': nodeReference, 'blockId': blockReference.blockId, 'language': language, 'x-ua-device': device}) %}
+        {{ render_esi(url('open_orchestra_front_block', queryParams)) }}
     {% endfor %}
 </div>
