@@ -12,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Router;
 
 /**
@@ -40,6 +41,7 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
         if (
             (!($exception = $event->getException()) instanceof NotFoundHttpException
             && ! $exception->getPrevious() instanceof ResourceNotFoundException)
+            || $exception instanceof RouteNotFoundException
             || ! $event->isMasterRequest()
         ) {
             return;
