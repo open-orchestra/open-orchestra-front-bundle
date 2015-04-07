@@ -31,7 +31,7 @@ class OpenOrchestraGeneratorDumperTest extends \PHPUnit_Framework_TestCase
      */
     public function testDump()
     {
-        $this->assertSame(<<<EOF
+        $generatedString = <<<EOF
 <?php
 
 use Symfony\Component\Routing\RequestContext;
@@ -86,7 +86,8 @@ class ProjectUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerat
     }
 }
 
-EOF
-        , $this->dumper->dump());
+EOF;
+
+        $this->assertSame($generatedString, $this->dumper->dump());
     }
 }
