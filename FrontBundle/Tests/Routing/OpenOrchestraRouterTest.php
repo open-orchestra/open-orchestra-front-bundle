@@ -50,6 +50,5 @@ class OpenOrchestraRouterTest extends \PHPUnit_Framework_TestCase
             'OpenOrchestra\\FrontBundle\\Routing\\OpenOrchestraUrlGenerator',
             $generator
         );
-        $this->assertSame($generator, $this->router->getGenerator());
     }
 }
