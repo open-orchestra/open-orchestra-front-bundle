@@ -1,6 +1,7 @@
 parameters:
     open_orchestra_front.manager.sitemap.class: OpenOrchestra\FrontBundle\Manager\SitemapManager
     open_orchestra_front.manager.robots.class: OpenOrchestra\FrontBundle\Manager\RobotsManager
+    open_orchestra_front.manager.parameters.class: OpenOrchestra\FrontBundle\Manager\ParametersManager
 
     open_orchestra_front.subscriber.check_routing_cache.class: OpenOrchestra\FrontBundle\EventSubscriber\CheckRoutingCacheViabilitySubscriber
 
@@ -26,3 +27,5 @@ services:
             - @open_orchestra_model.repository.node
         tags:
             - { name: kernel.event_subscriber }
+    open_orchestra_front.manager.parameters:
+        class: %open_orchestra_front.manager.parameters.class%

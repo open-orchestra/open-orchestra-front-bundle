@@ -39,7 +39,9 @@ class NodeController extends Controller
             return $this->redirect($this->get('request')->getBaseUrl());
         }
 
-        $response = $this->renderNode($node);
+        $parameters = $this->container->get('open_orchestra_front.manager.parameters');
+
+        $response = $this->renderNode($node, $parameters->getParameters($request, $node));
 
         return $this->updateNodeResponse($response, $node);
     }
@@ -88,21 +90,24 @@ class NodeController extends Controller
         $node = $this->get('open_orchestra_model.repository.node')->find($decryptedToken);
         $this->get('open_orchestra_display.manager.site')->setSiteId($node->getSiteId());
 
-        return $this->renderNode($node);
+        $parameters = $this->container->get('open_orchestra_front.manager.parameters');
+
+        return $this->renderNode($node, $parameters->getParameters($request, $node));
     }
 
     /**
      * @param ReadNodeInterface $node
+     * @param array             $parameters
      *
      * @return Response
      */
-    protected function renderNode($node)
+    protected function renderNode($node, $parameters)
     {
         $response = $this->render(
             'OpenOrchestraFrontBundle:Node:show.html.twig',
             array(
                 'node' => $node,
-                'datetime' => time()
+                'parameters' => $parameters
             )
         );
 
