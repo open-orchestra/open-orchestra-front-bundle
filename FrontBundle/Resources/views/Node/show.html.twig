@@ -8,10 +8,9 @@
     </head>
     <body>
         <div id="orchestra">
-            {#<span>datetime : {{ datetime }}</span>#}
             <div id="orchestra-main">
                 {% for area in node.areas %}
-                    {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": area, 'nodeId': node.nodeId, 'siteId': node.siteId, 'language': node.language } only %}
+                    {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": area, 'nodeId': node.nodeId, 'parameters': parameters } only %}
                 {% endfor %}
             </div>
         </div>
