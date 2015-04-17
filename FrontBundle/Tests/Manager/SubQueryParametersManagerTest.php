@@ -2,13 +2,13 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Manager;
 
-use OpenOrchestra\FrontBundle\Manager\ParametersManager;
+use OpenOrchestra\FrontBundle\Manager\SubQueryParametersManager;
 use Phake;
 
 /**
  * Class Test
  */
-class ParametersManagerTest extends \PHPUnit_Framework_TestCase
+class SubQueryParametersManagerTest extends \PHPUnit_Framework_TestCase
 {
     protected $parametersManager;
     protected $parameterBag;
@@ -28,7 +28,7 @@ class ParametersManagerTest extends \PHPUnit_Framework_TestCase
         $this->request->attributes = $this->parameterBag;
         $this->request->headers = $this->headerBag;
 
-        $this->parametersManager = new ParametersManager();
+        $this->parametersManager = new SubQueryParametersManager();
     }
 
     /**
@@ -39,7 +39,7 @@ class ParametersManagerTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider generateParameters
      */
-    public function testGetParameters($language, $siteId, $device, $attributes)
+    public function testGenerate($language, $siteId, $device, $attributes)
     {
         Phake::when($this->node)->getLanguage()->ThenReturn($language);
         Phake::when($this->node)->getSiteId()->ThenReturn($siteId);
@@ -52,7 +52,7 @@ class ParametersManagerTest extends \PHPUnit_Framework_TestCase
             'x-ua-device' => $device,
         ));
 
-        $result = $this->parametersManager->getParameters($this->request, $this->node);
+        $result = $this->parametersManager->generate($this->request, $this->node);
 
         $this->assertSame($expected, $result);
     }
@@ -69,6 +69,4 @@ class ParametersManagerTest extends \PHPUnit_Framework_TestCase
             array('en', 'site', 'ios', array('_controller' => 'OpenOrchestra\FrontBundle\Controller\NodeController::showAction', '_locale' => 'fr', 'siteId' => 'site2','_route' => '2_552e2d3802b', '_route_params' => array('_locale' => 'fr', 'nodeId' => 'root', 'siteId' => 'demoSite'))),
         );
     }
-
 }
- 

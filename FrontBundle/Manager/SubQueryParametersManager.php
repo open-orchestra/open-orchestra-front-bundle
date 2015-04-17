@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class ParametersManager
  */
-class ParametersManager
+class SubQueryParametersManager
 {
     /**
      * @param Request           $request
@@ -16,7 +16,7 @@ class ParametersManager
      *
      * @return array
      */
-    public function getParameters(Request $request, ReadNodeInterface $node)
+    public function generate(Request $request, ReadNodeInterface $node)
     {
         return array_merge(
             $request->attributes->all(),
