@@ -45,6 +45,10 @@ class OpenOrchestraRouter extends Router
      */
     public function getGenerator()
     {
+        if (null !== $this->generator) {
+            return $this->generator;
+        }
+
         if (null === $this->options['cache_dir'] || null === $this->options['generator_cache_class']) {
             $this->generator =  new $this->options['generator_class'](
                     $this->getRouteCollection(),
