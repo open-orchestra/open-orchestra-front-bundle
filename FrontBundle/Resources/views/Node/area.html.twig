@@ -1,4 +1,5 @@
-<div id="{{ area.areaId }}" class="{{  area.htmlClass }}" >
+<div {% if area.areaId is defined and area.areaId is not null %}id="{{ area.areaId }}"{% endif %}
+ {% if area.htmlClass is defined and area.htmlClass is not null%}class="{{ area.htmlClass }}"{% endif %}>
     {% for subArea in area.areas %}
         {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": subArea, 'nodeId': nodeId, 'parameters': parameters} only %}
     {% endfor %}
