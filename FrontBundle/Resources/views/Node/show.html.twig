@@ -5,6 +5,7 @@
         {% block stylesheets %}
             {{ openOrchestraCss(node.theme) }}
         {% endblock %}
+        <script src="{{ asset('/bundles/openorchestradisplay/libs/require.js') }}"></script>
     </head>
     <body>
         <div id="orchestra">
@@ -14,7 +15,7 @@
                 {% endfor %}
             </div>
         </div>
-        
+
         {% block javascripts %}
             {{ openOrchestraJs(node.theme) }}
         {% endblock %}
