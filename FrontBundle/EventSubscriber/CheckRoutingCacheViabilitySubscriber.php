@@ -86,7 +86,7 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
         if (file_exists($cacheClass)) {
             $cacheAge = filemtime($cacheClass);
             $lastPublishedNode = $this->nodeRepository->findLastPublished();
-            if ($cacheAge < $lastPublishedNode->getUpdatedAt()->getTimestamp()) {
+            if ($lastPublishedNode->getUpdatedAt() instanceof \DateTime && $cacheAge < $lastPublishedNode->getUpdatedAt()->getTimestamp()) {
                 unlink($cacheClass);
 
                 return true;
