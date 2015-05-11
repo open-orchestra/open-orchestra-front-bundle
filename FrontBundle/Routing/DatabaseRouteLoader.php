@@ -149,22 +149,43 @@ class DatabaseRouteLoader extends Loader
                 if (is_null($scheme) || SchemeableInterface::SCHEME_DEFAULT == $scheme) {
                     $scheme = $alias->getScheme();
                 }
-                $route = new Route(
-                    $pattern,
-                    array(
-                        '_controller' => 'OpenOrchestra\FrontBundle\Controller\NodeController::showAction',
-                        '_locale' => $nodeLanguage,
-                        'nodeId' => $node->getNodeId(),
-                        'siteId' => $site->getSiteId(),
-                        'aliasId' => $key,
-                    ),
-                    array(),
-                    array(),
-                    $alias->getDomain(),
-                    $scheme
-                );
+                $nodeId = $node->getNodeId();
+                $siteId = $site->getSiteId();
+                $domain = $alias->getDomain();
+                $route = $this->generateRoute($pattern, $nodeLanguage, $nodeId, $siteId, $key, $domain, $scheme);
                 $routes->add($key . '_' . $node->getId(), $route);
             }
         }
+    }
+
+    /**
+     * @param string $pattern
+     * @param string $nodeLanguage
+     * @param string $nodeId
+     * @param string $siteId
+     * @param string $key
+     * @param string $domain
+     * @param string $scheme
+     *
+     * @return Route
+     */
+    protected function generateRoute($pattern, $nodeLanguage, $nodeId, $siteId, $key, $domain, $scheme)
+    {
+        $route = new Route(
+            $pattern,
+            array(
+                '_controller' => 'OpenOrchestra\FrontBundle\Controller\NodeController::showAction',
+                '_locale' => $nodeLanguage,
+                'nodeId' => $nodeId,
+                'siteId' => $siteId,
+                'aliasId' => $key,
+            ),
+            array(),
+            array(),
+            $domain,
+            $scheme
+        );
+
+        return $route;
     }
 }
