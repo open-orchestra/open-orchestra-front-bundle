@@ -29,7 +29,7 @@ class NodeController extends Controller
      */
     public function showAction(Request $request, $nodeId)
     {
-        $siteId = $this->get('open_orchestra.manager.current_site')->getCurrentSiteId();
+        $siteId = $this->get('open_orchestra_display.manager.site')->getCurrentSiteId();
         /** @var ReadNodeInterface $node */
         $node = $this->get('open_orchestra_model.repository.node')
             ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($nodeId, $request->getLocale(), $siteId);
