@@ -9,13 +9,9 @@
         <script src="{{ asset('/bundles/openorchestradisplay/requireConf.js') }}"></script>
     </head>
     <body>
-        <div id="orchestra">
-            <div id="orchestra-main">
-                {% for area in node.areas %}
-                    {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": area, 'nodeId': node.nodeId, 'parameters': parameters } only %}
-                {% endfor %}
-            </div>
-        </div>
+        {% for area in node.areas %}
+            {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": area, 'nodeId': node.nodeId, 'parameters': parameters } only %}
+        {% endfor %}
 
         {% block javascripts %}
             {{ openOrchestraJs(node.theme) }}
