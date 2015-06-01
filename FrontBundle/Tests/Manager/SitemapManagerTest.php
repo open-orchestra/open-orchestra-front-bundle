@@ -46,6 +46,7 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->nodeRepository)->findLastPublishedVersionByLanguageAndSiteId(Phake::anyParameters())->thenReturn($this->nodeCollection);
 
         $this->router = Phake::mock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        Phake::when($this->router)->generate(Phake::anyParameters())->thenReturn($this->domain.'/'.$this->prefix);
 
         $this->serializer = Phake::mock('Symfony\Component\Serializer\SerializerInterface');
         Phake::when($this->serializer)->serialize(Phake::anyParameters())->thenReturn($this->xmlContent);
@@ -76,12 +77,10 @@ class SitemapManagerTest extends \PHPUnit_Framework_TestCase
     public function testGenerateSitemap()
     {
         $alias = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface');
-        Phake::when($alias)->getPrefix()->thenReturn($this->prefix);
-        Phake::when($alias)->getDomain()->thenReturn($this->domain);
 
         $site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
         Phake::when($site)->getSiteId()->thenReturn($this->siteId);
-        Phake::when($site)->getName()->thenReturn($this->siteDomain);
+
         Phake::when($site)->getMainAlias()->thenReturn($alias);
 
         $this->sitemapManager->generateSitemap($site);

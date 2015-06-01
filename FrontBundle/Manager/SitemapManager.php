@@ -72,46 +72,99 @@ class SitemapManager
     protected function getSitemapNodesFromSite(ReadSiteInterface $site)
     {
         $nodes = array();
-
-        // TODO : récupérer les noeuds en version published uniquement + vision publique
         $nodesCollection = $this->nodeRepository->findLastPublishedVersionByLanguageAndSiteId($site->getMainAlias()->getLanguage(), $site->getSiteId());
 
         if ($nodesCollection) {
             /** @var ReadNodeInterface $node */
-            foreach($nodesCollection as $node) {
-                if (is_null($node->getRole())) {
-                    $sitemapChangefreq = $node->getSitemapChangefreq();
-                    if (is_null($sitemapChangefreq)) {
-                        $sitemapChangefreq = $site->getSitemapChangefreq();
-                    }
-
-                    $sitemapPriority = $node->getSitemapPriority();
-                    if (is_null($sitemapPriority)) {
-                        $sitemapPriority = $site->getSitemapPriority();
-                    }
-
-                    if ($lastmod = $node->getUpdatedAt()) {
-                        $lastmod = $lastmod->format('Y-m-d');
-                    }
-
-                    $mainAlias = $site->getMainAlias();
-                    $alias = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
-
-                    try {
-                        $url = $this->router->generate($node->getId());
-                        $nodes[] = array(
-                            'loc' => $alias . $url,
-                            'lastmod' => $lastmod,
-                            'changefreq' => $sitemapChangefreq,
-                            'priority' => $sitemapPriority
-                        );
-                    } catch (MissingMandatoryParametersException $e) {
-
-                    }
-                }
+            foreach ($nodesCollection as $node) {
+                $nodes[] = $this->generateNodeInfos($node, $site);
             }
         }
 
         return $nodes;
+    }
+
+    /**
+     * Generate sitemap informations for $node of $site
+     * 
+     * @param ReadNodeInterface $node
+     * @param ReadSiteInterface $site
+     * 
+     * @return array
+     */
+    protected function generateNodeInfos(ReadNodeInterface $node, ReadSiteInterface $site)
+    {
+        $nodeInfos = array();
+
+        if (is_null($node->getRole())) {
+            try {
+                $nodeInfos = array(
+                    'loc' => $this->router->generate($node->getId(), array('aliasId' => $site->getMainAliasId())),
+                    'lastmod' => $this->getLastModificationDate($node),
+                    'changefreq' => $this->getChangeFrequency($node, $site),
+                    'priority' => $this->getPriority($node, $site)
+                );
+            } catch (MissingMandatoryParametersException $e) {
+
+            }
+         }
+
+        return $nodeInfos;
+    }
+
+    /**
+     * Get the changefreq param of $node from $site
+     * 
+     * @param ReadNodeInterface $node
+     * @param ReadSiteInterface $site
+     * 
+     * @return string
+     */
+    protected function getChangeFrequency(ReadNodeInterface $node, ReadSiteInterface $site)
+    {
+        $sitemapChangefreq = $node->getSitemapChangefreq();
+
+        if (is_null($sitemapChangefreq)) {
+            $sitemapChangefreq = $site->getSitemapChangefreq();
+        }
+
+        return $sitemapChangefreq;
+    }
+
+    /**
+     * Get the priority param of $node from $site
+     * 
+     * @param ReadNodeInterface $node
+     * @param ReadSiteInterface $site
+     * 
+     * @return float
+     */
+    protected function getPriority(ReadNodeInterface $node, ReadSiteInterface $site)
+    {
+        $sitemapPriority = $node->getSitemapPriority();
+
+        if (is_null($sitemapPriority)) {
+            $sitemapPriority = $site->getSitemapPriority();
+        }
+
+        return $sitemapPriority;
+    }
+
+    /**
+     * Get the last modification date of $node
+     * 
+     * @param ReadNodeInterface $node
+     * 
+     * @return string
+     */
+    protected function getLastModificationDate(ReadNodeInterface $node)
+    {
+        $lastmod = "?";
+
+        if ($lastmod = $node->getUpdatedAt()) {
+            $lastmod = $lastmod->format('Y-m-d');
+        }
+
+        return $lastmod;
     }
 }
