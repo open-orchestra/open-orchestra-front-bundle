@@ -76,7 +76,7 @@ class SitemapManager
 
         if ($nodesCollection) {
             /** @var ReadNodeInterface $node */
-            foreach($nodesCollection as $node) {
+            foreach ($nodesCollection as $node) {
                 $nodes[] = $this->generateNodeInfos($node, $site);
             }
         }
