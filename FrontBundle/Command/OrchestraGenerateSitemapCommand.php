@@ -58,7 +58,10 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
     {
         $sitemapManager = $this->getContainer()->get('open_orchestra_front.manager.sitemap');
         $mainAlias = $site->getMainAlias();
-        $alias = ('' != $mainAlias->getPrefix()) ? $mainAlias->getDomain() . "/" . $mainAlias->getPrefix() : $mainAlias->getDomain();
+        $alias = $mainAlias->getScheme() . '://' . $mainAlias->getDomain();
+        if ('' != $mainAlias->getPrefix()) {
+            $alias .= '/' . $mainAlias->getPrefix();
+        }
 
         $output->writeln("<info>Generating sitemap for siteId " . $site->getSiteId() . " with alias " . $alias . "</info>");
 
