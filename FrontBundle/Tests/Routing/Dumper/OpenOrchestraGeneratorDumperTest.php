@@ -64,11 +64,13 @@ class ProjectUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerat
     public function generate(\$name, \$parameters = array(), \$referenceType = self::ABSOLUTE_PATH)
     {
         if (!isset(self::\$declaredRoutes[\$name])) {
-            if (!isset(self::\$declaredRoutes[\$this->getAliasId() . '_' . \$name])) {
+            \$requiredAliasId = (isset(\$parameters['aliasId'])) ? \$parameters['aliasId'] : null;
+
+            if (!isset(self::\$declaredRoutes[\$this->getAliasId(\$requiredAliasId) . '_' . \$name])) {
                 throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', \$name));
             }
 
-            \$name = \$this->getAliasId() . '_' . \$name;
+            \$name = \$this->getAliasId(\$requiredAliasId) . '_' . \$name;
         }
 
         list(\$variables, \$defaults, \$requirements, \$tokens, \$hostTokens, \$requiredSchemes) = self::\$declaredRoutes[\$name];
@@ -76,10 +78,15 @@ class ProjectUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerat
         return \$this->doGenerate(\$variables, \$defaults, \$requirements, \$tokens, \$parameters, \$name, \$referenceType, \$hostTokens, \$requiredSchemes);
     }
 
-    private function getAliasId()
+    private function getAliasId(\$aliasdId = null)
     {
-        if (\$this->aliasId === null) {
-            \$this->aliasId = \$this->request->get('aliasId', 0);
+        if (!is_null(\$aliasdId)) {
+            \$this->aliasId = \$aliasdId;
+        } else if (\$this->aliasId === null) {
+            \$this->aliasId = 0;
+            if (\$this->request) {
+                \$this->aliasId = \$this->request->get('aliasId', 0);
+            }
         }
 
         return \$this->aliasId;
