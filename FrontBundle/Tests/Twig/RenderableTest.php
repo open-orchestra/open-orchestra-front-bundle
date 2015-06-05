@@ -4,7 +4,6 @@ namespace OpenOrchestra\FrontBundle\Tests\Twig;
 
 use OpenOrchestra\FrontBundle\Twig\OrchestraTimedTwigEngine;
 use Phake;
-use Twig_Environment;
 
 /**
  * Class OrchestraTimedTwigEngineTest
