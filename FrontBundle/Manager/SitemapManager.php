@@ -104,7 +104,7 @@ class SitemapManager
                         array('required'=> array(
                             'aliasId' => $site->getMainAliasId(),
                         )),
-                        true
+                        UrlGeneratorInterface::ABSOLUTE_URL
                     ),
                     'lastmod' => $this->getLastModificationDate($node),
                     'changefreq' => $this->getChangeFrequency($node, $site),
