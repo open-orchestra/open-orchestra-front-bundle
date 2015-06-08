@@ -64,31 +64,38 @@ class ProjectUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerat
     public function generate(\$name, \$parameters = array(), \$referenceType = self::ABSOLUTE_PATH)
     {
         if (!isset(self::\$declaredRoutes[\$name])) {
-            \$requiredAliasId = (isset(\$parameters['aliasId'])) ? \$parameters['aliasId'] : null;
+            \$aliasId = (isset(\$parameters['required']['aliasId'])) ? \$parameters['required']['aliasId'] : null;
+            \$this->setAliasId(\$aliasId);
 
-            if (!isset(self::\$declaredRoutes[\$this->getAliasId(\$requiredAliasId) . '_' . \$name])) {
+            \$name = \$this->getAliasId() . '_' . \$name;
+            if (!isset(self::\$declaredRoutes[\$name])) {
                 throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', \$name));
             }
-
-            \$name = \$this->getAliasId(\$requiredAliasId) . '_' . \$name;
         }
 
         list(\$variables, \$defaults, \$requirements, \$tokens, \$hostTokens, \$requiredSchemes) = self::\$declaredRoutes[\$name];
+        if (isset(\$parameters['required']['scheme'])) {
+            \$requiredSchemes = array(\$parameters['required']['scheme']);
+        }
+        unset(\$parameters['required']);
 
         return \$this->doGenerate(\$variables, \$defaults, \$requirements, \$tokens, \$parameters, \$name, \$referenceType, \$hostTokens, \$requiredSchemes);
     }
 
-    private function getAliasId(\$aliasdId = null)
+    private function setAliasId(\$aliasId = null)
     {
-        if (!is_null(\$aliasdId)) {
-            \$this->aliasId = \$aliasdId;
+        if (!is_null(\$aliasId)) {
+            \$this->aliasId = \$aliasId;
         } else if (\$this->aliasId === null) {
             \$this->aliasId = 0;
             if (\$this->request) {
                 \$this->aliasId = \$this->request->get('aliasId', 0);
             }
         }
+    }
 
+    private function getAliasId()
+    {
         return \$this->aliasId;
     }
 }

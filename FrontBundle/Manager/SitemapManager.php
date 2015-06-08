@@ -99,7 +99,13 @@ class SitemapManager
         if (is_null($node->getRole())) {
             try {
                 $nodeInfos = array(
-                    'loc' => $this->router->generate($node->getId(), array('aliasId' => $site->getMainAliasId())),
+                    'loc' => $this->router->generate(
+                        $node->getId(),
+                        array('required'=> array(
+                            'aliasId' => $site->getMainAliasId(),
+                        )),
+                        UrlGeneratorInterface::ABSOLUTE_URL
+                    ),
                     'lastmod' => $this->getLastModificationDate($node),
                     'changefreq' => $this->getChangeFrequency($node, $site),
                     'priority' => $this->getPriority($node, $site)
