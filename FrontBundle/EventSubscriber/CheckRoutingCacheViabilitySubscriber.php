@@ -3,10 +3,8 @@
 namespace OpenOrchestra\FrontBundle\EventSubscriber;
 
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
-use OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
