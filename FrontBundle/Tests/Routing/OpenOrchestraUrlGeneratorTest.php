@@ -36,10 +36,13 @@ class OpenOrchestraUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->context = Phake::mock('Symfony\Component\Routing\RequestContext');
 
+        $nodeManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\NodeManager');
+
         $this->generator = new OpenOrchestraUrlGenerator(
             $this->routes,
             $this->context,
-            $this->requestStack
+            $this->requestStack,
+            $nodeManager
         );
     }
 

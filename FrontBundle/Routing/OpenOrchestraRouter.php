@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class OpenOrchestraRouter extends Router
 {
     protected $requestStack;
+    protected $nodeManager;
 
     /**
      * Extends parent constructor to get documents service
@@ -36,6 +37,7 @@ class OpenOrchestraRouter extends Router
         parent::__construct($container, $resource, $options, $context);
 
         $this->requestStack = $container->get('request_stack');
+        $this->nodeManager = $container->get('open_orchestra_front.manager.node');
     }
 
     /**
@@ -54,6 +56,7 @@ class OpenOrchestraRouter extends Router
                     $this->getRouteCollection(),
                     $this->context,
                     $this->requestStack,
+                    $this->nodeManager,
                     $this->logger
                 );
         } else {
@@ -72,7 +75,7 @@ class OpenOrchestraRouter extends Router
 
             require_once $cache;
 
-            $this->generator = new $class($this->context, $this->requestStack, $this->logger);
+            $this->generator = new $class($this->context, $this->requestStack, $this->nodeManager, $this->logger);
         }
 
         if ($this->generator instanceof ConfigurableRequirementsInterface) {

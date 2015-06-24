@@ -21,6 +21,7 @@ class OpenOrchestraRouterTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        $nodeManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\NodeManager');
         $requestStack = Phake::mock('Symfony\Component\HttpFoundation\RequestStack');
 
         $mockRoutingLoader = Phake::mock('Symfony\Bundle\FrameworkBundle\Routing\DelegatingLoader');
@@ -29,6 +30,7 @@ class OpenOrchestraRouterTest extends \PHPUnit_Framework_TestCase
         $container = Phake::mock('Symfony\Component\DependencyInjection\ContainerInterface');
         Phake::when($container)->get('routing.loader')->thenReturn($mockRoutingLoader);
         Phake::when($container)->get('request_stack')->thenReturn($requestStack);
+        Phake::when($container)->get('open_orchestra_front.manager.node')->thenReturn($nodeManager);
 
         $this->router = new OpenOrchestraRouter(
             $container,

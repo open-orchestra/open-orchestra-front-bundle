@@ -38,6 +38,7 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Psr\Log\LoggerInterface;
+use OpenOrchestra\FrontBundle\Manager\NodeManager;
 
 /**
  * ProjectUrlGenerator
@@ -50,19 +51,25 @@ class ProjectUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerat
     private static \$declaredRoutes = array(
     );
     private \$aliasId;
+    private \$nodeManager;
 
     /**
      * Constructor.
      */
-    public function __construct(RequestContext \$context, RequestStack \$requestStack, LoggerInterface \$logger = null)
+    public function __construct(RequestContext \$context, RequestStack \$requestStack, NodeManager \$nodeManager, LoggerInterface \$logger = null)
     {
         \$this->context = \$context;
         \$this->request = \$requestStack->getMasterRequest();
         \$this->logger = \$logger;
+        \$this->nodeManager = \$nodeManager;
     }
 
     public function generate(\$name, \$parameters = array(), \$referenceType = self::ABSOLUTE_PATH)
     {
+        if (isset(\$parameters['redirect_to_language'])) {
+            \$name = \$this->nodeManager->getNodeRouteName(\$name, \$parameters['redirect_to_language']);
+        }
+
         if (!isset(self::\$declaredRoutes[\$name])) {
             \$aliasId = (isset(\$parameters['required']['aliasId'])) ? \$parameters['required']['aliasId'] : null;
             \$this->setAliasId(\$aliasId);
