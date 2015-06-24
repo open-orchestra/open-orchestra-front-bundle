@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Routing;
 
+use OpenOrchestra\DisplayBundle\Exception\NodeNotFoundException;
 use OpenOrchestra\FrontBundle\Manager\NodeManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -19,6 +20,7 @@ class OpenOrchestraUrlGenerator extends UrlGenerator
     protected $request;
     protected $siteManager;
     protected $nodeManager;
+    const REDIRECT_TO_LANGUAGE = 'redirect_to_language';
 
     /**
      * Constructor
@@ -53,8 +55,13 @@ class OpenOrchestraUrlGenerator extends UrlGenerator
      */
     public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
-        if (isset($parameters['redirect_to_language'])) {
-            $name = $this->nodeManager->getNodeRouteName($name, $parameters['redirect_to_language']);
+        if (isset($parameters[self::REDIRECT_TO_LANGUAGE])) {
+            try {
+                $name = $this->nodeManager->getNodeRouteName($name, $parameters[self::REDIRECT_TO_LANGUAGE]);
+            } catch (NodeNotFoundException $e) {
+                throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', $name));
+            }
+            unset($parameters[self::REDIRECT_TO_LANGUAGE]);
         }
 
         try {

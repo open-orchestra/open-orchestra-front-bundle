@@ -38,6 +38,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Psr\Log\LoggerInterface;
 use OpenOrchestra\FrontBundle\Manager\NodeManager;
+use OpenOrchestra\DisplayBundle\Exception\NodeNotFoundException;
 
 /**
  * {$options['class']}
@@ -49,7 +50,6 @@ class {$options['class']} extends {$options['base_class']}
 {
     private static \$declaredRoutes = {$this->generateDeclaredRoutes()};
     private \$aliasId;
-    private \$nodeManager;
 
     /**
      * Constructor.
@@ -109,8 +109,13 @@ EOF;
         return <<<EOF
     public function generate(\$name, \$parameters = array(), \$referenceType = self::ABSOLUTE_PATH)
     {
-        if (isset(\$parameters['redirect_to_language'])) {
-            \$name = \$this->nodeManager->getNodeRouteName(\$name, \$parameters['redirect_to_language']);
+        if (isset(\$parameters[self::REDIRECT_TO_LANGUAGE])) {
+            try {
+                \$name = \$this->nodeManager->getNodeRouteName(\$name, \$parameters[self::REDIRECT_TO_LANGUAGE]);
+            } catch (NodeNotFoundException \$e) {
+                throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', \$name));
+            }
+            unset(\$parameters[self::REDIRECT_TO_LANGUAGE]);
         }
 
         if (!isset(self::\$declaredRoutes[\$name])) {
