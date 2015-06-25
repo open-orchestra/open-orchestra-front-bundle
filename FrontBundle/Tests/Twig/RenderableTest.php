@@ -2,7 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Twig;
 
-use OpenOrchestra\FrontBundle\Twig\OrchestraTimedTwigEngine;
+use OpenOrchestra\FrontBundle\Twig\OrchestraTwigEngine;
 use Phake;
 
 /**
@@ -11,13 +11,12 @@ use Phake;
 class RenderableTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var OrchestraTimedTwigEngine
+     * @var OrchestraTwigEngine
      */
     protected $twig;
     protected $devices;
     protected $twigEnv;
     protected $request;
-    protected $stopWatch;
     protected $fileLocator;
     protected $templateName;
     protected $requestStack;
@@ -31,7 +30,6 @@ class RenderableTest extends \PHPUnit_Framework_TestCase
     {
         $this->twigEnv = Phake::mock('Twig_Environment');
         $this->request = Phake::mock('Symfony\Component\HttpFoundation\Request');
-        $this->stopWatch = Phake::mock('Symfony\Component\Stopwatch\Stopwatch');
         $this->fileLocator = Phake::mock('Symfony\Component\Config\FileLocatorInterface');
         $this->templateName = Phake::mock('Symfony\Component\Templating\TemplateNameParserInterface');
         $this->requestStack = Phake::mock('Symfony\Component\HttpFoundation\RequestStack');
@@ -42,7 +40,7 @@ class RenderableTest extends \PHPUnit_Framework_TestCase
 
         $this->devices = array('web' => array('parent' => null), 'mobile' => array('parent' => 'web'), 'android' => array('parent' => 'mobile'));
 
-        $this->twig = new OrchestraTimedTwigEngine($this->twigEnv, $this->templateName, $this->fileLocator, $this->stopWatch, $this->requestStack, $this->devices);
+        $this->twig = new OrchestraTwigEngine($this->twigEnv, $this->templateName, $this->fileLocator, $this->requestStack, $this->devices);
     }
 
     /**
