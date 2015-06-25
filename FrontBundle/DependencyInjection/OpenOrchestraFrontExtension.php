@@ -31,8 +31,6 @@ class OpenOrchestraFrontExtension extends Extension
         $container->setAlias('templating', 'open_orchestra_front.twig.orchestra_twig_engine');
         if ($container->getParameter('kernel.debug')) {
             $loader->load('debug.yml');
-
-            $container->setAlias('templating', 'open_orchestra_front.twig.orchestra_timed_twig_engine');
         }
     }
 }

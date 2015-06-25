@@ -73,7 +73,7 @@ class OpenOrchestraRouter extends Router
                 $cache->write($dumper->dump($options), $this->getRouteCollection()->getResources());
             }
 
-            require_once $cache;
+            require_once $cache->getPath();
 
             $this->generator = new $class($this->context, $this->requestStack, $this->nodeManager, $this->logger);
         }
