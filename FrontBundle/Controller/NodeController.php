@@ -79,20 +79,32 @@ class NodeController extends Controller
     /**
      * @param Request $request
      *
-     * @Config\Route("/preview", name="open_orchestra_front_node_preview")
+     * @Config\Route("/preview/{token}", name="open_orchestra_front_node_preview")
      * @Config\Method({"GET"})
      *
      * @return Response
      */
-    public function previewAction(Request $request)
+    public function previewAction($token, Request $request)
     {
-        $token = $request->get('token');
         $decryptedToken = $this->get('open_orchestra_base.manager.encryption')->decrypt($token);
         $node = $this->get('open_orchestra_model.repository.node')->find(new \MongoId($decryptedToken));
 
         $parameters = $this->container->get('open_orchestra_front.manager.sub_query_parameters');
 
         return $this->renderNode($node, $parameters->generate($request, $node));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @Config\Route("/{languagePrefix}/preview/{token}", name="open_orchestra_front_node_preview_with_prefix")
+     * @Config\Method({"GET"})
+     *
+     * @return Response
+     */
+    public function previewWithPrefixAction($token, Request $request)
+    {
+        return $this->previewAction($token, $request);
     }
 
     /**
