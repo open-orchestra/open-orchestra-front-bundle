@@ -37,6 +37,8 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Psr\Log\LoggerInterface;
+use OpenOrchestra\FrontBundle\Manager\NodeManager;
+use OpenOrchestra\DisplayBundle\Exception\NodeNotFoundException;
 
 /**
  * {$options['class']}
@@ -52,11 +54,12 @@ class {$options['class']} extends {$options['base_class']}
     /**
      * Constructor.
      */
-    public function __construct(RequestContext \$context, RequestStack \$requestStack, LoggerInterface \$logger = null)
+    public function __construct(RequestContext \$context, RequestStack \$requestStack, NodeManager \$nodeManager, LoggerInterface \$logger = null)
     {
         \$this->context = \$context;
         \$this->request = \$requestStack->getMasterRequest();
         \$this->logger = \$logger;
+        \$this->nodeManager = \$nodeManager;
     }
 
 {$this->generateGenerateMethod()}
@@ -106,6 +109,15 @@ EOF;
         return <<<EOF
     public function generate(\$name, \$parameters = array(), \$referenceType = self::ABSOLUTE_PATH)
     {
+        if (isset(\$parameters[self::REDIRECT_TO_LANGUAGE])) {
+            try {
+                \$name = \$this->nodeManager->getNodeRouteName(\$name, \$parameters[self::REDIRECT_TO_LANGUAGE]);
+            } catch (NodeNotFoundException \$e) {
+                throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', \$name));
+            }
+            unset(\$parameters[self::REDIRECT_TO_LANGUAGE]);
+        }
+
         if (!isset(self::\$declaredRoutes[\$name])) {
             \$aliasId = (isset(\$parameters['required']['aliasId'])) ? \$parameters['required']['aliasId'] : null;
             \$this->setAliasId(\$aliasId);
