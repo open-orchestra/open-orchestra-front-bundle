@@ -88,8 +88,7 @@ class NodeController extends Controller
     {
         $token = $request->get('token');
         $decryptedToken = $this->get('open_orchestra_base.manager.encryption')->decrypt($token);
-        $node = $this->get('open_orchestra_model.repository.node')->find($decryptedToken);
-        $this->get('open_orchestra_display.manager.site')->setSiteId($node->getSiteId());
+        $node = $this->get('open_orchestra_model.repository.node')->find(new \MongoId($decryptedToken));
 
         $parameters = $this->container->get('open_orchestra_front.manager.sub_query_parameters');
 
