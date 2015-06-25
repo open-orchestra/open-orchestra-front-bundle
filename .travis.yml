@@ -21,6 +21,3 @@ install:
   - php -d memory_limit=-1 ./composer.phar install --no-progress --prefer-dist
 
 script: ./bin/phpunit
-
-after_script:
-  - ./bin/ocular code-coverage:upload --access-token="0ab85d09ea536dc6a7f03316b495cc078d8bee02c7c74974bbfd1fe280425a16" --format=php-clover build/logs/clover.xml
