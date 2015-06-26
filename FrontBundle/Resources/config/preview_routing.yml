@@ -1,0 +1,11 @@
+open_orchestra_base_node_preview:
+    path: %open_orchestra_base.preview_route_pattern%
+    defaults:  { _controller: OpenOrchestraFrontBundle:Node:preview }
+    requirements:
+        methods: [GET]
+
+open_orchestra_base_node_preview_with_prefix:
+    path: %open_orchestra_base.preview_with_prefix_route_pattern%
+    defaults:  { _controller: OpenOrchestraFrontBundle:Node:previewWithPrefix }
+    requirements:
+        methods: [GET]
