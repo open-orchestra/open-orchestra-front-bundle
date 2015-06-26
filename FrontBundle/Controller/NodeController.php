@@ -77,10 +77,10 @@ class NodeController extends Controller
     }
 
     /**
+     * Render the node version given by encoded $token
+     * 
+     * @param string  token
      * @param Request $request
-     *
-     * @Config\Route("/preview/{token}", name="open_orchestra_front_node_preview")
-     * @Config\Method({"GET"})
      *
      * @return Response
      */
@@ -95,10 +95,10 @@ class NodeController extends Controller
     }
 
     /**
-     * @param Request $request
+     * Render the node version given by encoded $token for an alias including a language prefix
      *
-     * @Config\Route("/{languagePrefix}/preview/{token}", name="open_orchestra_front_node_preview_with_prefix")
-     * @Config\Method({"GET"})
+     * @param string  $token
+     * @param Request $request
      *
      * @return Response
      */

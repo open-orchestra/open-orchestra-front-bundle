@@ -1,5 +1,4 @@
 parameters:
-#--[EXTEND SYMFONY 2 ROUTING]---#
     router.class : 'OpenOrchestra\FrontBundle\Routing\OpenOrchestraRouter'
     router.options.generator_class : 'OpenOrchestra\FrontBundle\Routing\OpenOrchestraUrlGenerator'
     router.options.generator_base_class : 'OpenOrchestra\FrontBundle\Routing\OpenOrchestraUrlGenerator'
