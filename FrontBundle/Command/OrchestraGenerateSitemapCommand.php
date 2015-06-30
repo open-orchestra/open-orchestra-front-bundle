@@ -26,6 +26,8 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
      * 
      * @param InputInterface  $input
      * @param OutputInterface $output
+     *
+     * @return null|int null or 0 if everything went fine, or an error code
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -35,6 +37,7 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
                 $this->generateSitemap($site, $output);
             } else {
                 $output->writeln("<error>No website found with siteId " . $siteId . ".</error>");
+                return 0;
             }
         } else {
             $siteCollection = $this->getContainer()->get('open_orchestra_model.repository.site')->findByDeleted(false);
@@ -46,6 +49,7 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
         }
 
         $output->writeln("<info>Done.</info>");
+        return 1;
     }
 
     /**

@@ -32,7 +32,7 @@ class NodeController extends Controller
         $siteId = $this->get('open_orchestra_display.manager.site')->getCurrentSiteId();
         /** @var ReadNodeInterface $node */
         $node = $this->get('open_orchestra_model.repository.node')
-            ->findOneByNodeIdAndLanguageWithPublishedAndLastVersionAndSiteId($nodeId, $request->getLocale(), $siteId);
+            ->findOnePublishedByNodeIdAndLanguageAndSiteIdInLastVersion($nodeId, $request->getLocale(), $siteId);
 
         if (!($node instanceof ReadNodeInterface)) {
             throw new NonExistingNodeException();
@@ -79,7 +79,7 @@ class NodeController extends Controller
     /**
      * Render the node version given by encoded $token
      * 
-     * @param string  token
+     * @param string  $token
      * @param Request $request
      *
      * @return Response
