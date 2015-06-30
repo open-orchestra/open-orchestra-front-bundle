@@ -87,24 +87,11 @@ class NodeController extends Controller
     public function previewAction($token, Request $request)
     {
         $decryptedToken = $this->get('open_orchestra_base.manager.encryption')->decrypt($token);
-        $node = $this->get('open_orchestra_model.repository.node')->find(new \MongoId($decryptedToken));
+        $node = $this->get('open_orchestra_model.repository.node')->findOneById($decryptedToken);
 
         $parameters = $this->container->get('open_orchestra_front.manager.sub_query_parameters');
 
         return $this->renderNode($node, $parameters->generate($request, $node));
-    }
-
-    /**
-     * Render the node version given by encoded $token for an alias including a language prefix
-     *
-     * @param string  $token
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function previewWithPrefixAction($token, Request $request)
-    {
-        return $this->previewAction($token, $request);
     }
 
     /**
