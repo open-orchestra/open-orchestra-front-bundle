@@ -156,7 +156,10 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
         $previousClass = 'Symfony\Component\Routing\Exception\ResourceNotFoundException'
     )
     {
-        $previous = Phake::mock($previousClass);
+        $previous = null;
+        if (!is_null($previousClass)) {
+            $previous = Phake::mock($previousClass);
+        }
         $exception = Phake::mock($exceptionClass);
         Phake::when($exception)->getPrevious()->thenReturn($previous);
         Phake::when($this->event)->getException()->thenReturn($exception);
@@ -170,21 +173,16 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
     {
         return array(
             array('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Symfony\Component\Routing\Exception\ResourceNotFoundException'),
-            array('\Twig_Error_Runtime', 'Symfony\Component\Routing\Exception\RouteNotFoundException'),
+            array('\Twig_Error_Runtime', null),
         );
     }
 
     /**
      * Test no interaction if request not master
-     *
-     * @param string $exceptionClass
-     * @param string $previousClass
-     *
-     * @dataProvider provideExceptionClass
      */
-    public function testNoInteractionIfRequestNotMaster($exceptionClass, $previousClass)
+    public function testNoInteractionIfRequestNotMaster()
     {
-        $this->generateException($exceptionClass, $previousClass);
+        $this->generateException();
         Phake::when($this->event)->isMasterRequest()->thenReturn(false);
 
         $this->subscriber->checkCacheFileAndRefresh($this->event);
