@@ -26,39 +26,13 @@ class NodeControllerTest extends WebTestCase
     /**
      * Test fixture_home
      */
-    public function testShowActionFixtureHomeSecondSite()
+    public function testShowActionFixtureHomeDemoSite()
     {
         $this->client->setServerParameter('HTTP_HOST', 'demo.openorchestra.dev');
         $crawler = $this->client->request('GET', '');
 
         $this->assertCount(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")'));
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")')->count());
-    }
-
-    /**
-     * Test fixture_home
-     *
-     * @param string $currentLanguage
-     * @param string $otherLanguage
-     *
-     * @dataProvider provideLanguageAndOtherLanguage
-     */
-    public function testShowActionFixtureHomeSiteEchonext($currentLanguage, $otherLanguage)
-    {
-        $this->client->setServerParameter('HTTP_HOST', 'echonext.openorchestra.dev');
-        $this->client->followRedirects();
-        $crawler = $this->client->request('GET', '/' . $currentLanguage);
-
-        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
-        $this->assertCount(0, $crawler->filter('html:contains("Bienvenu sur le site de démo issu des fixtures.")'));
-        $this->assertCount(0, $crawler->filter('html:contains("Business & Decision est un Groupe international de services numériques")'));
-        $this->assertCount(1755, $crawler->filter('#contentNewsList > div'));
-        foreach ($crawler->filter('a')->extract('href') as $link) {
-            if (strpos($link, 'echonext.phporchestra.dev') && strpos($link, 'news')) {
-                $this->assertRegExp('/'. $currentLanguage . '/', $link);
-                $this->assertNotRegExp('/\/' . $otherLanguage . '\//', $link);
-            }
-        }
     }
 
     /**
@@ -87,7 +61,7 @@ class NodeControllerTest extends WebTestCase
         $form = $crawler->selectButton('Connexion')->form();
         $form['_username'] = 'nicolas';
         $form['_password'] = 'nicolas';
-        $crawler = $this->client->submit($form);
+        $this->client->submit($form);
 
         $crawler = $this->client->request('GET', '/fixture-full');
 

@@ -15,12 +15,19 @@ use Symfony\Component\DependencyInjection\Loader;
 class OpenOrchestraFrontExtension extends Extension
 {
     /**
-     * {@inheritDoc}
+     * Loads a specific configuration.
+     *
+     * @param array            $config   An array of configuration values
+     * @param ContainerBuilder $container A ContainerBuilder instance
+     *
+     * @throws \InvalidArgumentException When provided tag is not defined in this extension
+     *
+     * @api
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $config, ContainerBuilder $container)
     {
         $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration($configuration, $config);
 
         $container->setParameter('open_orchestra_front.devices', $config['devices']);
 

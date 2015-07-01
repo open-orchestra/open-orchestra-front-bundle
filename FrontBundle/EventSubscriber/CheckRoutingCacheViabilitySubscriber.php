@@ -4,7 +4,6 @@ namespace OpenOrchestra\FrontBundle\EventSubscriber;
 
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -49,10 +48,10 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         $matcherCacheClass = $cacheDir . '/' . $this->router->getOption('matcher_cache_class') . '.php';
-        $warmupMatcher = $this->testCacheFile($matcherCacheClass, $request);
+        $warmupMatcher = $this->testCacheFile($matcherCacheClass);
 
         $generatorCacheClass = $cacheDir . '/' . $this->router->getOption('generator_cache_class') . '.php';
-        $warmupGenerator = $this->testCacheFile($generatorCacheClass, $request);
+        $warmupGenerator = $this->testCacheFile($generatorCacheClass);
 
         if ($warmupMatcher || $warmupGenerator) {
             $this->router->warmUp($cacheDir);
@@ -75,11 +74,10 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
 
     /**
      * @param string  $cacheClass
-     * @param Request $request
      *
      * @return bool
      */
-    protected function testCacheFile($cacheClass, $request)
+    protected function testCacheFile($cacheClass)
     {
         if (file_exists($cacheClass)) {
             $cacheAge = filemtime($cacheClass);
