@@ -3,6 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Controller;
 
 use OpenOrchestra\FrontBundle\Exception\NonExistingNodeException;
+use OpenOrchestra\ModelInterface\Model\NodeInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,7 +88,12 @@ class NodeController extends Controller
     public function previewAction($token, Request $request)
     {
         $decryptedToken = $this->get('open_orchestra_base.manager.encryption')->decrypt($token);
+        /** @var NodeInterface $node */
         $node = $this->get('open_orchestra_model.repository.node')->findOneById($decryptedToken);
+
+        $siteManager = $this->get('open_orchestra_display.manager.site');
+        $siteManager->setSiteId($node->getSiteId());
+        $siteManager->setCurrentLanguage($node->getLanguage());
 
         $parameters = $this->container->get('open_orchestra_front.manager.sub_query_parameters');
 
