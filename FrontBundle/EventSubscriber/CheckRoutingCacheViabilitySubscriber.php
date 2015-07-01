@@ -38,9 +38,9 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
         if (
             ((!($exception = $event->getException()) instanceof NotFoundHttpException
             && ! $exception->getPrevious() instanceof ResourceNotFoundException)
-            && !($exception instanceof \Twig_Error_Runtime))
             || $exception instanceof RouteNotFoundException
-            || ! $event->isMasterRequest()
+            || ! $event->isMasterRequest())
+            && !($exception instanceof \Twig_Error_Runtime)
         ) {
             return;
         }
