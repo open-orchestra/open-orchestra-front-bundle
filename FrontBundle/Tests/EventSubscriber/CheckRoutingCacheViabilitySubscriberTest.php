@@ -56,7 +56,6 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
         $this->request = Phake::mock('Symfony\Component\HttpFoundation\Request');
         Phake::when($this->request)->getHost()->thenReturn($this->host);
         $this->event = Phake::mock('Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent');
-        $this->generateException();
         Phake::when($this->event)->getRequest()->thenReturn($this->request);
         Phake::when($this->event)->getKernel()->thenReturn($this->kernel);
 
@@ -81,10 +80,16 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
 
     /**
      * Test check cache file
+     *
+     * @param string $exceptionClass
+     * @param string $previousClass
+     *
+     * @dataProvider provideExceptionClass
      */
-    public function testCheckCacheFileAndRefreshWhenFileOutdated()
+    public function testCheckCacheFileAndRefreshWhenFileOutdated($exceptionClass, $previousClass)
     {
         $this->createFiles();
+        $this->generateException($exceptionClass, $previousClass);
 
         $nodeDate = new \DateTime();
         $nodeDate->add(new \DateInterval('P1M'));
@@ -101,10 +106,16 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
 
     /**
      * Test check cache file
+     *
+     * @param string $exceptionClass
+     * @param string $previousClass
+     *
+     * @dataProvider provideExceptionClass
      */
-    public function testCheckCacheFileAndRefreshWhenFileOndated()
+    public function testCheckCacheFileAndRefreshWhenFileOndated($exceptionClass, $previousClass)
     {
         $this->createFiles();
+        $this->generateException($exceptionClass, $previousClass);
 
         $nodeDate = new \DateTime();
         $nodeDate->sub(new \DateInterval('P1M'));
@@ -136,21 +147,44 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
 
     /**
      * Generate all the exceptions thrown
+     *
+     * @param string $exceptionClass
+     * @param string $previousClass
      */
-    protected function generateException()
+    protected function generateException(
+        $exceptionClass = 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+        $previousClass = 'Symfony\Component\Routing\Exception\ResourceNotFoundException'
+    )
     {
-        $previous = Phake::mock('Symfony\Component\Routing\Exception\ResourceNotFoundException');
-        $exception = Phake::mock('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+        $previous = Phake::mock($previousClass);
+        $exception = Phake::mock($exceptionClass);
         Phake::when($exception)->getPrevious()->thenReturn($previous);
         Phake::when($this->event)->getException()->thenReturn($exception);
         Phake::when($this->event)->isMasterRequest()->thenReturn(true);
     }
 
     /**
-     * Test no interaction if request not master
+     * @return array
      */
-    public function testNoInteractionIfRequestNotMaster()
+    public function provideExceptionClass()
     {
+        return array(
+            array('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Symfony\Component\Routing\Exception\ResourceNotFoundException'),
+            array('\Twig_Error_Runtime', 'Symfony\Component\Routing\Exception\RouteNotFoundException'),
+        );
+    }
+
+    /**
+     * Test no interaction if request not master
+     *
+     * @param string $exceptionClass
+     * @param string $previousClass
+     *
+     * @dataProvider provideExceptionClass
+     */
+    public function testNoInteractionIfRequestNotMaster($exceptionClass, $previousClass)
+    {
+        $this->generateException($exceptionClass, $previousClass);
         Phake::when($this->event)->isMasterRequest()->thenReturn(false);
 
         $this->subscriber->checkCacheFileAndRefresh($this->event);

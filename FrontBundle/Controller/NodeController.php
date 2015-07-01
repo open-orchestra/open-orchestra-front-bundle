@@ -36,7 +36,7 @@ class NodeController extends Controller
 
         if (!($node instanceof ReadNodeInterface)) {
             throw new NonExistingNodeException();
-        } elseif (!is_null($node->getRole()) && !$this->get('security.context')->isGranted($node->getRole())) {
+        } elseif (!is_null($node->getRole()) && !$this->get('security.authorization_checker')->isGranted($node->getRole())) {
             return $this->redirect($this->get('request')->getBaseUrl());
         }
 
