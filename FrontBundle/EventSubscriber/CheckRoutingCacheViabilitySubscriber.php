@@ -2,14 +2,11 @@
 
 namespace OpenOrchestra\FrontBundle\EventSubscriber;
 
+use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Router;
 
 /**
@@ -19,6 +16,7 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
 {
     protected $router;
     protected $nodeRepository;
+    protected $lastPublishedNode;
 
     /**
      * @param Router                      $router
@@ -31,36 +29,23 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseForExceptionEvent $event
+     * Test if the file cache is up to date
+     *
+     * @param GetResponseEvent $event
      */
-    public function checkCacheFileAndRefresh(GetResponseForExceptionEvent $event)
+    public function checkCacheFileAndRefresh(GetResponseEvent $event)
     {
-        if (
-            ((!($exception = $event->getException()) instanceof NotFoundHttpException
-            && ! $exception->getPrevious() instanceof ResourceNotFoundException)
-            || $exception instanceof RouteNotFoundException
-            || ! $event->isMasterRequest())
-            && !($exception instanceof \Twig_Error_Runtime)
-        ) {
+        if (!$event->isMasterRequest()) {
             return;
         }
 
         $cacheDir = $this->router->getOption('cache_dir');
-        $request = $event->getRequest();
 
         $matcherCacheClass = $cacheDir . '/' . $this->router->getOption('matcher_cache_class') . '.php';
-        $warmupMatcher = $this->testCacheFile($matcherCacheClass);
+        $this->testCacheFile($matcherCacheClass);
 
         $generatorCacheClass = $cacheDir . '/' . $this->router->getOption('generator_cache_class') . '.php';
-        $warmupGenerator = $this->testCacheFile($generatorCacheClass);
-
-        if ($warmupMatcher || $warmupGenerator) {
-            $this->router->warmUp($cacheDir);
-        }
-
-        $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST);
-        $event->setResponse($response);
-        $event->stopPropagation();
+        $this->testCacheFile($generatorCacheClass);
     }
 
     /**
@@ -69,7 +54,7 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::EXCEPTION => 'checkCacheFileAndRefresh',
+            KernelEvents::REQUEST => 'checkCacheFileAndRefresh',
         );
     }
 
@@ -82,7 +67,7 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
     {
         if (file_exists($cacheClass)) {
             $cacheAge = filemtime($cacheClass);
-            $lastPublishedNode = $this->nodeRepository->findLastPublished();
+            $lastPublishedNode = $this->getLastNodePublished();
             if ($lastPublishedNode->getUpdatedAt() instanceof \DateTime && $cacheAge < $lastPublishedNode->getUpdatedAt()->getTimestamp()) {
                 unlink($cacheClass);
 
@@ -91,5 +76,17 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
         }
 
         return false;
+    }
+
+    /**
+     * @return ReadNodeInterface
+     */
+    protected function getLastNodePublished()
+    {
+        if (!$this->lastPublishedNode instanceof ReadNodeInterface) {
+            $this->lastPublishedNode = $this->nodeRepository->findLastPublished();
+        }
+
+        return $this->lastPublishedNode;
     }
 }
