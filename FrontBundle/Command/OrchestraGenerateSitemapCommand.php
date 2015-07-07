@@ -37,6 +37,7 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
                 $this->generateSitemap($site, $output);
             } else {
                 $output->writeln("<error>No website found with siteId " . $siteId . ".</error>");
+
                 return 1;
             }
         } else {
@@ -49,6 +50,7 @@ class OrchestraGenerateSitemapCommand extends ContainerAwareCommand
         }
 
         $output->writeln("<info>Done.</info>");
+
         return 0;
     }
 

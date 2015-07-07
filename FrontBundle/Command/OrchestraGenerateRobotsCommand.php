@@ -41,6 +41,7 @@ class OrchestraGenerateRobotsCommand extends ContainerAwareCommand
                 $this->generateRobots($site, $output);
             } else {
                 $output->writeln("<error>No website found with siteId " . $siteId . ".</error>");
+
                 return 1;
             }
         } else {
@@ -53,6 +54,7 @@ class OrchestraGenerateRobotsCommand extends ContainerAwareCommand
         }
 
         $output->writeln("<info>Done.</info>");
+
         return 0;
     }
 
