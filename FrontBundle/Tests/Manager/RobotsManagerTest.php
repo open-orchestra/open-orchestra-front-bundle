@@ -4,7 +4,6 @@ namespace OpenOrchestra\FrontBundle\Tests\Manager;
 
 use Phake;
 use OpenOrchestra\FrontBundle\Manager\RobotsManager;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class RobotsManagerTest

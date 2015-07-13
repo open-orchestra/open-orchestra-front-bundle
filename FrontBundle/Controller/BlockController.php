@@ -32,6 +32,7 @@ class BlockController extends Controller
     public function showAction(Request $request, $siteId, $nodeId, $blockId, $language)
     {
         $newNodeId = null;
+        $node = null;
 
         if ($token = $request->get('token')) {
             $decryptedToken = $this->get('open_orchestra_base.manager.encryption')->decrypt($token);
@@ -44,7 +45,7 @@ class BlockController extends Controller
                 ->findOnePublishedByNodeIdAndLanguageAndSiteIdInLastVersion($nodeId, $language, $siteId);
         }
 
-        if ($node && (null !== ($block = $node->getBlock($blockId)))) {
+        if (null !== $node && (null !== ($block = $node->getBlock($blockId)))) {
             $response = $this->get('open_orchestra_display.display_block_manager')->show($block);
 
             $this->tagResponse($response, $block, $nodeId, $siteId, $language);
