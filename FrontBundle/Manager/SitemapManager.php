@@ -167,8 +167,8 @@ class SitemapManager
     {
         $lastmod = "?";
 
-        if ($node->getUpdatedAt()) {
-            $lastmod = $lastmod->format('Y-m-d');
+        if (null !== ($date = $node->getUpdatedAt())) {
+            $lastmod = $date->format('Y-m-d');
         }
 
         return $lastmod;
