@@ -45,7 +45,7 @@ class BlockController extends Controller
                 ->findOnePublishedByNodeIdAndLanguageAndSiteIdInLastVersion($nodeId, $language, $siteId);
         }
 
-        if (null !== $node && (null !== ($block = $node->getBlock($blockId)))) {
+        if ($node instanceof ReadNodeInterface && (null !== ($block = $node->getBlock($blockId)))) {
             $response = $this->get('open_orchestra_display.display_block_manager')->show($block);
 
             $this->tagResponse($response, $block, $nodeId, $siteId, $language);
