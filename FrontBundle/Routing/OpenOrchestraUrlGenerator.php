@@ -39,11 +39,9 @@ class OpenOrchestraUrlGenerator extends UrlGenerator
         LoggerInterface $logger = null
     )
     {
+        parent::__construct($routes, $context, $logger);
         $this->request = $requestStack->getMasterRequest();
-        $this->context = $context;
-        $this->routes = $routes;
         $this->nodeManager = $nodeManager;
-        $this->logger = $logger;
     }
 
     /**

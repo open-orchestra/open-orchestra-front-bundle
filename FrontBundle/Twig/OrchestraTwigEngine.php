@@ -5,7 +5,6 @@ namespace OpenOrchestra\FrontBundle\Twig;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Templating\TemplateNameParserInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Config\FileLocatorInterface;
 
 /**
