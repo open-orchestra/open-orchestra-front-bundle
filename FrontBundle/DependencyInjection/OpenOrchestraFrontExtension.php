@@ -35,6 +35,8 @@ class OpenOrchestraFrontExtension extends Extension
         $loader->load('services.yml');
         $loader->load('routing.yml');
         $loader->load('twig.yml');
+        $loader->load('subquery.yml');
+
         $container->setAlias('templating', 'open_orchestra_front.twig.orchestra_twig_engine');
     }
 }

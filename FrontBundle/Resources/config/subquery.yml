@@ -1,0 +1,28 @@
+parameters:
+    open_orchestra_front.sub_query.manager.class: OpenOrchestra\FrontBundle\SubQuery\SubQueryGeneratorManager
+    open_orchestra_front.sub_query.request.class: OpenOrchestra\FrontBundle\SubQuery\Strategies\RequestSubQueryStrategy
+    open_orchestra_front.sub_query.device.class: OpenOrchestra\FrontBundle\SubQuery\Strategies\DeviceSubQueryStrategy
+    open_orchestra_front.sub_query.post_data.class: OpenOrchestra\FrontBundle\SubQuery\Strategies\PostDataSubQueryStrategy
+
+services:
+    open_orchestra_front.sub_query.manager:
+        class: %open_orchestra_front.sub_query.manager.class%
+
+    open_orchestra_front.sub_query.request:
+        class: %open_orchestra_front.sub_query.request.class%
+        arguments:
+            - @request_stack
+        tags:
+            - { name: open_orchestra_front.sub_query.strategy }
+    open_orchestra_front.sub_query.device:
+        class: %open_orchestra_front.sub_query.device.class%
+        arguments:
+            - @request_stack
+        tags:
+            - { name: open_orchestra_front.sub_query.strategy }
+    open_orchestra_front.sub_query.post_data:
+        class: %open_orchestra_front.sub_query.post_data.class%
+        arguments:
+            - @request_stack
+        tags:
+            - { name: open_orchestra_front.sub_query.strategy }

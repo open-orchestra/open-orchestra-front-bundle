@@ -1,5 +1,6 @@
 parameters:
     open_orchestra_front.twig.orchestra_twig_engine.class: OpenOrchestra\FrontBundle\Twig\OrchestraTwigEngine
+    open_orchestra_front.extension.sub_query.class: OpenOrchestra\FrontBundle\Twig\SubQueryGeneratorExtension
 
 services:
     open_orchestra_front.twig.orchestra_twig_engine:
@@ -10,3 +11,9 @@ services:
             - @templating.locator
             - @request_stack
             - %open_orchestra_front.devices%
+    open_orchestra_front.extension.sub_query:
+        class: %open_orchestra_front.extension.sub_query.class%
+        arguments:
+            - @open_orchestra_front.sub_query.manager
+        tags:
+            - { name: twig.extension }
