@@ -17,7 +17,7 @@ class OrchestraGenerateErrorPagesCommand extends ContainerAwareCommand
     {
         $this
             ->setName('orchestra:errorpages:generate')
-            ->setDescription('Generate all error pages')
+            ->setDescription('Generate all error static pages')
             ->addOption('siteId', null, InputOption::VALUE_REQUIRED, 'If set, will generate error pages only for this site');
     }
 
@@ -69,7 +69,7 @@ class OrchestraGenerateErrorPagesCommand extends ContainerAwareCommand
 
         $output->writeln("\n<info>Generating error pages for siteId " . $site->getSiteId() . "</info>");
 
-        $filenames = $errorPagesManager->generatePages($site);
+        $filenames = $errorPagesManager->generateErrorPages($site);
         foreach ($filenames as $filename) {
             $output->writeln("<comment>-> " . $filename . " generated</comment>");
         }
