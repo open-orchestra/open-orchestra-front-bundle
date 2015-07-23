@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ParametersManager
+ *
+ * @deprecated will be removed in 0.4.0
  */
 class SubQueryParametersManager
 {
@@ -15,6 +17,8 @@ class SubQueryParametersManager
      * @param ReadNodeInterface $node
      *
      * @return array
+     *
+     * @deprecated will be removed in 0.4.0
      */
     public function generate(Request $request, ReadNodeInterface $node)
     {

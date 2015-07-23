@@ -41,9 +41,7 @@ class NodeController extends Controller
             return $this->redirect($this->get('request')->getBaseUrl());
         }
 
-        $parameters = $this->container->get('open_orchestra_front.manager.sub_query_parameters');
-
-        $response = $this->renderNode($node, $parameters->generate($request, $node));
+        $response = $this->renderNode($node);
 
         return $this->updateNodeResponse($response, $node);
     }
@@ -81,11 +79,10 @@ class NodeController extends Controller
      * Render the node version given by encoded $token
      * 
      * @param string  $token
-     * @param Request $request
      *
      * @return Response
      */
-    public function previewAction($token, Request $request)
+    public function previewAction($token)
     {
         $decryptedToken = $this->get('open_orchestra_base.manager.encryption')->decrypt($token);
         /** @var NodeInterface $node */
@@ -95,24 +92,21 @@ class NodeController extends Controller
         $siteManager->setSiteId($node->getSiteId());
         $siteManager->setCurrentLanguage($node->getLanguage());
 
-        $parameters = $this->container->get('open_orchestra_front.manager.sub_query_parameters');
-
-        return $this->renderNode($node, $parameters->generate($request, $node));
+        return $this->renderNode($node);
     }
 
     /**
      * @param ReadNodeInterface $node
-     * @param array             $parameters
      *
      * @return Response
      */
-    protected function renderNode($node, $parameters)
+    protected function renderNode($node)
     {
         $response = $this->render(
             'OpenOrchestraFrontBundle:Node:show.html.twig',
             array(
                 'node' => $node,
-                'parameters' => $parameters
+                'parameters' => array('siteId' => $node->getSiteId(), 'language' => $node->getLanguage()),
             )
         );
 
