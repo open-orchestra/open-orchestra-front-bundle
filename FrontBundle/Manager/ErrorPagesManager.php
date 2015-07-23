@@ -17,27 +17,27 @@ class ErrorPagesManager
 {
     protected $nodeRepository;
     protected $filesystem;
-    protected $kernel;
+    protected $client;
     protected $router;
     protected $encrypter;
 
     /**
      * @param ReadNodeRepositoryInterface $nodeRepository
-     * @param Filesystem $filesystem
-     * @param $kernel
-     * @param $router
-     * @param EncryptionManager $encrypter
+     * @param Filesystem                  $filesystem
+     * @param Client                      $client
+     * @param UrlGeneratorInterface       $router
+     * @param EncryptionManager           $encrypter
      */
     public function __construct(
         ReadNodeRepositoryInterface $nodeRepository,
         Filesystem $filesystem,
-        $kernel,
+        Client $client,
         UrlGeneratorInterface $router,
         EncryptionManager $encrypter
     ) {
         $this->nodeRepository = $nodeRepository;
         $this->filesystem = $filesystem;
-        $this->kernel = $kernel;
+        $this->client = $client;
         $this->router = $router;
         $this->encrypter = $encrypter;
     }
@@ -79,8 +79,6 @@ class ErrorPagesManager
      */
     protected function dumpErrorPageForSiteAlias(ReadNodeInterface $errorNode, $aliasId, $siteId)
     {
-        $client = new Client($this->kernel);
-
         $url = $this->router->generate(
             'open_orchestra_base_node_preview',
             array(
@@ -91,7 +89,7 @@ class ErrorPagesManager
         );
 
         $filepath = $siteId . '/alias-' . $aliasId . '/' . $errorNode->getName() . '.html';
-        $crawler = $client->request('GET', $url);
+        $crawler = $this->client->request('GET', $url);
         $this->filesystem->dumpFile('web/' . $filepath, $crawler->html());
 
         return $filepath;
