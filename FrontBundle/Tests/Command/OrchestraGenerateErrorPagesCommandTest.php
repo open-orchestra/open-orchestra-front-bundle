@@ -8,7 +8,6 @@ use Symfony\Component\Console\Application;
 
 /**
  * Class OrchestraGenerateErrorPagesCommandTest
- *
  */
 class OrchestraGenerateErrorPagesCommandTest extends \PHPUnit_Framework_TestCase
 {

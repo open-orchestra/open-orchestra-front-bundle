@@ -8,6 +8,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 
+/**
+ * Class OrchestraGenerateErrorPagesCommand
+ */
 class OrchestraGenerateErrorPagesCommand extends ContainerAwareCommand
 {
     /**
@@ -61,7 +64,7 @@ class OrchestraGenerateErrorPagesCommand extends ContainerAwareCommand
      * Call sitemap generation for $site
      * 
      * @param ReadSiteInterface $site
-     * @param OutputInterface $output
+     * @param OutputInterface   $output
      */
     protected function generateErrorPages(ReadSiteInterface $site, OutputInterface $output)
     {
