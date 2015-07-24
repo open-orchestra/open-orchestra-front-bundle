@@ -100,7 +100,7 @@ class NodeController extends Controller
      *
      * @return Response
      */
-    protected function renderNode($node)
+    protected function renderNode(ReadNodeInterface $node)
     {
         $response = $this->render(
             'OpenOrchestraFrontBundle:Node:show.html.twig',
