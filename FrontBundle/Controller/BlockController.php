@@ -70,7 +70,7 @@ class BlockController extends Controller
     {
         $tagManager = $this->get('open_orchestra_base.manager.tag');
 
-        $cacheTags = $this->get('open_orchestra_display.display_block_manager')->getTags($block);
+        $cacheTags = $this->get('open_orchestra_display.display_block_manager')->getCacheTags($block);
 
         $nodes = $this->getNodesUsingBlock($block, $nodeId);
         if (is_array($nodes)) {
