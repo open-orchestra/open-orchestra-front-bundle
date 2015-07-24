@@ -1,9 +1,11 @@
 parameters:
     open_orchestra_front.manager.sitemap.class: OpenOrchestra\FrontBundle\Manager\SitemapManager
     open_orchestra_front.manager.robots.class: OpenOrchestra\FrontBundle\Manager\RobotsManager
+    open_orchestra_front.manager.error_pages.class: OpenOrchestra\FrontBundle\Manager\ErrorPagesManager
     open_orchestra_front.manager.sub_query_parameters.class: OpenOrchestra\FrontBundle\Manager\SubQueryParametersManager
     open_orchestra_front.manager.node.class: OpenOrchestra\FrontBundle\Manager\NodeManager
     open_orchestra_front.subscriber.check_routing_cache.class: OpenOrchestra\FrontBundle\EventSubscriber\CheckRoutingCacheViabilitySubscriber
+    open_orchestra_front.symfony.client.class: Symfony\Component\HttpKernel\Client
 
 services:
     open_orchestra_front.manager.sitemap:
@@ -17,6 +19,14 @@ services:
         class: %open_orchestra_front.manager.robots.class%
         arguments:
             - @filesystem
+    open_orchestra_front.manager.error_pages:
+        class: %open_orchestra_front.manager.error_pages.class%
+        arguments:
+            - @open_orchestra_model.repository.node
+            - @filesystem
+            - @open_orchestra_front.symfony.client
+            - @router
+            - @open_orchestra_base.manager.encryption
     open_orchestra_front.manager.sub_query_parameters:
         class: %open_orchestra_front.manager.sub_query_parameters.class%
     open_orchestra_front.manager.node:
@@ -32,3 +42,7 @@ services:
             - @open_orchestra_model.repository.node
         tags:
             - { name: kernel.event_subscriber }
+    open_orchestra_front.symfony.client:
+        class: %open_orchestra_front.symfony.client.class%
+        arguments:
+            - @kernel
