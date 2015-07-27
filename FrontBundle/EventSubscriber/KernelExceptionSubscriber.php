@@ -106,7 +106,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::EXCEPTION => 'onKernelException'
+            KernelEvents::EXCEPTION => array('onKernelException', 50)
         );
     }
 }
