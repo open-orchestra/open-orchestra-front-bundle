@@ -77,6 +77,8 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      * Else get the language of the main alias
      * 
      * @param ReadSiteInterface $site
+     * 
+     * @return string
      */
     protected function getLanguage(ReadSiteInterface $site)
     {
