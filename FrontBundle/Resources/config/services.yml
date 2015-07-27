@@ -4,7 +4,6 @@ parameters:
     open_orchestra_front.manager.error_pages.class: OpenOrchestra\FrontBundle\Manager\ErrorPagesManager
     open_orchestra_front.manager.sub_query_parameters.class: OpenOrchestra\FrontBundle\Manager\SubQueryParametersManager
     open_orchestra_front.manager.node.class: OpenOrchestra\FrontBundle\Manager\NodeManager
-    open_orchestra_front.subscriber.check_routing_cache.class: OpenOrchestra\FrontBundle\EventSubscriber\CheckRoutingCacheViabilitySubscriber
     open_orchestra_front.symfony.client.class: Symfony\Component\HttpKernel\Client
 
 services:
@@ -35,13 +34,6 @@ services:
             - @open_orchestra_model.repository.node
             - @open_orchestra_model.repository.site
             - @open_orchestra_display.manager.site
-    open_orchestra_front.subscriber.check_routing_cache:
-        class: %open_orchestra_front.subscriber.check_routing_cache.class%
-        arguments:
-            - @router
-            - @open_orchestra_model.repository.node
-        tags:
-            - { name: kernel.event_subscriber }
     open_orchestra_front.symfony.client:
         class: %open_orchestra_front.symfony.client.class%
         arguments:
