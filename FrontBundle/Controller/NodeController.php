@@ -64,7 +64,7 @@ class NodeController extends Controller
             $tagManager->formatLanguageTag($node->getLanguage()),
             $tagManager->formatSiteIdTag($node->getSiteId())
         );
-        $cacheableManager->tagResponse($response, $cacheTags);
+        $cacheableManager->addCacheTags($cacheTags);
 
         $response = $cacheableManager->setResponseCacheParameters(
             $response,

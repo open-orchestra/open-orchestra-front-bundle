@@ -82,7 +82,7 @@ class BlockController extends Controller
         $cacheTags[] = $tagManager->formatSiteIdTag($siteId);
         $cacheTags[] = $tagManager->formatLanguageTag($language);
 
-        $this->get('open_orchestra_display.manager.cacheable')->tagResponse($response, $cacheTags);
+        $this->get('open_orchestra_display.manager.cacheable')->addCacheTags($cacheTags);
     }
 
     /**
