@@ -12,7 +12,7 @@ use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 /**
  * Class KernelExceptionSubscriber
  */
@@ -48,7 +48,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if ('404' == $event->getException()->getStatusCode()) {
+        if ($event->getException() instanceof HttpExceptionInterface && '404' == $event->getException()->getStatusCode()) {
             $currentSite = $this->siteRepository->findByAliasDomain($this->request->getHost());
 
             if ($currentSite) {
