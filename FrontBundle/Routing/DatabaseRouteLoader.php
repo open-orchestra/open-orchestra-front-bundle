@@ -117,11 +117,11 @@ class DatabaseRouteLoader extends Loader
     }
 
     /**
-     * @param $language
-     * @param $site
+     * @param string            $language
+     * @param ReadSiteInterface $site
      * @return array
      */
-    protected function initializeNodes($language, $site)
+    protected function initializeNodes($language, ReadSiteInterface $site)
     {
         $this->orderedNodes = array();
         $nodes = $this->nodeRepository->findLastPublishedVersionByLanguageAndSiteId($language, $site->getSiteId());
@@ -131,11 +131,11 @@ class DatabaseRouteLoader extends Loader
     }
 
     /**
-     * @param ReadSiteInterface   $site
-     * @param ReadNodeInterface   $node
-     * @param RouteCollection $routes
+     * @param ReadSiteInterface $site
+     * @param ReadNodeInterface $node
+     * @param RouteCollection   $routes
      */
-    protected function generateRoutesForNode($site, $node, $routes)
+    protected function generateRoutesForNode(ReadSiteInterface $site, ReadNodeInterface $node, RouteCollection $routes)
     {
         /** @var ReadSiteAliasInterface $alias */
         foreach ($site->getAliases() as $key => $alias) {
