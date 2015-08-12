@@ -18,6 +18,11 @@ trait Renderable
     protected $devices;
 
     /**
+     * @var  string
+     */
+    protected $deviceTypeField;
+
+    /**
      * @param string|\Symfony\Component\Templating\TemplateReferenceInterface $name
      * @param array                                                           $parameters
      *
@@ -25,7 +30,7 @@ trait Renderable
      */
     public function render($name, array $parameters = array())
     {
-        $device = $this->request->get('x-ua-device');
+        $device = $this->request->get($this->deviceTypeField);
 
         if (!is_null($device) && '' !== $device) {
             $name = $this->getTemplate($name, $device);

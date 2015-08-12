@@ -11,6 +11,7 @@ services:
             - @templating.locator
             - @request_stack
             - %open_orchestra_front.devices%
+            - %open_orchestra_front.device_type_field%
     open_orchestra_front.extension.sub_query:
         class: %open_orchestra_front.extension.sub_query.class%
         arguments:

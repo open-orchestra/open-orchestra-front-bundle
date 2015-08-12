@@ -30,6 +30,7 @@ class OpenOrchestraFrontExtension extends Extension
         $config = $this->processConfiguration($configuration, $config);
 
         $container->setParameter('open_orchestra_front.devices', $config['devices']);
+        $container->setParameter('open_orchestra_front.device_type_field', $config['device_type_field']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
