@@ -40,7 +40,7 @@ class RenderableTest extends \PHPUnit_Framework_TestCase
 
         $this->devices = array('web' => array('parent' => null), 'mobile' => array('parent' => 'web'), 'android' => array('parent' => 'mobile'));
 
-        $this->twig = new OrchestraTwigEngine($this->twigEnv, $this->templateName, $this->fileLocator, $this->requestStack, $this->devices);
+        $this->twig = new OrchestraTwigEngine($this->twigEnv, $this->templateName, $this->fileLocator, $this->requestStack, $this->devices, 'x-ua-device');
     }
 
     /**

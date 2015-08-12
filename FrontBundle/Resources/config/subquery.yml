@@ -18,6 +18,7 @@ services:
         class: %open_orchestra_front.sub_query.device.class%
         arguments:
             - @request_stack
+            - %open_orchestra_front.device_type_field%
         tags:
             - { name: open_orchestra_front.sub_query.strategy }
     open_orchestra_front.sub_query.post_data:

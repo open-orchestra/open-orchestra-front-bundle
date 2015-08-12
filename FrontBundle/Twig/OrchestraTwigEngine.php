@@ -22,18 +22,21 @@ class OrchestraTwigEngine extends TwigEngine
      * @param FileLocatorInterface        $locator      A FileLocatorInterface instance
      * @param RequestStack                $requestStack A RequestStack instance
      * @param array                       $devices
+     * @param string                      $deviceTypeField
      */
     public function __construct(
         \Twig_Environment $environment,
         TemplateNameParserInterface $parser,
         FileLocatorInterface $locator,
         RequestStack $requestStack,
-        array $devices
+        array $devices,
+        $deviceTypeField
     )
     {
         parent::__construct($environment, $parser, $locator);
 
         $this->request = $requestStack->getMasterRequest();
         $this->devices = $devices;
+        $this->deviceTypeField = $deviceTypeField;
     }
 }
