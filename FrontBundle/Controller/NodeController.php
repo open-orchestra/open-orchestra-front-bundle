@@ -92,21 +92,24 @@ class NodeController extends Controller
         $siteManager->setSiteId($node->getSiteId());
         $siteManager->setCurrentLanguage($node->getLanguage());
 
-        return $this->renderNode($node);
+        return $this->renderNode($node, array('token' => $token));
     }
 
     /**
      * @param ReadNodeInterface $node
+     * @param array             $parameters
      *
      * @return Response
      */
-    protected function renderNode(ReadNodeInterface $node)
+    protected function renderNode(ReadNodeInterface $node, array $parameters = array())
     {
+        $parameters = array_merge($parameters, array('siteId' => $node->getSiteId(), 'language' => $node->getLanguage()));
+
         $response = $this->render(
             'OpenOrchestraFrontBundle:Node:show.html.twig',
             array(
                 'node' => $node,
-                'parameters' => array('siteId' => $node->getSiteId(), 'language' => $node->getLanguage()),
+                'parameters' => $parameters,
             )
         );
 
