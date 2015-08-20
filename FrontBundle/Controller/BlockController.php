@@ -22,16 +22,16 @@ class BlockController extends Controller
      * @param string  $siteId
      * @param string  $nodeId
      * @param string  $blockId
-     * @param string  $language
      *
-     * @Config\Route("/block/{siteId}/{nodeId}/{blockId}/{language}", name="open_orchestra_front_block")
+     * @Config\Route("/block/{siteId}/{nodeId}/{blockId}/{_locale}", name="open_orchestra_front_block")
      * @Config\Method({"GET"})
      *
      * @throws NotFoundHttpException
      * @return Response
      */
-    public function showAction(Request $request, $siteId, $nodeId, $blockId, $language)
+    public function showAction(Request $request, $siteId, $nodeId, $blockId)
     {
+        $language = $request->getLocale();
         $newNodeId = null;
         $node = null;
 
