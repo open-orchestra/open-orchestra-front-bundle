@@ -14,7 +14,7 @@ class CurrentRouteSubQueryStrategy extends AbstractRequestSubQueryStrategy
      */
     public function support($blockParameter)
     {
-        return strpos($blockParameter, 'current_route') === 0;
+        return 'current_route' === $blockParameter;
     }
 
     /**
@@ -32,6 +32,6 @@ class CurrentRouteSubQueryStrategy extends AbstractRequestSubQueryStrategy
      */
     public function getName()
     {
-        return 'request';
+        return 'current_route';
     }
 }
