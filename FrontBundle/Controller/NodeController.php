@@ -103,7 +103,7 @@ class NodeController extends Controller
      */
     protected function renderNode(ReadNodeInterface $node, array $parameters = array())
     {
-        $parameters = array_merge($parameters, array('siteId' => $node->getSiteId(), 'language' => $node->getLanguage()));
+        $parameters = array_merge($parameters, array('siteId' => $node->getSiteId(), '_locale' => $node->getLanguage()));
 
         $response = $this->render(
             'OpenOrchestraFrontBundle:Node:show.html.twig',
