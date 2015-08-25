@@ -63,7 +63,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
                         'OpenOrchestraFrontBundle:Node:show.html.twig',
                         array(
                             'node' => $node,
-                            'parameters' => array('siteId' => $node->getSiteId(), 'language' => $node->getLanguage())
+                            'parameters' => array('siteId' => $node->getSiteId(), '_locale' => $node->getLanguage())
                         )
                     );
                     $event->setResponse(new Response($html, 404));
