@@ -24,6 +24,9 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     protected $templating;
     protected $request;
 
+    protected $currentSite;
+    protected $currentLanguage;
+
     /**
      * @param SiteRepositoryInterface     $siteRepository
      * @param ReadNodeRepositoryInterface $nodeRepository
@@ -50,57 +53,77 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         if ($event->getException() instanceof HttpExceptionInterface && '404' == $event->getException()->getStatusCode()) {
-            $currentSite = $this->siteRepository->findByAliasDomain($this->request->getHost());
 
-            if ($currentSite) {
-                $language = $this->getLanguage($currentSite);
-                $siteId = $currentSite->getSiteId();
-                $nodeId = ReadNodeInterface::ERROR_404_NODE_ID;
-                $node = $this->nodeRepository->findOnePublishedByNodeIdAndLanguageAndSiteIdInLastVersion($nodeId, $language, $siteId);
+            $this->setCurrentSiteInfo(
+                trim($this->request->getHost(), '/'),
+                trim($this->request->getPathInfo(), '/')
+            );
 
-                if ($node) {
-                    $html = $this->templating->render(
-                        'OpenOrchestraFrontBundle:Node:show.html.twig',
-                        array(
-                            'node' => $node,
-                            'parameters' => array('siteId' => $node->getSiteId(), '_locale' => $node->getLanguage())
-                        )
-                    );
-                    $event->setResponse(new Response($html, 404));
-                }
+            if ($this->currentSite && $this->currentLanguage && $html = $this->getCustom404Html()) {
+                $event->setResponse(new Response($html, 404));
             }
         }
     }
 
     /**
-     * Get the language to display the 404 page for $site
-     * If a language prefix maps the url, get the corresponding language
-     * Else get the language of the main alias
+     * Try to find and set the current site and language
      * 
-     * @param ReadSiteInterface $site
-     * 
-     * @return string
+     * @param string $host
+     * @param string $path
      */
-    protected function getLanguage(ReadSiteInterface $site)
+    private function setCurrentSiteInfo($host, $path)
     {
-        $targetAlias = null;
-        $path = trim($this->request->getPathInfo(), '/');
-        $host = $this->request->getHost();
+        $this->currentSite = null;
+        $this->currentLanguage = null;
+        $possibleSite = null;
+        $possibleAlias = null;
 
-        if ('' != $path) {
+        $matchingSites = $this->siteRepository->findByAliasDomain($host);
+
+        /** @var ReadSiteInterface $site */
+        foreach ($matchingSites as $site) {
             foreach ($site->getAliases() as $alias) {
-                if ($host == $alias->getDomain() && strpos($path . '/', $alias->getPrefix() . '/') === 0) {
-                    $targetAlias = $alias;
-                    break;
+                if ($alias->getPrefix() == '') {
+                    $possibleSite = $site;
+                    $possibleAlias = $alias;
+                } else {
+                    if ($host == $alias->getDomain() && strpos($path . '/', trim($alias->getPrefix(), '/') . '/') === 0) {
+                        $this->currentSite = $site;
+                        $this->currentLanguage = $alias->getLanguage();
+                        return;
+                    }
                 }
             }
         }
 
-        if (!$targetAlias) {
-            $targetAlias = $site->getMainAlias();
+        if ($possibleSite && $possibleAlias) {
+            $this->currentSite = $possibleSite;
+            $this->currentLanguage = $possibleAlias->getLanguage();
         }
+    }
 
-        return $targetAlias->getLanguage();
+    /**
+     * Get the 404 custom page for the current site / language if it has been contributed
+     * 
+     * @return string | null
+     */
+    private function getCustom404Html()
+    {
+        $siteId = $this->currentSite->getSiteId();
+        $nodeId = ReadNodeInterface::ERROR_404_NODE_ID;
+        $node = $this->nodeRepository->findOnePublishedByNodeIdAndLanguageAndSiteIdInLastVersion($nodeId, $this->currentLanguage, $siteId);
+
+        if ($node) {
+            return $this->templating->render(
+                'OpenOrchestraFrontBundle:Node:show.html.twig',
+                array(
+                    'node' => $node,
+                    'parameters' => array('siteId' => $node->getSiteId(), '_locale' => $node->getLanguage())
+                )
+            );
+        } else {
+            return null;
+        }
     }
 
     /**

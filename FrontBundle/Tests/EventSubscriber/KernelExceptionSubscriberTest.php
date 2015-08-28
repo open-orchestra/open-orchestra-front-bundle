@@ -35,12 +35,13 @@ class KernelExceptionSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->mainAlias = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
         Phake::when($this->mainAlias)->getLanguage()->thenReturn('en');
         $this->site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
-        Phake::when($this->site)->getMainAlias()->thenReturn($this->mainAlias);
+        Phake::when($this->site)->getAliases()->thenReturn(array($this->mainAlias));
         $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface');
-        Phake::when($this->siteRepository)->findByAliasDomain(Phake::anyParameters())->thenReturn($this->site);
+        Phake::when($this->siteRepository)->findByAliasDomain(Phake::anyParameters())->thenReturn(array($this->site));
 
         $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface');
         $this->templating = Phake::mock('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface');
+        Phake::when($this->templating)->render(Phake::anyParameters())->thenReturn('404 html page');
 
         $this->request = Phake::mock('Symfony\Component\HttpFoundation\Request');
         $this->requestStack = Phake::mock('Symfony\Component\HttpFoundation\RequestStack');
