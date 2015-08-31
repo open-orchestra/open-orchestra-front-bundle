@@ -24,9 +24,6 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     protected $templating;
     protected $request;
 
-    protected $currentSite;
-    protected $currentLanguage;
-
     /**
      * @param SiteRepositoryInterface     $siteRepository
      * @param ReadNodeRepositoryInterface $nodeRepository
@@ -54,12 +51,12 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     {
         if ($event->getException() instanceof HttpExceptionInterface && '404' == $event->getException()->getStatusCode()) {
 
-            $this->setCurrentSiteInfo(
+            $siteInfo = $this->getCurrentSiteInfo(
                 trim($this->request->getHost(), '/'),
                 trim($this->request->getPathInfo(), '/')
             );
 
-            if ($this->currentSite && $this->currentLanguage && $html = $this->getCustom404Html()) {
+            if ($html = $this->getCustom404Html($siteInfo['site'], $siteInfo['language'])) {
                 $event->setResponse(new Response($html, 404));
             }
         }
@@ -70,48 +67,74 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      * 
      * @param string $host
      * @param string $path
+     * 
+     * @return array
      */
-    private function setCurrentSiteInfo($host, $path)
+    protected function getCurrentSiteInfo($host, $path)
     {
-        $this->currentSite = null;
-        $this->currentLanguage = null;
+        $path = $this->formatPath($path);
         $possibleSite = null;
         $possibleAlias = null;
+        $matchingLength = -1;
 
         $matchingSites = $this->siteRepository->findByAliasDomain($host);
 
         /** @var ReadSiteInterface $site */
         foreach ($matchingSites as $site) {
             foreach ($site->getAliases() as $alias) {
-                if ($alias->getPrefix() == '') {
-                    $possibleSite = $site;
-                    $possibleAlias = $alias;
-                } else {
-                    if ($host == $alias->getDomain() && strpos($path . '/', trim($alias->getPrefix(), '/') . '/') === 0) {
-                        $this->currentSite = $site;
-                        $this->currentLanguage = $alias->getLanguage();
-                        return;
+                $aliasPrefix = $this->formatPath($alias->getPrefix());
+                if ($host == $alias->getDomain() && strpos($path, $aliasPrefix) === 0) {
+                    $splitLength = count(explode('/', $aliasPrefix));
+                    if ($splitLength > $matchingLength) {
+                        $possibleAlias = $alias;
+                        $possibleSite = $site;
+                        $matchingLength = $splitLength;
                     }
                 }
             }
         }
 
-        if ($possibleSite && $possibleAlias) {
-            $this->currentSite = $possibleSite;
-            $this->currentLanguage = $possibleAlias->getLanguage();
+        return array(
+            'site' => $possibleSite,
+            'language' => $possibleAlias->getLanguage()
+        );
+    }
+
+    /**
+     * Format a path to be compared with another formatted path
+     * Ouptut a path formatted like this : /lvl1/lvl2/lvl3/ (/ if no path)
+     * 
+     * @param string $path
+     * 
+     * @return string
+     */
+    protected function formatPath($path)
+    {
+        $path = trim($path, '/') . '/';
+        if (strlen($path) > 1) {
+            $path = '/' . $path;
         }
+
+        return $path;
     }
 
     /**
      * Get the 404 custom page for the current site / language if it has been contributed
      * 
+     * @param ReadSiteInterface $site
+     * @param string            $language
+     * 
      * @return string | null
      */
-    private function getCustom404Html()
+    protected function getCustom404Html(ReadSiteInterface $site, $language)
     {
-        $siteId = $this->currentSite->getSiteId();
+        if (!$site || !$language) {
+            return null;
+        }
+
+        $siteId = $site->getSiteId();
         $nodeId = ReadNodeInterface::ERROR_404_NODE_ID;
-        $node = $this->nodeRepository->findOnePublishedByNodeIdAndLanguageAndSiteIdInLastVersion($nodeId, $this->currentLanguage, $siteId);
+        $node = $this->nodeRepository->findOnePublishedByNodeIdAndLanguageAndSiteIdInLastVersion($nodeId, $language, $siteId);
 
         if ($node) {
             return $this->templating->render(
@@ -121,9 +144,9 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
                     'parameters' => array('siteId' => $node->getSiteId(), '_locale' => $node->getLanguage())
                 )
             );
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
