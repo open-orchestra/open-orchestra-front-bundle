@@ -137,6 +137,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
         $node = $this->nodeRepository->findOnePublishedByNodeIdAndLanguageAndSiteIdInLastVersion($nodeId, $language, $siteId);
 
         if ($node) {
+
             return $this->templating->render(
                 'OpenOrchestraFrontBundle:Node:show.html.twig',
                 array(
