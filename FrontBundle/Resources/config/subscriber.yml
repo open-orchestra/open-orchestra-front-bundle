@@ -8,6 +8,7 @@ services:
         arguments:
             - @router
             - @open_orchestra_model.repository.node
+            - %kernel.cache_dir%
         tags:
             - { name: kernel.event_subscriber }
     open_orchestra_front.subscriber.kernel_exception:

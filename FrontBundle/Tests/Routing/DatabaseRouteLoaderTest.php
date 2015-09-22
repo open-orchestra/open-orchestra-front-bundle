@@ -55,16 +55,6 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test exception
-     */
-    public function testRunOnlyOnce()
-    {
-        $this->loader->load($this->resource, 'database');
-        $this->setExpectedException('RuntimeException');
-        $this->loader->load($this->resource, 'database');
-    }
-
-    /**
      * Test load routes
      */
     public function testLoad()

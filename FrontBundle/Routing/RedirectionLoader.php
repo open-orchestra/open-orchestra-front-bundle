@@ -21,7 +21,6 @@ class RedirectionLoader extends Loader
     protected $redirectionRepository;
     protected $nodeRepository;
     protected $siteRepository;
-    protected $loaded = false;
 
     /**
      * @param RedirectionRepositoryInterface $redirectionRepository
@@ -47,10 +46,6 @@ class RedirectionLoader extends Loader
      */
     public function load($resource, $type = null)
     {
-        if (true === $this->loaded) {
-            throw new \RuntimeException('Do not add the "database" loader twice');
-        }
-
         $routes = new RouteCollection();
 
         $redirections = $this->redirectionRepository->findAll();
@@ -71,8 +66,6 @@ class RedirectionLoader extends Loader
                 $this->generateRouteForSite($site, $redirection, $parameterKey, null, $redirection->getUrl(), $routes);
             }
         }
-
-        $this->loaded = true;
 
         return $routes;
 

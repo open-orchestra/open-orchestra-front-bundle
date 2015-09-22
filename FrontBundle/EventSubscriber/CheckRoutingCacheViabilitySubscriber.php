@@ -2,12 +2,13 @@
 
 namespace OpenOrchestra\FrontBundle\EventSubscriber;
 
+use OpenOrchestra\FrontBundle\Routing\OpenOrchestraRouter;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class CheckRoutingCacheViabilitySubscriber
@@ -19,10 +20,10 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
     protected $lastPublishedNode;
 
     /**
-     * @param Router                      $router
+     * @param RouterInterface             $router
      * @param ReadNodeRepositoryInterface $nodeRepository
      */
-    public function __construct(Router $router, ReadNodeRepositoryInterface $nodeRepository)
+    public function __construct(RouterInterface $router, ReadNodeRepositoryInterface $nodeRepository)
     {
         $this->router = $router;
         $this->nodeRepository = $nodeRepository;
@@ -35,7 +36,7 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
      */
     public function checkCacheFileAndRefresh(GetResponseEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMasterRequest() && !$this->router instanceof OpenOrchestraRouter) {
             return;
         }
 
