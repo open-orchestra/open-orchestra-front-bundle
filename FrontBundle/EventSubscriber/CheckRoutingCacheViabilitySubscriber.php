@@ -5,6 +5,7 @@ namespace OpenOrchestra\FrontBundle\EventSubscriber;
 use OpenOrchestra\FrontBundle\Routing\OpenOrchestraRouter;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
+use Symfony\Cmf\Component\Routing\ChainRouter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -36,16 +37,26 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
      */
     public function checkCacheFileAndRefresh(GetResponseEvent $event)
     {
-        if (!$event->isMasterRequest() && !$this->router instanceof OpenOrchestraRouter) {
+        if (!$event->isMasterRequest()) {
             return;
         }
 
-        $cacheDir = $this->router->getOption('cache_dir');
+        $router = $this->router;
+        if ($this->router instanceof ChainRouter) {
+            foreach ($this->router->all() as $router) {
+                if ($router instanceof OpenOrchestraRouter) {
+                    break;
+                }
+            }
 
-        $matcherCacheClass = $cacheDir . '/' . $this->router->getOption('matcher_cache_class') . '.php';
+        }
+
+        $cacheDir = $router->getOption('cache_dir');
+
+        $matcherCacheClass = $cacheDir . '/' . $router->getOption('matcher_cache_class') . '.php';
         $this->testCacheFile($matcherCacheClass);
 
-        $generatorCacheClass = $cacheDir . '/' . $this->router->getOption('generator_cache_class') . '.php';
+        $generatorCacheClass = $cacheDir . '/' . $router->getOption('generator_cache_class') . '.php';
         $this->testCacheFile($generatorCacheClass);
     }
 
