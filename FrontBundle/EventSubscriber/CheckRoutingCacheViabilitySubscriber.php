@@ -48,7 +48,10 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
                     break;
                 }
             }
+        }
 
+        if (!$router instanceof OpenOrchestraRouter) {
+            return;
         }
 
         $cacheDir = $router->getOption('cache_dir');

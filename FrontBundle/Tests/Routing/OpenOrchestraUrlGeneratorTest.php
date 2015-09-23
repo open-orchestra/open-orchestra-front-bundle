@@ -56,6 +56,6 @@ class OpenOrchestraUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->generator->generate('route');
 
         Phake::verify($this->request)->get('aliasId', '0');
-        Phake::verify($this->routes, Phake::times(2))->get(Phake::anyParameters());
+        Phake::verify($this->routes)->get(Phake::anyParameters());
     }
 }

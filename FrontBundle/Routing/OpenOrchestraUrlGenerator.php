@@ -60,17 +60,15 @@ class OpenOrchestraUrlGenerator extends UrlGenerator
                 throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', $name));
             }
             unset($parameters[self::REDIRECT_TO_LANGUAGE]);
+
+            return parent::generate($name, $parameters, $referenceType);
         }
 
-        try {
-            $uri = parent::generate($name, $parameters, $referenceType);
-        } catch (RouteNotFoundException $e) {
-            $aliasId = 0;
-            if ($this->request) {
-                $aliasId = $this->request->get('aliasId', $aliasId);
-            }
-            $uri = parent::generate($aliasId . '_' . $name, $parameters, $referenceType);
+        $aliasId = 0;
+        if ($this->request) {
+            $aliasId = $this->request->get('aliasId', $aliasId);
         }
+        $uri = parent::generate($aliasId . '_' . $name, $parameters, $referenceType);
 
         return $uri;
     }
