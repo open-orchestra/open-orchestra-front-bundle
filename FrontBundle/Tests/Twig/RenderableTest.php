@@ -62,6 +62,22 @@ class RenderableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return array
+     */
+    public function generateTemplateName()
+    {
+        return array(
+            array('OpenOrchestraFrontBundle:Node:show.html.twig', 'OpenOrchestraFrontBundle:Node:show.html.twig', null),
+            array('OpenOrchestraFrontBundle:Node:show.html.twig', 'OpenOrchestraFrontBundle:Node:show.android.html.twig', 'android'),
+            array('OpenOrchestraDisplayBundle:Block/LanguageList:show.html.twig', 'OpenOrchestraDisplayBundle:Block/LanguageList:show.html.twig', ''),
+            array('OpenOrchestraDisplayBundle:Block/LanguageList:show.html.twig', 'OpenOrchestraDisplayBundle:Block/LanguageList:show.mobile.html.twig', 'mobile'),
+            array('OpenOrchestraFrontBundle:Node:show.html.smarty', 'OpenOrchestraFrontBundle:Node:show.html.smarty', null),
+            array('OpenOrchestraFrontBundle:Node:show.html.smarty', 'OpenOrchestraFrontBundle:Node:show.android.html.smarty', 'android'),
+            array('OpenOrchestraFrontBundle:Node:show.html.php', 'OpenOrchestraFrontBundle:Node:show.android.html.php', 'android'),
+        );
+    }
+
+    /**
      * @param string $name
      * @param string $device
      *
@@ -75,6 +91,18 @@ class RenderableTest extends \PHPUnit_Framework_TestCase
         $result = $this->twig->getTemplate($name, $device);
 
         $this->assertSame($name, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function generateTemplateNameExistFalse()
+    {
+        return array(
+            array('OpenOrchestraFrontBundle:Node:show.html.twig', 'blob'),
+            array('OpenOrchestraFrontBundle:Node:show.html.twig', 'android'),
+            array('OpenOrchestraFrontBundle:Node:show.html.smarty', 'android'),
+        );
     }
 
     /**
@@ -93,33 +121,6 @@ class RenderableTest extends \PHPUnit_Framework_TestCase
         $result = $this->twig->getTemplate($name, $device);
 
         $this->assertSame($expected, $result);
-    }
-
-    /**
-     * @return array
-     */
-    public function generateTemplateName()
-    {
-        return array(
-            array('OpenOrchestraFrontBundle:Node:show.html.twig', 'OpenOrchestraFrontBundle:Node:show.html.twig', null),
-            array('OpenOrchestraFrontBundle:Node:show.html.twig', 'OpenOrchestraFrontBundle:Node:show.android.html.twig', 'android'),
-            array('OpenOrchestraDisplayBundle:Block/LanguageList:show.html.twig', 'OpenOrchestraDisplayBundle:Block/LanguageList:show.html.twig', ''),
-            array('OpenOrchestraDisplayBundle:Block/LanguageList:show.html.twig', 'OpenOrchestraDisplayBundle:Block/LanguageList:show.mobile.html.twig', 'mobile'),
-            array('OpenOrchestraFrontBundle:Node:show.html.smarty', 'OpenOrchestraFrontBundle:Node:show.html.smarty', null),
-            array('OpenOrchestraFrontBundle:Node:show.html.smarty', 'OpenOrchestraFrontBundle:Node:show.android.html.smarty', 'android'),
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function generateTemplateNameExistFalse()
-    {
-        return array(
-            array('OpenOrchestraFrontBundle:Node:show.html.twig', 'blob'),
-            array('OpenOrchestraFrontBundle:Node:show.html.twig', 'android'),
-            array('OpenOrchestraFrontBundle:Node:show.html.smarty', 'android'),
-        );
     }
 
     /**
