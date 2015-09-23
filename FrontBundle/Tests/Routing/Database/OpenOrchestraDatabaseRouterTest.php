@@ -19,6 +19,7 @@ class OpenOrchestraDatabaseRouterTest extends \PHPUnit_Framework_TestCase
     protected $context;
     protected $routeDocumentRepository;
     protected $routeDocumentToValueObjectTransformer;
+    protected $routeDocumentCollectionToRouteCollectionTransformer;
 
     /**
      * Set up the test
@@ -28,10 +29,17 @@ class OpenOrchestraDatabaseRouterTest extends \PHPUnit_Framework_TestCase
         $this->context = Phake::mock('Symfony\Component\Routing\RequestContext');
         $this->routeDocumentRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\RouteDocumentRepositoryInterface');
         $this->routeDocumentToValueObjectTransformer = Phake::mock('OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentToValueObjectTransformer');
+        $this->routeDocumentCollectionToRouteCollectionTransformer = Phake::mock('OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentCollectionToRouteCollectionTransformer');
         $requestStack = Phake::mock('Symfony\Component\HttpFoundation\RequestStack');
         $nodeManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\NodeManager');
 
-        $this->router = new OpenOrchestraDatabaseRouter($this->routeDocumentRepository, $this->routeDocumentToValueObjectTransformer, $requestStack, $nodeManager);
+        $this->router = new OpenOrchestraDatabaseRouter(
+            $this->routeDocumentRepository,
+            $this->routeDocumentToValueObjectTransformer,
+            $this->routeDocumentCollectionToRouteCollectionTransformer,
+            $requestStack,
+            $nodeManager
+        );
         $this->router->setContext($this->context);
     }
 
@@ -56,20 +64,16 @@ class OpenOrchestraDatabaseRouterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRouteCollection()
     {
-        $name = 'foo';
         $routeDocument = Phake::mock('OpenOrchestra\ModelInterface\Model\RouteDocumentInterface');
-        Phake::when($routeDocument)->getName()->thenReturn($name);
         $routeDocuments = new ArrayCollection(array($routeDocument));
         Phake::when($this->routeDocumentRepository)->findAll()->thenReturn($routeDocuments);
 
-        $route = Phake::mock('Symfony\Component\Routing\Route');
-        Phake::when($this->routeDocumentToValueObjectTransformer)->transform(Phake::anyParameters())->thenReturn($route);
+        $routeCollectionGenerated = Phake::mock('Symfony\Component\Routing\RouteCollection');
+        Phake::when($this->routeDocumentCollectionToRouteCollectionTransformer)->transform(Phake::anyParameters())->thenReturn($routeCollectionGenerated);
 
         $routeCollection = $this->router->getRouteCollection();
 
-        $this->assertInstanceOf('Symfony\Component\Routing\RouteCollection', $routeCollection);
-        $this->assertCount(1, $routeCollection);
-        $this->assertSame($route, $routeCollection->get($name));
+        $this->assertSame($routeCollectionGenerated, $routeCollection);
     }
 
     /**
@@ -81,5 +85,16 @@ class OpenOrchestraDatabaseRouterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Symfony\Component\Routing\Generator\UrlGeneratorInterface', $generator);
         $this->assertInstanceOf('OpenOrchestra\FrontBundle\Routing\Database\OpenOrchestraDatabaseUrlGenerator', $generator);
+    }
+
+    /**
+     * Test get matcher
+     */
+    public function testGetMatcher()
+    {
+        $matcher = $this->router->getMatcher();
+
+        $this->assertInstanceOf('Symfony\Component\Routing\Matcher\UrlMatcherInterface', $matcher);
+        $this->assertInstanceOf('OpenOrchestra\FrontBundle\Routing\Database\OpenOrchestraDatabaseUrlMatcher', $matcher);
     }
 }

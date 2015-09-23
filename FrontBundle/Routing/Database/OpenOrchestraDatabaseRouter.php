@@ -3,6 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Routing\Database;
 
 use OpenOrchestra\FrontBundle\Manager\NodeManager;
+use OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentCollectionToRouteCollectionTransformer;
 use OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentToValueObjectTransformer;
 use OpenOrchestra\ModelInterface\Repository\RouteDocumentRepositoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -27,6 +28,7 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
      */
     protected $context;
 
+    protected $routeDocumentCollectionToRouteCollectionTransformer;
     protected $routeDocumentToValueObjectTransformer;
     protected $routeDocumentRepository;
     protected $options = array();
@@ -34,22 +36,26 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
     protected $requestStack;
     protected $nodeManager;
     protected $generator;
+    protected $matcher;
 
     /**
-     * @param RouteDocumentRepositoryInterface      $routeDocumentRepository
-     * @param RouteDocumentToValueObjectTransformer $routeDocumentToValueObjectTransformer
-     * @param RequestStack                          $requestStack
-     * @param NodeManager                           $nodeManager
-     * @param array                                 $options
+     * @param RouteDocumentRepositoryInterface                    $routeDocumentRepository
+     * @param RouteDocumentToValueObjectTransformer               $routeDocumentToValueObjectTransformer
+     * @param RouteDocumentCollectionToRouteCollectionTransformer $routeDocumentCollectionToRouteCollectionTransformer
+     * @param RequestStack                                        $requestStack
+     * @param NodeManager                                         $nodeManager
+     * @param array                                               $options
      */
     public function __construct(
         RouteDocumentRepositoryInterface $routeDocumentRepository,
         RouteDocumentToValueObjectTransformer $routeDocumentToValueObjectTransformer,
+        RouteDocumentCollectionToRouteCollectionTransformer $routeDocumentCollectionToRouteCollectionTransformer,
         RequestStack $requestStack,
         NodeManager $nodeManager,
         array $options = array()
     )
     {
+        $this->routeDocumentCollectionToRouteCollectionTransformer = $routeDocumentCollectionToRouteCollectionTransformer;
         $this->routeDocumentToValueObjectTransformer = $routeDocumentToValueObjectTransformer;
         $this->routeDocumentRepository = $routeDocumentRepository;
         $this->requestStack = $requestStack;
@@ -68,6 +74,9 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
      */
     public function setContext(RequestContext $context)
     {
+        if (null !== $this->generator) {
+            $this->getGenerator()->setContext($context);
+        }
         $this->context = $context;
     }
 
@@ -89,13 +98,9 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
     public function getRouteCollection()
     {
         if (null === $this->routeCollection) {
-            $routeCollection = new RouteCollection();
-            $routeDocuments = $this->routeDocumentRepository->findAll();
-            foreach ($routeDocuments as $routeDocument) {
-                $routeCollection->add($routeDocument->getName(), $this->routeDocumentToValueObjectTransformer->transform($routeDocument));
-            }
-
-            $this->routeCollection = $routeCollection;
+            $this->routeCollection = $this
+                ->routeDocumentCollectionToRouteCollectionTransformer
+                ->transform($this->routeDocumentRepository->findAll());
         }
 
         return $this->routeCollection;
@@ -159,6 +164,15 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
      */
     public function getMatcher()
     {
+        if (!$this->matcher instanceof UrlMatcherInterface) {
+            $matcherClass = $this->options['matcher_class'];
+            $this->matcher = new $matcherClass(
+                $this->context,
+                $this->routeDocumentCollectionToRouteCollectionTransformer,
+                $this->routeDocumentRepository
+            );
+        }
 
+        return $this->matcher;
     }
 }
