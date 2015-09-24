@@ -36,7 +36,7 @@ class KernelExceptionSubscriberTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->mainAlias)->getLanguage()->thenReturn('en');
         $this->site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
         Phake::when($this->site)->getAliases()->thenReturn(array($this->mainAlias));
-        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface');
+        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface');
         Phake::when($this->siteRepository)->findByAliasDomain(Phake::anyParameters())->thenReturn(array($this->site));
 
         $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface');

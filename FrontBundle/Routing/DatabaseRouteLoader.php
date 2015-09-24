@@ -7,7 +7,7 @@ use OpenOrchestra\ModelInterface\Model\SchemeableInterface;
 use OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface;
 use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
-use OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
+use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -24,9 +24,9 @@ class DatabaseRouteLoader extends Loader
 
     /**
      * @param ReadNodeRepositoryInterface $nodeRepository
-     * @param SiteRepositoryInterface     $siteRepository
+     * @param ReadSiteRepositoryInterface $siteRepository
      */
-    public function __construct(ReadNodeRepositoryInterface $nodeRepository, SiteRepositoryInterface $siteRepository)
+    public function __construct(ReadNodeRepositoryInterface $nodeRepository, ReadSiteRepositoryInterface $siteRepository)
     {
         $this->nodeRepository = $nodeRepository;
         $this->siteRepository = $siteRepository;
