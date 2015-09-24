@@ -51,7 +51,7 @@ class OpenOrchestraDatabaseUrlMatcherTest extends \PHPUnit_Framework_TestCase
     public function testMatch()
     {
         $route = Phake::mock('Symfony\Component\Routing\Route');
-        Phake::when($route)->compile()->thenThrow(new RouteCompiled());
+        Phake::when($route)->compile()->thenThrow(new MatchedRouteCompiledException());
 
         $routeCollection = new RouteCollection();
         $routeCollection->add('foo', $route);
@@ -59,16 +59,16 @@ class OpenOrchestraDatabaseUrlMatcherTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->routeTransformer)->transform(Phake::anyParameters())->thenReturn($routeCollection);
         Phake::when($this->routeRepository)->findByPathInfo(Phake::anyParameters())->thenReturn(new ArrayCollection());
 
-        $this->setExpectedException('OpenOrchestra\FrontBundle\Tests\Routing\Database\RouteCompiled');
+        $this->setExpectedException('OpenOrchestra\FrontBundle\Tests\Routing\Database\MatchedRouteCompiledException');
         $this->urlMatcher->match('foo');
     }
 }
 
 /**
- * Class RouteCompiled
+ * Class MatchedRouteCompiledException
  *
  * Thrown when the route is compiled
  */
-class RouteCompiled extends \Exception
+class MatchedRouteCompiledException extends \Exception
 {
 }

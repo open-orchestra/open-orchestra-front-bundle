@@ -35,7 +35,7 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->requestStack = Phake::mock('Symfony\Component\HttpFoundation\RequestStack');
 
         $route = Phake::mock('Symfony\Component\Routing\Route');
-        Phake::when($route)->compile()->thenThrow(new RouteCompiledException());
+        Phake::when($route)->compile()->thenThrow(new GeneratedRouteCompiledException());
         $this->routeDocumentToValueObjectTransformer = Phake::mock('OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentToValueObjectTransformer');
         Phake::when($this->routeDocumentToValueObjectTransformer)->transform(Phake::anyParameters())->thenReturn($route);
 
@@ -74,7 +74,7 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $routeDocument = Phake::mock('OpenOrchestra\ModelInterface\Model\RouteDocumentInterface');
         Phake::when($this->routeDocumentRepository)->findOneByName($this->routeFullName)->thenReturn($routeDocument);
 
-        $this->setExpectedException('OpenOrchestra\FrontBundle\Tests\Routing\Database\RouteCompiledException');
+        $this->setExpectedException('OpenOrchestra\FrontBundle\Tests\Routing\Database\GeneratedRouteCompiledException');
         $this->generator->generate($this->routeName);
     }
 
@@ -97,7 +97,7 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $routeDocument = Phake::mock('OpenOrchestra\ModelInterface\Model\RouteDocumentInterface');
         Phake::when($this->routeDocumentRepository)->findOneByName($this->routeName)->thenReturn($routeDocument);
 
-        $this->setExpectedException('OpenOrchestra\FrontBundle\Tests\Routing\Database\RouteCompiledException');
+        $this->setExpectedException('OpenOrchestra\FrontBundle\Tests\Routing\Database\GeneratedRouteCompiledException');
         $this->generator->generate($this->routeName, array(OpenOrchestraDatabaseUrlGenerator::REDIRECT_TO_LANGUAGE => true));
     }
 
@@ -125,10 +125,10 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 }
 
 /**
- * Class RouteCompiledException
+ * Class GeneratedRouteCompiledException
  *
  * This exception will be used to avoid the route generation (tested in symfony)
  */
-class RouteCompiledException extends \Exception
+class GeneratedRouteCompiledException extends \Exception
 {
 }
