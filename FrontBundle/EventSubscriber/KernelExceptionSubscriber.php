@@ -25,10 +25,10 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     protected $request;
 
     /**
-     * @param ReadSiteRepositoryInterface     $siteRepository
-     * @param ReadNodeRepositoryInterface     $nodeRepository
-     * @param EngineInterface                 $templating
-     * @param RequestStack                    $requestStack
+     * @param ReadSiteRepositoryInterface $siteRepository
+     * @param ReadNodeRepositoryInterface $nodeRepository
+     * @param EngineInterface             $templating
+     * @param RequestStack                $requestStack
      */
     public function __construct(
         ReadSiteRepositoryInterface $siteRepository,
