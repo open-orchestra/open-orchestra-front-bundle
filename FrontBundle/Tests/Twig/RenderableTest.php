@@ -73,7 +73,7 @@ class RenderableTest extends \PHPUnit_Framework_TestCase
             array('OpenOrchestraDisplayBundle:Block/LanguageList:show.html.twig', 'OpenOrchestraDisplayBundle:Block/LanguageList:show.mobile.html.twig', 'mobile'),
             array('OpenOrchestraFrontBundle:Node:show.html.smarty', 'OpenOrchestraFrontBundle:Node:show.html.smarty', null),
             array('OpenOrchestraFrontBundle:Node:show.html.smarty', 'OpenOrchestraFrontBundle:Node:show.android.html.smarty', 'android'),
-            array('OpenOrchestraFrontBundle:Node:show.html.php', 'OpenOrchestraFrontBundle:Node:show.android.html.php', 'android'),
+            array('OpenOrchestraFrontBundle:Node:show.html.php', 'OpenOrchestraFrontBundle:Node:show.html.php', 'android'),
         );
     }
 
