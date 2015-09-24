@@ -4,7 +4,7 @@ namespace OpenOrchestra\FrontBundle\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
+use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -25,13 +25,13 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     protected $request;
 
     /**
-     * @param SiteRepositoryInterface     $siteRepository
+     * @param ReadSiteRepositoryInterface $siteRepository
      * @param ReadNodeRepositoryInterface $nodeRepository
      * @param EngineInterface             $templating
      * @param RequestStack                $requestStack
      */
     public function __construct(
-        SiteRepositoryInterface $siteRepository,
+        ReadSiteRepositoryInterface $siteRepository,
         ReadNodeRepositoryInterface $nodeRepository,
         EngineInterface $templating,
         RequestStack $requestStack

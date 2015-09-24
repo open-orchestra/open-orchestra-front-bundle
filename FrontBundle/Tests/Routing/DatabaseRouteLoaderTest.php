@@ -29,10 +29,10 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface');
+        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface');
         Phake::when($this->siteRepository)->findByDeleted(Phake::anyParameters())->thenReturn(array());
 
-        $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface');
+        $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface');
 
         $this->loader = new DatabaseRouteLoader($this->nodeRepository, $this->siteRepository);
     }

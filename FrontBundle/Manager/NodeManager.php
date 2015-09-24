@@ -4,8 +4,8 @@ namespace OpenOrchestra\FrontBundle\Manager;
 
 use OpenOrchestra\DisplayBundle\Exception\NodeNotFoundException;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
-use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
-use OpenOrchestra\ModelInterface\Repository\SiteRepositoryInterface;
+use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
+use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
 use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 
 /**
@@ -18,14 +18,14 @@ class NodeManager
     protected $currentSiteManager;
 
     /**
-     * @param NodeRepositoryInterface $nodeRepository
-     * @param SiteRepositoryInterface $siteRepository
-     * @param CurrentSiteIdInterface  $currentSiteManager
+     * @param ReadNodeRepositoryInterface $nodeRepository
+     * @param ReadSiteRepositoryInterface $siteRepository
+     * @param CurrentSiteIdInterface      $currentSiteManager
      */
     public function __construct(
-        NodeRepositoryInterface $nodeRepository,
-        SiteRepositoryInterface $siteRepository,
-        CurrentSiteIdInterface $currentSiteManager
+        ReadNodeRepositoryInterface $nodeRepository,
+        ReadSiteRepositoryInterface $siteRepository,
+        CurrentSiteIdInterface      $currentSiteManager
     )
     {
         $this->nodeRepository = $nodeRepository;
