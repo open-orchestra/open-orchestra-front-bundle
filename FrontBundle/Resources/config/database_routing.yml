@@ -1,0 +1,23 @@
+parameters:
+    open_orchestra_front.router.database.class: OpenOrchestra\FrontBundle\Routing\Database\OpenOrchestraDatabaseRouter
+    open_orchestra_front.router.document_to_value_object.class: OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentToValueObjectTransformer
+    open_orchestra_front.router.collection_to_array.class: OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentCollectionToRouteCollectionTransformer
+
+services:
+    open_orchestra_front.router.document_to_value_object:
+        class: %open_orchestra_front.router.document_to_value_object.class%
+    open_orchestra_front.router.collection_to_array:
+        class: %open_orchestra_front.router.collection_to_array.class%
+        arguments:
+            - @open_orchestra_front.router.document_to_value_object
+    open_orchestra_front.router.database:
+        class: %open_orchestra_front.router.database.class%
+        arguments:
+            - @open_orchestra_model.repository.route_document
+            - @open_orchestra_front.router.document_to_value_object
+            - @open_orchestra_front.router.collection_to_array
+            - @request_stack
+            - @open_orchestra_front.manager.node
+        tags:
+            - { name: monolog.logger, channel: router }
+            - { name: router, priority: 300 }

@@ -35,7 +35,7 @@ class OpenOrchestraFrontExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('subscriber.yml');
-        $loader->load('routing.yml');
+        $loader->load('database_routing.yml');
         $loader->load('twig.yml');
         $loader->load('subquery.yml');
 
