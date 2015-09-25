@@ -22,11 +22,11 @@ class RouteDocumentCollectionToRouteCollectionTransformer
     }
 
     /**
-     * @param Collection $routeDocuments
+     * @param array|Collection $routeDocuments
      *
      * @return RouteCollection
      */
-    public function transform(Collection $routeDocuments)
+    public function transform($routeDocuments)
     {
         $routeCollection = new RouteCollection();
 
