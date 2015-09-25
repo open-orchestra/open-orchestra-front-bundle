@@ -17,7 +17,7 @@ class RouteDocumentToValueObjectTransformer
      */
     public function transform(RouteDocumentInterface $routeDocument)
     {
-        $defaults = array_merge(array('_controller'=> 'OpenOrchestra\FrontBundle\Controller\NodeController::showAction'),$routeDocument->getDefaults());
+        $defaults = array_merge(array('_controller'=> 'OpenOrchestra\FrontBundle\Controller\NodeController::showAction'), $routeDocument->getDefaults());
         return new Route(
             $routeDocument->getPattern(),
             $defaults,
