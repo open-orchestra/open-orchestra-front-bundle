@@ -13,7 +13,8 @@
         "open-orchestra/open-orchestra-base-bundle": "*",
         "open-orchestra/open-orchestra-display-bundle": "*",
         "open-orchestra/open-orchestra-model-interface": "*",
-        "open-orchestra/open-orchestra-theme-bundle": "*"
+        "open-orchestra/open-orchestra-theme-bundle": "*",
+        "symfony-cmf/routing-bundle": "*"
     },
     "require-dev": {
         "open-orchestra/open-orchestra-model-bundle": "dev-master",

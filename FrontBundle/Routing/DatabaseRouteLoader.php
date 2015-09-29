@@ -17,7 +17,6 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class DatabaseRouteLoader extends Loader
 {
-    protected $loaded = false;
     protected $nodeRepository;
     protected $siteRepository;
     protected $orderedNodes = array();
@@ -42,10 +41,6 @@ class DatabaseRouteLoader extends Loader
      */
     public function load($resource, $type = null)
     {
-        if (true === $this->loaded) {
-            throw new \RuntimeException('Do not add the "database" loader twice');
-        }
-
         $routes = new RouteCollection();
 
         $sites = $this->siteRepository->findByDeleted(false);
@@ -60,8 +55,6 @@ class DatabaseRouteLoader extends Loader
                 }
             }
         }
-
-        $this->loaded = true;
 
         return $routes;
     }

@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
             ->scalarNode('device_type_field')->defaultValue('x-ua-device')->end()
+            ->enumNode('routing_type')->values(array('file', 'database'))->defaultValue('database')->end()
         ->end();
 
         return $treeBuilder;

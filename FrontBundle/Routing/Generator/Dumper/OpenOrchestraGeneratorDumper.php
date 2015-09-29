@@ -118,14 +118,12 @@ EOF;
             unset(\$parameters[self::REDIRECT_TO_LANGUAGE]);
         }
 
-        if (!isset(self::\$declaredRoutes[\$name])) {
-            \$aliasId = (isset(\$parameters['required']['aliasId'])) ? \$parameters['required']['aliasId'] : null;
-            \$this->setAliasId(\$aliasId);
+        \$aliasId = (isset(\$parameters['required']['aliasId'])) ? \$parameters['required']['aliasId'] : null;
+        \$this->setAliasId(\$aliasId);
 
-            \$name = \$this->getAliasId() . '_' . \$name;
-            if (!isset(self::\$declaredRoutes[\$name])) {
-                throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', \$name));
-            }
+        \$name = \$this->getAliasId() . '_' . \$name;
+        if (!isset(self::\$declaredRoutes[\$name])) {
+            throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', \$name));
         }
 
         list(\$variables, \$defaults, \$requirements, \$tokens, \$hostTokens, \$requiredSchemes) = self::\$declaredRoutes[\$name];
