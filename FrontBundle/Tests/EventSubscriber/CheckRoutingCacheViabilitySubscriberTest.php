@@ -41,6 +41,8 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
         Phake::when($this->router)->getOption('cache_dir')->thenReturn($this->cacheDir);
         Phake::when($this->router)->getOption('matcher_cache_class')->thenReturn($this->matcherCacheClass);
         Phake::when($this->router)->getOption('generator_cache_class')->thenReturn($this->generatorCacheClass);
+        $chainRouter = Phake::mock('Symfony\Cmf\Component\Routing\ChainRouterInterface');
+        Phake::when($chainRouter)->all()->thenReturn(array($this->router));
 
         $this->node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
         $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface');
@@ -49,7 +51,7 @@ class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCa
         $this->event = Phake::mock('Symfony\Component\HttpKernel\Event\GetResponseEvent');
         Phake::when($this->event)->isMasterRequest()->thenReturn(true);
 
-        $this->subscriber = new CheckRoutingCacheViabilitySubscriber($this->router, $this->nodeRepository);
+        $this->subscriber = new CheckRoutingCacheViabilitySubscriber($chainRouter, $this->nodeRepository);
     }
 
     /**

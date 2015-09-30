@@ -5,7 +5,7 @@ namespace OpenOrchestra\FrontBundle\EventSubscriber;
 use OpenOrchestra\FrontBundle\Routing\OpenOrchestraRouter;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
-use Symfony\Cmf\Component\Routing\ChainRouter;
+use Symfony\Cmf\Component\Routing\ChainRouterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -42,7 +42,7 @@ class CheckRoutingCacheViabilitySubscriber implements EventSubscriberInterface
         }
 
         $router = $this->router;
-        if ($this->router instanceof ChainRouter) {
+        if ($this->router instanceof ChainRouterInterface) {
             foreach ($this->router->all() as $router) {
                 if ($router instanceof OpenOrchestraRouter) {
                     break;
