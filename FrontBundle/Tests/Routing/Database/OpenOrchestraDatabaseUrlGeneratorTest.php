@@ -18,7 +18,6 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected $context;
     protected $nodeManager;
-    protected $requestStack;
     protected $routeName = 'foo';
     protected $routeFullName = '0_foo';
     protected $routeDocumentRepository;
@@ -32,7 +31,11 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->context = Phake::mock('Symfony\Component\Routing\RequestContext');
         $this->routeDocumentRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\RouteDocumentRepositoryInterface');
         $this->nodeManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\NodeManager');
-        $this->requestStack = Phake::mock('Symfony\Component\HttpFoundation\RequestStack');
+
+        $request = Phake::mock('Symfony\Component\HttpFoundation\Request');
+        Phake::when($request)->get(Phake::anyParameters())->thenReturn(0);
+        $requestStack = Phake::mock('Symfony\Component\HttpFoundation\RequestStack');
+        Phake::when($requestStack)->getMasterRequest()->thenReturn($request);
 
         $route = Phake::mock('Symfony\Component\Routing\Route');
         Phake::when($route)->compile()->thenThrow(new GeneratedRouteCompiledException());
@@ -42,7 +45,7 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->generator = new OpenOrchestraDatabaseUrlGenerator(
             $this->routeDocumentRepository,
             $this->routeDocumentToValueObjectTransformer,
-            $this->requestStack,
+            $requestStack,
             $this->nodeManager,
             $this->context
         );
@@ -107,6 +110,17 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testWithRedirectionAndNoExistingRoute()
     {
         Phake::when($this->nodeManager)->getNodeRouteName(Phake::anyParameters())->thenReturn($this->routeName);
+
+        $this->setExpectedException('Symfony\Component\Routing\Exception\RouteNotFoundException');
+        $this->generator->generate($this->routeName, array(OpenOrchestraDatabaseUrlGenerator::REDIRECT_TO_LANGUAGE => true));
+    }
+
+    /**
+     * Test when a redirection is made and no node is found
+     */
+    public function testWithRedirectionAndNoExistingNode()
+    {
+        Phake::when($this->nodeManager)->getNodeRouteName(Phake::anyParameters())->thenThrow(new NodeNotFoundException());
 
         $this->setExpectedException('Symfony\Component\Routing\Exception\RouteNotFoundException');
         $this->generator->generate($this->routeName, array(OpenOrchestraDatabaseUrlGenerator::REDIRECT_TO_LANGUAGE => true));
