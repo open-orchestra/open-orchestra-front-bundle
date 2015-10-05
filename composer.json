@@ -27,9 +27,8 @@
         "bin-dir" : "bin"
     },
     "autoload": {
-        "psr-0": {
-            "OpenOrchestra\\FrontBundle": ""
+        "psr-4": {
+            "OpenOrchestra\\FrontBundle\\": "FrontBundle/"
         }
-    },
-    "target-dir": "OpenOrchestra"
+    }
 }
