@@ -81,7 +81,7 @@ class KernelExceptionSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testOnKernelException($status, ReadNodeInterface $node = null, $expectedResponseCount)
     {
         Phake::when($this->exception)->getStatusCode()->thenReturn($status);
-        Phake::when($this->nodeRepository)->findOnePublishedByNodeIdAndLanguageAndSiteIdInLastVersion(Phake::anyParameters())->thenReturn($node);
+        Phake::when($this->nodeRepository)->findPublishedInLastVersion(Phake::anyParameters())->thenReturn($node);
 
         $this->subscriber->onKernelException($this->event);
 

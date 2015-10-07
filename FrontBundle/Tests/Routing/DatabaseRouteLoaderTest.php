@@ -111,8 +111,8 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
         $enNodes[] = $enGrandSonNode;
 
         // Define the repository return
-        Phake::when($this->nodeRepository)->findLastPublishedVersionByLanguageAndSiteId($this->frLocale, $siteId)->thenReturn($frNodes);
-        Phake::when($this->nodeRepository)->findLastPublishedVersionByLanguageAndSiteId($this->enLocale, $siteId)->thenReturn($enNodes);
+        Phake::when($this->nodeRepository)->findLastPublishedVersion($this->frLocale, $siteId)->thenReturn($frNodes);
+        Phake::when($this->nodeRepository)->findLastPublishedVersion($this->enLocale, $siteId)->thenReturn($enNodes);
 
         $routeCollection = $this->loader->load($this->resource, 'database');
 
@@ -175,7 +175,7 @@ class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
         $frNodes[] = $frGrandSonNode;
 
         // Define the repository return
-        Phake::when($this->nodeRepository)->findLastPublishedVersionByLanguageAndSiteId($this->frLocale, $siteId)->thenReturn($frNodes);
+        Phake::when($this->nodeRepository)->findLastPublishedVersion($this->frLocale, $siteId)->thenReturn($frNodes);
 
         $routeCollection = $this->loader->load($this->resource, 'database');
 

@@ -43,7 +43,7 @@ class BlockController extends Controller
 
         if (is_null($newNodeId) || $newNodeId != $nodeId) {
             $node = $this->get('open_orchestra_model.repository.node')
-                ->findOnePublishedByNodeIdAndLanguageAndSiteIdInLastVersion($nodeId, $language, $siteId);
+                ->findPublishedInLastVersion($nodeId, $language, $siteId);
         }
 
         if ($node instanceof ReadNodeInterface && (null !== ($block = $node->getBlock($blockId)))) {
