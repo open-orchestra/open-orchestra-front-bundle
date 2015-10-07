@@ -47,7 +47,7 @@ class NodeManagerTest extends \PHPUnit_Framework_TestCase
         $node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
         Phake::when($node)->getId()->thenReturn($mongoNodeId);
         Phake::when($this->nodeRepository)
-            ->findOnePublishedByNodeIdAndLanguageAndSiteIdInLastVersion(Phake::anyParameters())
+            ->findPublishedInLastVersion(Phake::anyParameters())
             ->thenReturn($node);
 
         $site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
