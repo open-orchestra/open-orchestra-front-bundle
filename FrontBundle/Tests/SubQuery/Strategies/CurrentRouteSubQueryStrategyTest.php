@@ -49,13 +49,28 @@ class CurrentRouteSubQueryStrategyTest extends AbstractSubQueryStrategyTest
     }
 
     /**
-     * Test generate
+     * @param string $route
+     * @param string $expectedRoute
+     * @param string $aliasId
+     *
+     * @dataProvider provideRouteNames
      */
-    public function testGenerate()
+    public function testGenerate($route, $expectedRoute, $aliasId)
     {
-        $route = 'route';
         Phake::when($this->request)->get('_route')->thenReturn($route);
+        Phake::when($this->request)->get('aliasId')->thenReturn($aliasId);
 
-        $this->assertSame(array('currentRouteName' => $route), $this->strategy->generate('current_route'));
+        $this->assertSame(array('currentRouteName' => $expectedRoute, 'aliasId' => $aliasId), $this->strategy->generate('current_route'));
+    }
+
+    /**
+     * @return array
+     */
+    public function provideRouteNames()
+    {
+        return array(
+            array('foo', 'foo', '2'),
+            array('3_foo', 'foo', '3'),
+        );
     }
 }

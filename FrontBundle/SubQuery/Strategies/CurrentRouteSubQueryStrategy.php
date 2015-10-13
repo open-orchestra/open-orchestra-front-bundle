@@ -24,7 +24,10 @@ class CurrentRouteSubQueryStrategy extends AbstractRequestSubQueryStrategy
      */
     public function generate($blockParameter)
     {
-        return array('currentRouteName' => $this->request->get('_route'));
+        return array(
+            'currentRouteName' => $this->extractRouteName($this->request->get('_route')),
+            'aliasId' => $this->request->get('aliasId'),
+        );
     }
 
     /**
@@ -33,5 +36,18 @@ class CurrentRouteSubQueryStrategy extends AbstractRequestSubQueryStrategy
     public function getName()
     {
         return 'current_route';
+    }
+
+    /**
+     * @param string $routeName
+     *
+     * @return string
+     */
+    protected function extractRouteName($routeName)
+    {
+        $route = explode('_', $routeName);
+        $routeName = end($route);
+
+        return $routeName;
     }
 }
