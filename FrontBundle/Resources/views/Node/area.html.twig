@@ -4,7 +4,7 @@
         {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": subArea, 'nodeId': nodeId, 'parameters': parameters} only %}
     {% endfor %}
     {% for blockReference in area.blocks %}
-        {% if blockReference.nodeId is sameas(0) %}
+        {% if blockReference.nodeId is same as(0) %}
             {% set nodeReference = nodeId %}
         {% else %}
             {% set nodeReference = blockReference.nodeId %}
