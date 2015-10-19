@@ -1,0 +1,5 @@
+open_orchestra_front:
+    devices:
+        fake_name:
+            parent: fake_parent
+    device_type_field: x-ua-fake
