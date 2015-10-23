@@ -2,6 +2,9 @@
 
 namespace OpenOrchestra\FrontBundle\Controller;
 
+use OpenOrchestra\FrontBundle\Exception\NonExistingBlockException;
+use OpenOrchestra\FrontBundle\Exception\NonExistingNodeException;
+use OpenOrchestra\ModelInterface\Model\ReadBlockInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,42 +34,37 @@ class BlockController extends Controller
      */
     public function showAction(Request $request, $siteId, $nodeId, $blockId)
     {
-        $language = $request->getLocale();
-        $newNodeId = null;
-        $node = null;
+        try {
+            $block = $this->get('open_orchestra_front.repository.block')->findBlock(
+                $blockId,
+                $nodeId,
+                $request->getLocale(),
+                $siteId,
+                $request->get('token')
+            );
 
-        if ($token = $request->get('token')) {
-            $decryptedToken = $this->get('open_orchestra_base.manager.encryption')->decrypt($token);
-            $node = $this->get('open_orchestra_model.repository.node')->find($decryptedToken);
-            $newNodeId = $node->getNodeId();
-        }
-
-        if (is_null($newNodeId) || $newNodeId != $nodeId) {
-            $node = $this->get('open_orchestra_model.repository.node')
-                ->findPublishedInLastVersion($nodeId, $language, $siteId);
-        }
-
-        if ($node instanceof ReadNodeInterface && (null !== ($block = $node->getBlock($blockId)))) {
             $response = $this->get('open_orchestra_display.display_block_manager')->show($block);
 
-            $this->tagResponse($response, $block, $nodeId, $siteId, $language);
+            $this->tagResponse($response, $block, $nodeId, $siteId, $request->getLocale());
 
             return $response;
+        } catch (NonExistingBlockException $e) {
+            throw new NotFoundHttpException(null, $e);
+        } catch (NonExistingNodeException $e) {
+            throw new NotFoundHttpException(null, $e);
         }
-
-        throw new NotFoundHttpException();
     }
 
     /**
      * Tag response
      * 
-     * @param Response       $response
-     * @param BlockInterface $block
-     * @param string         $nodeId
-     * @param string         $siteId
-     * @param string         $language
+     * @param Response           $response
+     * @param ReadBlockInterface $block
+     * @param string             $nodeId
+     * @param string             $siteId
+     * @param string             $language
      */
-    protected function tagResponse(Response $response, BlockInterface $block, $nodeId, $siteId, $language)
+    protected function tagResponse(Response $response, ReadBlockInterface $block, $nodeId, $siteId, $language)
     {
         $tagManager = $this->get('open_orchestra_base.manager.tag');
 
@@ -88,12 +86,12 @@ class BlockController extends Controller
     /**
      * Get a list of nodes using $block
      * 
-     * @param BlockInterface $block
-     * @param string         $nodeId
+     * @param ReadBlockInterface $block
+     * @param string             $nodeId
      * 
      * @return array
      */
-    protected function getNodesUsingBlock(BlockInterface $block, $nodeId)
+    protected function getNodesUsingBlock(ReadBlockInterface $block, $nodeId)
     {
         $nodes = array();
         $areas = $block->getAreas();
