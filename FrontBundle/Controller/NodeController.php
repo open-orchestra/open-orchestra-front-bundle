@@ -86,7 +86,7 @@ class NodeController extends Controller
     {
         $decryptedToken = $this->get('open_orchestra_base.manager.encryption')->decrypt($token);
         /** @var NodeInterface $node */
-        $node = $this->get('open_orchestra_model.repository.node')->findOneById($decryptedToken);
+        $node = $this->get('open_orchestra_model.repository.node')->findVersionByDocumentId($decryptedToken);
 
         $siteManager = $this->get('open_orchestra_display.manager.site');
         $siteManager->setSiteId($node->getSiteId());
