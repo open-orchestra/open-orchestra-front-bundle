@@ -2,13 +2,14 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Routing\Database\Transformer;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentToValueObjectTransformer;
 use Phake;
 
 /**
  * Test RouteDocumentToValueObjectTransformerTest
  */
-class RouteDocumentToValueObjectTransformerTest extends \PHPUnit_Framework_TestCase
+class RouteDocumentToValueObjectTransformerTest extends AbstractBaseTestCase
 {
     /**
      * @var RouteDocumentToValueObjectTransformer

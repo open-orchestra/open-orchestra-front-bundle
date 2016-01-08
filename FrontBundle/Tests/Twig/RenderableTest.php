@@ -2,13 +2,14 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Twig;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\Twig\OrchestraTwigEngine;
 use Phake;
 
 /**
  * Class OrchestraTimedTwigEngineTest
  */
-class RenderableTest extends \PHPUnit_Framework_TestCase
+class RenderableTest extends AbstractBaseTestCase
 {
     /**
      * @var OrchestraTwigEngine

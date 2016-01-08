@@ -2,13 +2,14 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Manager;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\Manager\NodeManager;
 use Phake;
 
 /**
  * Test NodeManagerTest
  */
-class NodeManagerTest extends \PHPUnit_Framework_TestCase
+class NodeManagerTest extends AbstractBaseTestCase
 {
     /**
      * @var NodeManager

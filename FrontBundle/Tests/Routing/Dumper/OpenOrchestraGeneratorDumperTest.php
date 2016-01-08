@@ -2,13 +2,14 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Routing\Dumper;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\Routing\Generator\Dumper\OpenOrchestraGeneratorDumper;
 use Phake;
 
 /**
  * Test OpenOrchestraGeneratorDumperTest
  */
-class OpenOrchestraGeneratorDumperTest extends \PHPUnit_Framework_TestCase
+class OpenOrchestraGeneratorDumperTest extends AbstractBaseTestCase
 {
     /**
      * @var OpenOrchestraGeneratorDumper

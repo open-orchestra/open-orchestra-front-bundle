@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Routing\Database;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\DisplayBundle\Exception\NodeNotFoundException;
 use OpenOrchestra\FrontBundle\Routing\Database\OpenOrchestraDatabaseUrlGenerator;
 use Phake;
@@ -9,7 +10,7 @@ use Phake;
 /**
  * Test OpenOrchestraDatabaseUrlGeneratorTest
  */
-class OpenOrchestraDatabaseUrlGeneratorTest extends \PHPUnit_Framework_TestCase
+class OpenOrchestraDatabaseUrlGeneratorTest extends AbstractBaseTestCase
 {
     /**
      * @var OpenOrchestraDatabaseUrlGenerator

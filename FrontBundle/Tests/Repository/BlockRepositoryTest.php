@@ -2,13 +2,14 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Repository;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\Repository\BlockRepository;
 use Phake;
 
 /**
  * Test BlockRepositoryTest
  */
-class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
+class BlockRepositoryTest extends AbstractBaseTestCase
 {
     /**
      * @var BlockRepository

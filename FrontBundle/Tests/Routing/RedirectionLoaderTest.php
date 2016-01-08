@@ -3,6 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Tests\Routing;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use Phake;
 use OpenOrchestra\FrontBundle\Routing\RedirectionLoader;
 use Symfony\Component\Routing\Route;
@@ -10,7 +11,7 @@ use Symfony\Component\Routing\Route;
 /**
  * Test RedirectionLoaderTest
  */
-class RedirectionLoaderTest extends \PHPUnit_Framework_TestCase
+class RedirectionLoaderTest extends AbstractBaseTestCase
 {
     const REDIRECT = 'redirect';
     const URL_REDIRECT = 'urlRedirect';

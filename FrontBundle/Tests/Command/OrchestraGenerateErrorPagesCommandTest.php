@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Command;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use Phake;
 use OpenOrchestra\FrontBundle\Command\OrchestraGenerateErrorPagesCommand;
 use Symfony\Component\Console\Application;
@@ -9,7 +10,7 @@ use Symfony\Component\Console\Application;
 /**
  * Class OrchestraGenerateErrorPagesCommandTest
  */
-class OrchestraGenerateErrorPagesCommandTest extends \PHPUnit_Framework_TestCase
+class OrchestraGenerateErrorPagesCommandTest extends AbstractBaseTestCase
 {
     /**
      * @var OrchestraGenerateErrorPagesCommand

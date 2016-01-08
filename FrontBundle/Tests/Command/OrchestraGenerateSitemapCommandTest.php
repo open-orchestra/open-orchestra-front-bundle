@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Command;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use Phake;
 use OpenOrchestra\FrontBundle\Command\OrchestraGenerateSitemapCommand;
 use Symfony\Component\Console\Application;
@@ -10,7 +11,7 @@ use Symfony\Component\Console\Application;
  * Class OrchestraGenerateSitemapCommandTest
  *
  */
-class OrchestraGenerateSitemapCommandTest extends \PHPUnit_Framework_TestCase
+class OrchestraGenerateSitemapCommandTest extends AbstractBaseTestCase
 {
     /**
      * @var OrchestraGenerateSitemapCommand

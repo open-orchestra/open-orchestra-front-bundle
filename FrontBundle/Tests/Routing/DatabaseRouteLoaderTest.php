@@ -3,6 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Tests\Routing;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use Phake;
 use OpenOrchestra\FrontBundle\Routing\DatabaseRouteLoader;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
@@ -11,7 +12,7 @@ use OpenOrchestra\ModelInterface\Model\ReadSiteAliasInterface;
 /**
  * Test DatabaseRouteLoaderTest
  */
-class DatabaseRouteLoaderTest extends \PHPUnit_Framework_TestCase
+class DatabaseRouteLoaderTest extends AbstractBaseTestCase
 {
     /**
      * @var DatabaseRouteLoader
