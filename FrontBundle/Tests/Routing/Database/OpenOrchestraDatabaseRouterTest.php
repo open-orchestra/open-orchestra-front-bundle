@@ -3,13 +3,14 @@
 namespace OpenOrchestra\FrontBundle\Tests\Routing\Database;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\Routing\Database\OpenOrchestraDatabaseRouter;
 use Phake;
 
 /**
  * Test OpenOrchestraDatabaseRouterTest
  */
-class OpenOrchestraDatabaseRouterTest extends \PHPUnit_Framework_TestCase
+class OpenOrchestraDatabaseRouterTest extends AbstractBaseTestCase
 {
     /**
      * @var OpenOrchestraDatabaseRouter

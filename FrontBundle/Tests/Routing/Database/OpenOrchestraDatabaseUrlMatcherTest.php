@@ -3,6 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Tests\Routing\Database;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\Routing\Database\OpenOrchestraDatabaseUrlMatcher;
 use Phake;
 use Symfony\Component\Routing\RouteCollection;
@@ -10,7 +11,7 @@ use Symfony\Component\Routing\RouteCollection;
 /**
  * Test OpenOrchestraDatabaseUrlMatcherTest
  */
-class OpenOrchestraDatabaseUrlMatcherTest extends \PHPUnit_Framework_TestCase
+class OpenOrchestraDatabaseUrlMatcherTest extends AbstractBaseTestCase
 {
     /**
      * @var OpenOrchestraDatabaseUrlMatcher

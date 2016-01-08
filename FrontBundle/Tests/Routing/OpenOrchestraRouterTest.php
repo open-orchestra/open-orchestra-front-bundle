@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Routing;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use Phake;
 use OpenOrchestra\FrontBundle\Routing\OpenOrchestraRouter;
 use Symfony\Component\Routing\RouteCollection;
@@ -9,7 +10,7 @@ use Symfony\Component\Routing\RouteCollection;
 /**
  * Tests of OpenOrchestraUrlRouter
  */
-class OpenOrchestraRouterTest extends \PHPUnit_Framework_TestCase
+class OpenOrchestraRouterTest extends AbstractBaseTestCase
 {
     /**
      * @var OpenOrchestraRouter

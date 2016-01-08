@@ -2,13 +2,14 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\SubQuery;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\SubQuery\SubQueryGeneratorManager;
 use Phake;
 
 /**
  * Test SubQueryGeneratorManagerTest
  */
-class SubQueryGeneratorManagerTest extends \PHPUnit_Framework_TestCase
+class SubQueryGeneratorManagerTest extends AbstractBaseTestCase
 {
     /**
      * @var SubQueryGeneratorManager

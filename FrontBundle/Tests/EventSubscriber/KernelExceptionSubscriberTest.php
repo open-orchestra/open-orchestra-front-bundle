@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\EventSubscriber;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\EventSubscriber\KernelExceptionSubscriber;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use Phake;
@@ -10,7 +11,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Test KernelExceptionSubscriber
  */
-class KernelExceptionSubscriberTest extends \PHPUnit_Framework_TestCase
+class KernelExceptionSubscriberTest extends AbstractBaseTestCase
 {
     /**
      * @var KernelExceptionSubscriber

@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\EventSubscriber;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\EventSubscriber\CheckRoutingCacheViabilitySubscriber;
 use Phake;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -9,7 +10,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Test CheckRoutingCacheViabilitySubscriberTest
  */
-class CheckRoutingCacheViabilitySubscriberTest extends \PHPUnit_Framework_TestCase
+class CheckRoutingCacheViabilitySubscriberTest extends AbstractBaseTestCase
 {
     /**
      * @var CheckRoutingCacheViabilitySubscriber

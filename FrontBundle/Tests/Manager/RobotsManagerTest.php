@@ -2,13 +2,14 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Manager;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use Phake;
 use OpenOrchestra\FrontBundle\Manager\RobotsManager;
 
 /**
  * Class RobotsManagerTest
  */
-class RobotsManagerTest extends \PHPUnit_Framework_TestCase
+class RobotsManagerTest extends AbstractBaseTestCase
 {
     protected $filesystem;
     protected $robotsManager;

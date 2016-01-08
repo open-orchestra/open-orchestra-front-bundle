@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Manager;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use Phake;
 use OpenOrchestra\FrontBundle\Manager\ErrorPagesManager;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -9,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Class ErrorPagesManagerTest
  */
-class ErrorPagesManagerTest extends \PHPUnit_Framework_TestCase
+class ErrorPagesManagerTest extends AbstractBaseTestCase
 {
     protected $nodeRepository;
     protected $filesystem;

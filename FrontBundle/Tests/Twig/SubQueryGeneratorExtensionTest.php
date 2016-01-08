@@ -2,13 +2,14 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Twig;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\Twig\SubQueryGeneratorExtension;
 use Phake;
 
 /**
  * Test SubQueryGeneratorExtensionTest
  */
-class SubQueryGeneratorExtensionTest extends \PHPUnit_Framework_TestCase
+class SubQueryGeneratorExtensionTest extends AbstractBaseTestCase
 {
     /**
      * @var SubQueryGeneratorExtension

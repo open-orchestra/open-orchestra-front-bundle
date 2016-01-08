@@ -2,13 +2,14 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Manager;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\Manager\SubQueryParametersManager;
 use Phake;
 
 /**
  * Class Test
  */
-class SubQueryParametersManagerTest extends \PHPUnit_Framework_TestCase
+class SubQueryParametersManagerTest extends AbstractBaseTestCase
 {
     protected $parametersManager;
     protected $parameterBag;

@@ -3,13 +3,14 @@
 namespace OpenOrchestra\FrontBundle\Tests\Routing\Database\Transformer;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentCollectionToRouteCollectionTransformer;
 use Phake;
 
 /**
  * Test RouteDocumentCollectionToRouteCollectionTransformerTest
  */
-class RouteDocumentCollectionToRouteCollectionTransformerTest extends \PHPUnit_Framework_TestCase
+class RouteDocumentCollectionToRouteCollectionTransformerTest extends AbstractBaseTestCase
 {
     /**
      * @var RouteDocumentCollectionToRouteCollectionTransformer

@@ -2,13 +2,14 @@
 
 namespace OpenOrchestra\FrontBundle\Tests\Routing;
 
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use Phake;
 use OpenOrchestra\FrontBundle\Routing\OpenOrchestraUrlGenerator;
 
 /**
  * Tests of OpenOrchestraUrlGenerator
  */
-class OpenOrchestraUrlGeneratorTest extends \PHPUnit_Framework_TestCase
+class OpenOrchestraUrlGeneratorTest extends AbstractBaseTestCase
 {
     /**
      * @var OpenOrchestraUrlGenerator
