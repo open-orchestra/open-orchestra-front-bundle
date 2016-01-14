@@ -69,6 +69,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      * @param string $host
      * @param string $path
      * 
+     * @throws NonExistingSiteException
      * @return array
      */
     protected function getCurrentSiteInfo($host, $path)
@@ -95,14 +96,11 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
             }
         }
 
-        if (is_array($possibleAlias)) {
-            return array(
-                'site' => $possibleSite,
-                'language' => $possibleAlias->getLanguage()
-            );
+        if (is_null($possibleAlias)) {
+            throw new NonExistingSiteException();
         }
 
-        throw new NonExistingSiteException();
+        return array('site' => $possibleSite, 'language' => $possibleAlias->getLanguage());
     }
 
     /**
