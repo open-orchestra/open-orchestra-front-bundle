@@ -5,9 +5,9 @@ namespace OpenOrchestra\FrontBundle\Exception;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class NonExistingNodeException
+ * Class NonExistingSiteException
  */
-class NonExistingNodeException extends NotFoundHttpException
+class NonExistingSiteException extends NotFoundHttpException
 {
 
 }

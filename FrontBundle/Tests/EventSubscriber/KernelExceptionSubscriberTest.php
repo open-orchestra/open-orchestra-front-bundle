@@ -103,4 +103,35 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
             array('500', $node, 0),
         );
     }
+
+    /**
+     * @param string $status
+     * @param bool   $expectedException
+     * 
+     * @dataProvider getErrorContextWithException
+     */
+    public function testOnKernelExceptionWithNoSite($status, $expectedException)
+    {
+        Phake::when($this->exception)->getStatusCode()->thenReturn($status);
+        Phake::when($this->siteRepository)->findByAliasDomain(Phake::anyParameters())->thenReturn(array());
+
+        if ($expectedException) {
+            $this->setExpectedException('OpenOrchestra\FrontBundle\Exception\NonExistingSiteException');
+        }
+
+        $this->subscriber->onKernelException($this->event);
+    }
+
+    /**
+     * Provide error context
+     */
+    public function getErrorContextWithException()
+    {
+        $node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
+
+        return array(
+            array('404', true),
+            array('500', false),
+        );
+    }
 }

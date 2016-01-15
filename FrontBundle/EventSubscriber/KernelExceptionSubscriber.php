@@ -13,6 +13,7 @@ use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use OpenOrchestra\FrontBundle\Exception\NonExistingSiteException;
 
 /**
  * Class KernelExceptionSubscriber
@@ -68,6 +69,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      * @param string $host
      * @param string $path
      * 
+     * @throws NonExistingSiteException
      * @return array
      */
     protected function getCurrentSiteInfo($host, $path)
@@ -94,10 +96,11 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
             }
         }
 
-        return array(
-            'site' => $possibleSite,
-            'language' => $possibleAlias->getLanguage()
-        );
+        if (is_null($possibleAlias)) {
+            throw new NonExistingSiteException();
+        }
+
+        return array('site' => $possibleSite, 'language' => $possibleAlias->getLanguage());
     }
 
     /**
