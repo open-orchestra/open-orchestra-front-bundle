@@ -106,7 +106,7 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
 
     /**
      * @param string $status
-     * @param int    $expectedResponseCount
+     * @param bool   $expectedException
      * 
      * @dataProvider getErrorContextWithException
      */
