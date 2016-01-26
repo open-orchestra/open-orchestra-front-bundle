@@ -7,6 +7,10 @@
         {% endblock %}
         <script src="{{ asset('/bundles/openorchestradisplay/libs/require.js') }}"></script>
         <script src="{{ asset('/bundles/openorchestradisplay/requireConf.js') }}"></script>
+        <meta name="ROBOTS" content="
+            {{- node.metaFollow ? 'FOLLOW': 'NOFOLLOW' -}},
+            {{- node.metaIndex ? 'INDEX': 'NOINDEX' -}}
+        ">
     </head>
     <body>
         {% for area in node.areas %}
