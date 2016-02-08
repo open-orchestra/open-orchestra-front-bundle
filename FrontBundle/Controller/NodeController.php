@@ -37,24 +37,29 @@ class NodeController extends Controller
 
         if (!($node instanceof ReadNodeInterface)) {
             throw new NonExistingNodeException();
-        } elseif (!is_null($node->getRole()) && !$this->get('security.authorization_checker')->isGranted($node->getRole())) {
+        } elseif (
+            !is_null($node->getRole())
+            && !$this->get('security.authorization_checker')->isGranted($node->getRole())
+        ) {
+
             return $this->redirect($this->get('request')->getBaseUrl());
         }
 
         $response = $this->renderNode($node);
 
-        return $this->updateNodeResponse($response, $node);
+        return $this->updateNodeResponse($response, $node, $request);
     }
 
     /**
      * Update response headers
-     * 
-     * @param Response      $response
+     *
+     * @param Response          $response
      * @param ReadNodeInterface $node
-     * 
+     * @param Request           $request
+     *
      * @return Response
      */
-    protected function updateNodeResponse(Response $response, ReadNodeInterface $node)
+    protected function updateNodeResponse(Response $response, ReadNodeInterface $node, Request $request)
     {
         $tagManager = $this->get('open_orchestra_base.manager.tag');
         $cacheableManager = $this->get('open_orchestra_display.manager.cacheable');
@@ -66,11 +71,23 @@ class NodeController extends Controller
         );
         $cacheableManager->addCacheTags($cacheTags);
 
-        $response = $cacheableManager->setResponseCacheParameters(
-            $response,
-            $node->getMaxAge(),
-            CacheableInterface::CACHE_PUBLIC
-        );
+        if ($this->has('esi') && $this->get('esi')->hasSurrogateCapability($request)) {
+            $response = $cacheableManager->setResponseCacheParameters(
+                $response,
+                $node->getMaxAge(),
+                CacheableInterface::CACHE_PUBLIC
+            );
+        } else {
+            $cacheInfo = $this->get('open_orchestra_display.manager.node_response_manager')->getNodeCacheInfo($node);
+
+            $privacy = ($cacheInfo['isPublic']) ? CacheableInterface::CACHE_PUBLIC : CacheableInterface::CACHE_PRIVATE;
+
+            $response = $cacheableManager->setResponseCacheParameters(
+                $response,
+                $cacheInfo['MaxAge'],
+                $privacy
+            );
+        }
 
         return $response;
     }
@@ -103,7 +120,10 @@ class NodeController extends Controller
      */
     protected function renderNode(ReadNodeInterface $node, array $parameters = array())
     {
-        $parameters = array_merge($parameters, array('siteId' => $node->getSiteId(), '_locale' => $node->getLanguage()));
+        $parameters = array_merge(
+            $parameters,
+            array('siteId' => $node->getSiteId(), '_locale' => $node->getLanguage())
+        );
 
         $response = $this->render(
             'OpenOrchestraFrontBundle:Node:show.html.twig',
