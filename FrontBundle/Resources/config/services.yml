@@ -5,6 +5,7 @@ parameters:
     open_orchestra_front.manager.sub_query_parameters.class: OpenOrchestra\FrontBundle\Manager\SubQueryParametersManager
     open_orchestra_front.manager.node.class: OpenOrchestra\FrontBundle\Manager\NodeManager
     open_orchestra_front.symfony.client.class: Symfony\Component\HttpKernel\Client
+    open_orchestra_front.manager.node_response_manager.class: OpenOrchestra\FrontBundle\Manager\NodeResponseManager
 
 services:
     open_orchestra_front.manager.sitemap:
@@ -38,3 +39,8 @@ services:
         class: %open_orchestra_front.symfony.client.class%
         arguments:
             - @kernel
+    open_orchestra_front.manager.node_response_manager:
+        class: %open_orchestra_front.manager.node_response_manager.class%
+        arguments:
+            - @open_orchestra_model.repository.node
+            - @open_orchestra_display.display_block_manager

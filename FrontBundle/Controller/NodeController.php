@@ -78,7 +78,7 @@ class NodeController extends Controller
                 CacheableInterface::CACHE_PUBLIC
             );
         } else {
-            $cacheInfo = $this->get('open_orchestra_display.manager.node_response_manager')->getNodeCacheInfo($node);
+            $cacheInfo = $this->get('open_orchestra_front.manager.node_response_manager')->getNodeCacheInfo($node);
 
             $privacy = ($cacheInfo['isPublic']) ? CacheableInterface::CACHE_PUBLIC : CacheableInterface::CACHE_PRIVATE;
 
