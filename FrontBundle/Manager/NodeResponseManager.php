@@ -123,7 +123,7 @@ class NodeResponseManager
             $cacheInfo = $this->mergeCacheInfo(
                 $cacheInfo,
                 $this->formatCacheInfo(
-                    $block->getMaxAge($block),
+                    $block->getMaxAge(),
                     $this->displayBlockManager->isPublic($block)
                 )
             );
@@ -152,7 +152,7 @@ class NodeResponseManager
     /**
      * Merge two CacheInfo
      *
-     * @param array $cacheInfo1
+     * @param array $cacheInfogetCacheInfoFromAreas1
      * @param array $cacheInfo2
      */
     protected function mergeCacheInfo(array $cacheInfo1, array $cacheInfo2)
