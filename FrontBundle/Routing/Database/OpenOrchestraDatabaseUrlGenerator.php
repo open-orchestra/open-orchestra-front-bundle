@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Class OpenOrchestraDatabaseUrlGenerator
@@ -87,7 +88,7 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
         $routeDocument = $this->routeDocumentRepository->findOneByName($fullName);
 
         if (!$routeDocument instanceof RouteDocumentInterface) {
-            throw new RouteNotFoundException(sprintf('The route %s does not exists in the database', $name));
+            throw new RouteNotFoundException(sprintf('The route %s does not exists in the database', $fullName));
         }
 
         $route = $this->routeDocumentToValueObjectTransformer->transform($routeDocument);
@@ -106,4 +107,11 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
             $route->getSchemes()
         );
     }
+
+    public function generateWithParameter(ParameterBag $parameter, $name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    {
+        $this->request = $parameter;
+        return $this->generate($name, $parameters, $referenceType);
+    }
+
 }
