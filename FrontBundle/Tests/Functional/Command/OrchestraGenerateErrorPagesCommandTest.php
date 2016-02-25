@@ -41,6 +41,11 @@ class OrchestraGenerateErrorPagesCommandTest extends AbstractKernelTestCase
                     $commandTester->getDisplay()
                 );
                 $this->assertFileExists('./web/' . $siteId . '/alias-' . $i . '/Error 404.html');
+                $this->assertRegExp(
+                    '/-> ' . $siteId . '\/alias-' . $i . '\/Error 503.html generated/',
+                    $commandTester->getDisplay()
+                );
+                $this->assertFileExists('./web/' . $siteId . '/alias-' . $i . '/Error 503.html');
             }
         }
 
