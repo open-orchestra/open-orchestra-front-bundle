@@ -24,6 +24,14 @@ services:
         tags:
             - { name: routing.loader }
 
+    open_orchestra_front.database.link_loader:
+        class: %open_orchestra_front.database.route_loader.class%
+        arguments:
+            - @open_orchestra_model.repository.node
+            - @open_orchestra_model.repository.site
+        tags:
+            - { name: routing.loader }
+
     open_orchestra_front.router.file:
         class: %open_orchestra_front.router.file.class%
         arguments:

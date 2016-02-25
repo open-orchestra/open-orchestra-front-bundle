@@ -17,9 +17,9 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * Class OpenOrchestraDatabaseUrlGenerator
+ * Class OpenOrchestraDatabaseLinkGenerator
  */
-class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
+class OpenOrchestraDatabaseLinkGenerator extends UrlGenerator
 {
     protected $request;
     protected $nodeManager;
@@ -67,24 +67,9 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
      * @throws InvalidParameterException           When a parameter value for a placeholder is not correct because
      *                                             it does not match the requirement
      */
-    public function  generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    public function  generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH, $aliasId = null)
     {
-        if (isset($parameters[self::REDIRECT_TO_LANGUAGE])) {
-            try {
-                $fullName = $this->nodeManager->getNodeRouteName($name, $parameters[self::REDIRECT_TO_LANGUAGE]);
-            } catch (NodeNotFoundException $e) {
-                throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', $name));
-            }
-            unset($parameters[self::REDIRECT_TO_LANGUAGE]);
-        } else {
-            $aliasId = 0;
-            if ($this->request) {
-                $aliasId = $this->request->get('aliasId', $aliasId);
-            }
-
-            $fullName = $aliasId . '_' . $name;
-        }
-
+        $fullName = $parameters['aliasId'] . '_' . $name;
         $routeDocument = $this->routeDocumentRepository->findOneByName($fullName);
 
         if (!$routeDocument instanceof RouteDocumentInterface) {
@@ -100,7 +85,7 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
             $route->getDefaults(),
             $route->getRequirements(),
             $compiledRoute->getTokens(),
-            $parameters,
+            $parameters['query'],
             $fullName,
             $referenceType,
             $compiledRoute->getHostTokens(),
