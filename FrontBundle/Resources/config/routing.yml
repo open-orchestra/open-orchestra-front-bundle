@@ -3,7 +3,6 @@ parameters:
     open_orchestra_front.router.file.options.generator_class : 'OpenOrchestra\FrontBundle\Routing\OpenOrchestraUrlGenerator'
     open_orchestra_front.router.file.options.generator_base_class : 'OpenOrchestra\FrontBundle\Routing\OpenOrchestraUrlGenerator'
     open_orchestra_front.router.file.options.generator_dumper_class: OpenOrchestra\FrontBundle\Routing\Generator\Dumper\OpenOrchestraGeneratorDumper
-
     open_orchestra_front.database.route_loader.class: OpenOrchestra\FrontBundle\Routing\DatabaseRouteLoader
     open_orchestra_front.redirection.route_loader.class: OpenOrchestra\FrontBundle\Routing\RedirectionLoader
 
@@ -16,14 +15,6 @@ services:
             - @open_orchestra_model.repository.site
         tags:
             - { name: routing.loader }
-    open_orchestra_front.database.route_loader:
-        class: %open_orchestra_front.database.route_loader.class%
-        arguments:
-            - @open_orchestra_model.repository.node
-            - @open_orchestra_model.repository.site
-        tags:
-            - { name: routing.loader }
-
     open_orchestra_front.database.link_loader:
         class: %open_orchestra_front.database.route_loader.class%
         arguments:
@@ -31,7 +22,13 @@ services:
             - @open_orchestra_model.repository.site
         tags:
             - { name: routing.loader }
-
+    open_orchestra_front.database.route_loader:
+        class: %open_orchestra_front.database.route_loader.class%
+        arguments:
+            - @open_orchestra_model.repository.node
+            - @open_orchestra_model.repository.site
+        tags:
+            - { name: routing.loader }
     open_orchestra_front.router.file:
         class: %open_orchestra_front.router.file.class%
         arguments:

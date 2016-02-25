@@ -2,7 +2,6 @@
 
 namespace OpenOrchestra\FrontBundle\Routing\Database;
 
-use OpenOrchestra\DisplayBundle\Exception\NodeNotFoundException;
 use OpenOrchestra\FrontBundle\Manager\NodeManager;
 use OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentToValueObjectTransformer;
 use OpenOrchestra\ModelInterface\Model\RouteDocumentInterface;
@@ -14,7 +13,6 @@ use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Class OpenOrchestraDatabaseLinkGenerator
@@ -67,29 +65,33 @@ class OpenOrchestraDatabaseLinkGenerator extends UrlGenerator
      * @throws InvalidParameterException           When a parameter value for a placeholder is not correct because
      *                                             it does not match the requirement
      */
-    public function  generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH, $aliasId = null)
+    public function  generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
-        $fullName = $parameters['aliasId'] . '_' . $name;
-        $routeDocument = $this->routeDocumentRepository->findOneByName($fullName);
+        if (array_key_exists('aliasId', $parameters)) {
+            $fullName = $parameters['aliasId'] . '_' . $name;
+            $routeDocument = $this->routeDocumentRepository->findOneByName($fullName);
 
-        if (!$routeDocument instanceof RouteDocumentInterface) {
-            throw new RouteNotFoundException(sprintf('The route %s does not exists in the database', $fullName));
+            if (!$routeDocument instanceof RouteDocumentInterface) {
+                throw new RouteNotFoundException(sprintf('The route %s does not exists in the database', $fullName));
+            }
+
+            $route = $this->routeDocumentToValueObjectTransformer->transform($routeDocument);
+
+            $compiledRoute = $route->compile();
+
+            return $this->doGenerate(
+                $compiledRoute->getVariables(),
+                $route->getDefaults(),
+                $route->getRequirements(),
+                $compiledRoute->getTokens(),
+                $parameters,
+                $fullName,
+                $referenceType,
+                $compiledRoute->getHostTokens(),
+                $route->getSchemes()
+            );
         }
 
-        $route = $this->routeDocumentToValueObjectTransformer->transform($routeDocument);
-
-        $compiledRoute = $route->compile();
-
-        return $this->doGenerate(
-            $compiledRoute->getVariables(),
-            $route->getDefaults(),
-            $route->getRequirements(),
-            $compiledRoute->getTokens(),
-            $parameters['query'],
-            $fullName,
-            $referenceType,
-            $compiledRoute->getHostTokens(),
-            $route->getSchemes()
-        );
+        throw new RouteNotFoundException(sprintf('The route %s does not exists in the database', $name));
     }
 }
