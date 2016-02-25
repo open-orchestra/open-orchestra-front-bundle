@@ -69,7 +69,6 @@ class DatabaseRouteLoader extends Loader
      */
     public function supports($resource, $type = null)
     {
-        var_dump('database' === $type);
         return 'database' === $type;
     }
 
