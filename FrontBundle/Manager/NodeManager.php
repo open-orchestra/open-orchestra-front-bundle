@@ -44,7 +44,7 @@ class NodeManager
     {
         $siteId = $this->currentSiteManager->getCurrentSiteId();
 
-        $node = $this->nodeRepository->findPublishedInLastVersion($nodeId, $language, $siteId);
+        $node = $this->nodeRepository->findOneCurrentlyPublished($nodeId, $language, $siteId);
 
         if (!$node instanceof ReadNodeInterface) {
             throw new NodeNotFoundException();

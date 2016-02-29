@@ -112,8 +112,8 @@ class DatabaseRouteLoaderTest extends AbstractBaseTestCase
         $enNodes[] = $enGrandSonNode;
 
         // Define the repository return
-        Phake::when($this->nodeRepository)->findLastPublishedVersion($this->frLocale, $siteId)->thenReturn($frNodes);
-        Phake::when($this->nodeRepository)->findLastPublishedVersion($this->enLocale, $siteId)->thenReturn($enNodes);
+        Phake::when($this->nodeRepository)->findCurrentlyPublishedVersion($this->frLocale, $siteId)->thenReturn($frNodes);
+        Phake::when($this->nodeRepository)->findCurrentlyPublishedVersion($this->enLocale, $siteId)->thenReturn($enNodes);
 
         $routeCollection = $this->loader->load($this->resource, 'database');
 
@@ -176,7 +176,7 @@ class DatabaseRouteLoaderTest extends AbstractBaseTestCase
         $frNodes[] = $frGrandSonNode;
 
         // Define the repository return
-        Phake::when($this->nodeRepository)->findLastPublishedVersion($this->frLocale, $siteId)->thenReturn($frNodes);
+        Phake::when($this->nodeRepository)->findCurrentlyPublishedVersion($this->frLocale, $siteId)->thenReturn($frNodes);
 
         $routeCollection = $this->loader->load($this->resource, 'database');
 
