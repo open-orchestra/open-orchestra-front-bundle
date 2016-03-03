@@ -25,7 +25,7 @@ class BlockController extends Controller
      * @param string  $blockId
      *
      * @Config\Route("/block/{siteId}/{nodeId}/{blockId}/{_locale}", name="open_orchestra_front_block")
-     * @Config\Method({"GET"})
+     * @Config\Method({"GET", "POST"})
      *
      * @throws NotFoundHttpException
      * @return Response
@@ -55,7 +55,7 @@ class BlockController extends Controller
 
     /**
      * Tag response
-     * 
+     *
      * @param Response           $response
      * @param ReadBlockInterface $block
      * @param string             $nodeId
@@ -83,10 +83,10 @@ class BlockController extends Controller
 
     /**
      * Get a list of nodes using $block
-     * 
+     *
      * @param ReadBlockInterface $block
      * @param string             $nodeId
-     * 
+     *
      * @return array
      */
     protected function getNodesUsingBlock(ReadBlockInterface $block, $nodeId)
