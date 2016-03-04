@@ -47,13 +47,13 @@ class BlockRepositoryTest extends AbstractBaseTestCase
      */
     public function testFindBlockWithNoPreviewAndExistingBlock($siteId, $nodeId, $blockId, $language)
     {
-        Phake::when($this->nodeRepository)->findPublishedInLastVersion(Phake::anyParameters())->thenReturn($this->node);
+        Phake::when($this->nodeRepository)->findOneCurrentlyPublished(Phake::anyParameters())->thenReturn($this->node);
 
         $block = $this->repository->findBlock($blockId, $nodeId, $language, $siteId);
 
         $this->assertSame($this->block, $block);
         Phake::verify($this->node)->getBlock($blockId);
-        Phake::verify($this->nodeRepository)->findPublishedInLastVersion($nodeId, $language, $siteId);
+        Phake::verify($this->nodeRepository)->findOneCurrentlyPublished($nodeId, $language, $siteId);
     }
 
     /**
@@ -77,7 +77,7 @@ class BlockRepositoryTest extends AbstractBaseTestCase
      */
     public function testFindBlockWithNoPreviewAndNoBlock($siteId, $nodeId, $blockId, $language)
     {
-        Phake::when($this->nodeRepository)->findPublishedInLastVersion(Phake::anyParameters())->thenReturn($this->node);
+        Phake::when($this->nodeRepository)->findOneCurrentlyPublished(Phake::anyParameters())->thenReturn($this->node);
         Phake::when($this->node)->getBlock(Phake::anyParameters())->thenReturn(null);
 
         $this->setExpectedException('OpenOrchestra\FrontBundle\Exception\NonExistingBlockException');
@@ -102,7 +102,7 @@ class BlockRepositoryTest extends AbstractBaseTestCase
         Phake::when($previewNode)->getNodeId()->thenReturn($previewNodeId);
         Phake::when($previewNode)->getBlock(Phake::anyParameters())->thenReturn($this->block);
 
-        Phake::when($this->nodeRepository)->findPublishedInLastVersion(Phake::anyParameters())->thenReturn($this->node);
+        Phake::when($this->nodeRepository)->findOneCurrentlyPublished(Phake::anyParameters())->thenReturn($this->node);
         Phake::when($this->nodeRepository)->find(Phake::anyParameters())->thenReturn($previewNode);
 
         $block = $this->repository->findBlock($blockId, $nodeId, $language, $siteId, $previewToken);

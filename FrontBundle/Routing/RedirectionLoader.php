@@ -55,7 +55,7 @@ class RedirectionLoader extends Loader
             $site = $this->siteRepository->findOneBySiteId($redirection->getSiteId());
             if ($redirection->getNodeId()) {
                 /** @var ReadNodeInterface $node */
-                $node = $this->nodeRepository->findPublishedInLastVersion($redirection->getNodeId(), $redirection->getLocale(), $redirection->getSiteId());
+                $node = $this->nodeRepository->findOneCurrentlyPublished($redirection->getNodeId(), $redirection->getLocale(), $redirection->getSiteId());
                 if ($node instanceof ReadNodeInterface) {
                     $parameterKey = 'route';
                     $nodeId = $node->getId();

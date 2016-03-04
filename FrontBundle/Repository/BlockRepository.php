@@ -47,7 +47,7 @@ class BlockRepository
 
         if ( !($node instanceof ReadNodeInterface) || $nodeId != $node->getNodeId()) {
             /** @var ReadNodeInterface $node */
-            $node = $this->nodeRepository->findPublishedInLastVersion($nodeId, $language, $siteId);
+            $node = $this->nodeRepository->findOneCurrentlyPublished($nodeId, $language, $siteId);
         }
 
         if (!$node instanceof ReadNodeInterface) {
