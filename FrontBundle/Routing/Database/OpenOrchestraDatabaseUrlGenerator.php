@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Class OpenOrchestraDatabaseUrlGenerator
