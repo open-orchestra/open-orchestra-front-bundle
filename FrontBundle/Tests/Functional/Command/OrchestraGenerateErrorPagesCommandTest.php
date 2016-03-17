@@ -19,10 +19,6 @@ class OrchestraGenerateErrorPagesCommandTest extends AbstractKernelTestCase
      */
     public function testExecute(array $siteAlias)
     {
-        $this->markTestSkipped(
-            "Test skipped as it run fine locally but generates an error on Travis
-            (the request is ok locally but is null on travis)");
-
         $kernel = static::createKernel(array('environment' => 'test' ,'debug' => false));
         $kernel->boot();
 
