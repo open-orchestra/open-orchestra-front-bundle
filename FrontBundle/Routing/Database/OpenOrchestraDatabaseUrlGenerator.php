@@ -87,12 +87,7 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
             unset($parameters[self::REDIRECT_TO_LANGUAGE]);
         } else {
             $site = $this->siteRepository->findOneBySiteId($this->currentSiteManager->getCurrentSiteId());
-            foreach ($site->getAliases() as $key => $alias) {
-                $aliasId = $key;
-                if ($alias->isMain()) {
-                    break;
-                }
-            }
+            $aliasId = $site->getMainAliasId();
             if ($this->request) {
                 $aliasId = $this->request->get('aliasId', $aliasId);
             }

@@ -161,12 +161,7 @@ EOF;
             \$this->aliasId = \$aliasId;
         } else if (\$this->aliasId === null) {
             \$site = \$this->siteRepository->findOneBySiteId(\$this->currentSiteManager->getCurrentSiteId());
-            foreach (\$site->getAliases() as \$key => \$alias) {
-                \$aliasId = \$key;
-                if (\$alias->isMain()) {
-                    break;
-                }
-            }
+            \$aliasId = \$site->getMainAliasId();
             if (\$this->request) {
                 \$this->aliasId = \$this->request->get('aliasId', 0);
             }

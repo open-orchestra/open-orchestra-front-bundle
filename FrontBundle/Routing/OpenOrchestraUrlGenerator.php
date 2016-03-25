@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
+use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
+use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 
 /**
  * Class OpenOrchestraUrlGenerator
@@ -71,15 +73,8 @@ class OpenOrchestraUrlGenerator extends UrlGenerator
 
             return parent::generate($name, $parameters, $referenceType);
         }
-
         $site = $this->siteRepository->findOneBySiteId($this->currentSiteManager->getCurrentSiteId());
-        foreach ($site->getAliases() as $key => $alias) {
-            $aliasId = $key;
-            if ($alias->isMain()) {
-                break;
-            }
-        }
-
+        $aliasId = $site->getMainAliasId();
         if ($this->request) {
             $aliasId = $this->request->get('aliasId', $aliasId);
         }
