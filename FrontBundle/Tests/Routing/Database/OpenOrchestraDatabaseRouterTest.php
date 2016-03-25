@@ -17,6 +17,8 @@ class OpenOrchestraDatabaseRouterTest extends AbstractBaseTestCase
      */
     protected $router;
 
+    protected $siteRepository;
+    protected $currentSiteManager;
     protected $context;
     protected $routeDocumentRepository;
     protected $routeDocumentToValueObjectTransformer;
@@ -27,14 +29,20 @@ class OpenOrchestraDatabaseRouterTest extends AbstractBaseTestCase
      */
     public function setUp()
     {
+        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface');
+        $this->currentSiteManager = Phake::mock('OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
         $this->context = Phake::mock('Symfony\Component\Routing\RequestContext');
         $this->routeDocumentRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\RouteDocumentRepositoryInterface');
         $this->routeDocumentToValueObjectTransformer = Phake::mock('OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentToValueObjectTransformer');
         $this->routeDocumentCollectionToRouteCollectionTransformer = Phake::mock('OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentCollectionToRouteCollectionTransformer');
+
+
         $requestStack = Phake::mock('Symfony\Component\HttpFoundation\RequestStack');
         $nodeManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\NodeManager');
 
         $this->router = new OpenOrchestraDatabaseRouter(
+            $this->siteRepository,
+            $this->currentSiteManager,
             $this->routeDocumentRepository,
             $this->routeDocumentToValueObjectTransformer,
             $this->routeDocumentCollectionToRouteCollectionTransformer,

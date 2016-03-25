@@ -16,6 +16,8 @@ class OpenOrchestraUrlGeneratorTest extends AbstractBaseTestCase
      */
     protected $generator;
 
+    protected $siteRepository;
+    protected $currentSiteManager;
     protected $routes;
     protected $context;
     protected $request;
@@ -27,6 +29,8 @@ class OpenOrchestraUrlGeneratorTest extends AbstractBaseTestCase
      */
     public function setUp()
     {
+        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface');
+        $this->currentSiteManager = Phake::mock('OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
         $this->request = Phake::mock('Symfony\Component\HttpFoundation\Request');
         Phake::when($this->request)->get(Phake::anyParameters())->thenReturn($this->aliasId);
         $this->requestStack = Phake::mock('Symfony\Component\HttpFoundation\RequestStack');
@@ -40,6 +44,8 @@ class OpenOrchestraUrlGeneratorTest extends AbstractBaseTestCase
         $nodeManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\NodeManager');
 
         $this->generator = new OpenOrchestraUrlGenerator(
+            $this->siteRepository,
+            $this->currentSiteManager,
             $this->routes,
             $this->context,
             $this->requestStack,
