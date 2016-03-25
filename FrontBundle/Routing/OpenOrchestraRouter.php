@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Generator\ConfigurableRequirementsInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
+use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 
 /**
  * The FrameworkBundle router is extended to inject documents service
@@ -15,6 +17,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class OpenOrchestraRouter extends Router
 {
+    protected $siteRepository;
+    protected $currentSiteManager;
     protected $requestStack;
     protected $nodeManager;
 
@@ -22,12 +26,16 @@ class OpenOrchestraRouter extends Router
      * Extends parent constructor to get documents service
      * as $container is private in parent class
      *
-     * @param ContainerInterface $container
-     * @param mixed              $resource
-     * @param array              $options
-     * @param RequestContext     $context
+     * @param ReadSiteRepositoryInterface $siteRepository
+     * @param CurrentSiteIdInterface      $currentSiteManager
+     * @param ContainerInterface          $container
+     * @param mixed                       $resource
+     * @param array                       $options
+     * @param RequestContext              $context
      */
     public function __construct(
+        ReadSiteRepositoryInterface $siteRepository,
+        CurrentSiteIdInterface $currentSiteManager,
         ContainerInterface $container,
         $resource,
         array $options = array(),
@@ -36,6 +44,8 @@ class OpenOrchestraRouter extends Router
     {
         parent::__construct($container, $resource, $options, $context);
 
+        $this->siteRepository = $siteRepository;
+        $this->currentSiteManager = $currentSiteManager;
         $this->requestStack = $container->get('request_stack');
         $this->nodeManager = $container->get('open_orchestra_front.manager.node');
     }
@@ -53,6 +63,8 @@ class OpenOrchestraRouter extends Router
 
         if (null === $this->options['cache_dir'] || null === $this->options['generator_cache_class']) {
             $this->generator =  new $this->options['generator_class'](
+                    $this->siteRepository,
+                    $this->currentSiteManager,
                     $this->getRouteCollection(),
                     $this->context,
                     $this->requestStack,
