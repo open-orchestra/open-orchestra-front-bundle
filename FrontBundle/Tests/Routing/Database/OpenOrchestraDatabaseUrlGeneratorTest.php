@@ -17,6 +17,8 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends AbstractBaseTestCase
      */
     protected $generator;
 
+    protected $siteRepository;
+    protected $currentSiteManager;
     protected $context;
     protected $nodeManager;
     protected $routeName = 'foo';
@@ -29,6 +31,8 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends AbstractBaseTestCase
      */
     public function setUp()
     {
+        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface');
+        $this->currentSiteManager = Phake::mock('OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
         $this->context = Phake::mock('Symfony\Component\Routing\RequestContext');
         $this->routeDocumentRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\RouteDocumentRepositoryInterface');
         $this->nodeManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\NodeManager');
@@ -45,7 +49,9 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends AbstractBaseTestCase
 
         $this->generator = new OpenOrchestraDatabaseUrlGenerator(
             $this->routeDocumentRepository,
+            $this->siteRepository,
             $this->routeDocumentToValueObjectTransformer,
+            $this->currentSiteManager,
             $requestStack,
             $this->nodeManager,
             $this->context
@@ -78,7 +84,7 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends AbstractBaseTestCase
         $routeDocument = Phake::mock('OpenOrchestra\ModelInterface\Model\RouteDocumentInterface');
         Phake::when($this->routeDocumentRepository)->findOneByName($this->routeFullName)->thenReturn($routeDocument);
 
-        $this->setExpectedException('OpenOrchestra\FrontBundle\Tests\Routing\Database\GeneratedRouteCompiledException');
+        $this->setExpectedException('Symfony\Component\Routing\Exception\RouteNotFoundException');
         $this->generator->generate($this->routeName);
     }
 

@@ -15,6 +15,8 @@ class OpenOrchestraRouterTest extends AbstractBaseTestCase
     /**
      * @var OpenOrchestraRouter
      */
+    protected $siteRepository;
+    protected $currentSiteManager;
     protected $router;
 
     /**
@@ -22,6 +24,8 @@ class OpenOrchestraRouterTest extends AbstractBaseTestCase
      */
     public function setUp()
     {
+        $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface');
+        $this->currentSiteManager = Phake::mock('OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
         $nodeManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\NodeManager');
         $requestStack = Phake::mock('Symfony\Component\HttpFoundation\RequestStack');
 
@@ -34,6 +38,8 @@ class OpenOrchestraRouterTest extends AbstractBaseTestCase
         Phake::when($container)->get('open_orchestra_front.manager.node')->thenReturn($nodeManager);
 
         $this->router = new OpenOrchestraRouter(
+            $this->siteRepository,
+            $this->currentSiteManager,
             $container,
             null,
             array(

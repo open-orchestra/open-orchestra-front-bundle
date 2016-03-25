@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
+use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
+use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 
 /**
  * Class OpenOrchestraUrlGenerator
@@ -20,18 +22,24 @@ class OpenOrchestraUrlGenerator extends UrlGenerator
     protected $request;
     protected $siteManager;
     protected $nodeManager;
+    protected $siteRepository;
+    protected $currentSiteManager;
     const REDIRECT_TO_LANGUAGE = 'redirect_to_language';
 
     /**
      * Constructor
      *
-     * @param RouteCollection $routes
-     * @param RequestContext  $context
-     * @param RequestStack    $requestStack
-     * @param NodeManager     $nodeManager
-     * @param LoggerInterface $logger
+     * @param ReadSiteRepositoryInterface $siteRepository
+     * @param CurrentSiteIdInterface      $currentSiteManager
+     * @param RouteCollection             $routes
+     * @param RequestContext              $context
+     * @param RequestStack                $requestStack
+     * @param NodeManager                 $nodeManager
+     * @param LoggerInterface             $logger
      */
     public function __construct(
+        ReadSiteRepositoryInterface $siteRepository,
+        CurrentSiteIdInterface $currentSiteManager,
         RouteCollection $routes,
         RequestContext $context,
         RequestStack $requestStack,
@@ -40,6 +48,8 @@ class OpenOrchestraUrlGenerator extends UrlGenerator
     )
     {
         parent::__construct($routes, $context, $logger);
+        $this->siteRepository = $siteRepository;
+        $this->currentSiteManager = $currentSiteManager;
         $this->request = $requestStack->getMasterRequest();
         $this->nodeManager = $nodeManager;
     }
@@ -63,8 +73,12 @@ class OpenOrchestraUrlGenerator extends UrlGenerator
 
             return parent::generate($name, $parameters, $referenceType);
         }
+        $site = $this->siteRepository->findOneBySiteId($this->currentSiteManager->getCurrentSiteId());
 
-        $aliasId = 0;
+        if (null === $site) {
+            throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', $name));
+        }
+        $aliasId = $site->getMainAliasId();
         if ($this->request) {
             $aliasId = $this->request->get('aliasId', $aliasId);
         }

@@ -17,6 +17,8 @@ use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
+use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
+use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 
 /**
  * Class OpenOrchestraDatabaseRouter
@@ -28,6 +30,8 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
      */
     protected $context;
 
+    protected $siteRepository;
+    protected $currentSiteManager;
     protected $routeDocumentCollectionToRouteCollectionTransformer;
     protected $routeDocumentToValueObjectTransformer;
     protected $routeDocumentRepository;
@@ -39,6 +43,8 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
     protected $matcher;
 
     /**
+     * @param ReadSiteRepositoryInterface                         $siteRepository
+     * @param CurrentSiteIdInterface                              $currentSiteManager
      * @param RouteDocumentRepositoryInterface                    $routeDocumentRepository
      * @param RouteDocumentToValueObjectTransformer               $routeDocumentToValueObjectTransformer
      * @param RouteDocumentCollectionToRouteCollectionTransformer $routeDocumentCollectionToRouteCollectionTransformer
@@ -47,6 +53,8 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
      * @param array                                               $options
      */
     public function __construct(
+        ReadSiteRepositoryInterface $siteRepository,
+        CurrentSiteIdInterface $currentSiteManager,
         RouteDocumentRepositoryInterface $routeDocumentRepository,
         RouteDocumentToValueObjectTransformer $routeDocumentToValueObjectTransformer,
         RouteDocumentCollectionToRouteCollectionTransformer $routeDocumentCollectionToRouteCollectionTransformer,
@@ -55,6 +63,8 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
         array $options = array()
     )
     {
+        $this->siteRepository = $siteRepository;
+        $this->currentSiteManager = $currentSiteManager;
         $this->routeDocumentCollectionToRouteCollectionTransformer = $routeDocumentCollectionToRouteCollectionTransformer;
         $this->routeDocumentToValueObjectTransformer = $routeDocumentToValueObjectTransformer;
         $this->routeDocumentRepository = $routeDocumentRepository;
@@ -149,7 +159,9 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
             $generatorClass = $this->options['generator_class'];
             $this->generator = new $generatorClass(
                 $this->routeDocumentRepository,
+                $this->siteRepository,
                 $this->routeDocumentToValueObjectTransformer,
+                $this->currentSiteManager,
                 $this->requestStack,
                 $this->nodeManager,
                 $this->context

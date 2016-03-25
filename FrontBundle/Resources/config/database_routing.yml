@@ -25,6 +25,8 @@ services:
     open_orchestra_front.router.database:
         class: %open_orchestra_front.router.database.class%
         arguments:
+            - @open_orchestra_model.repository.site
+            - @open_orchestra_display.manager.site
             - @open_orchestra_model.repository.route_document
             - @open_orchestra_front.router.document_to_value_object
             - @open_orchestra_front.router.collection_to_array

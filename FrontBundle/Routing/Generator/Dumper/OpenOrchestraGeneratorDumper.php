@@ -39,6 +39,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Psr\Log\LoggerInterface;
 use OpenOrchestra\FrontBundle\Manager\NodeManager;
 use OpenOrchestra\DisplayBundle\Exception\NodeNotFoundException;
+use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
+use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 
 /**
  * {$options['class']}
@@ -54,11 +56,19 @@ class {$options['class']} extends {$options['base_class']}
     /**
      * Constructor.
      */
-    public function __construct(RequestContext \$context, RequestStack \$requestStack, NodeManager \$nodeManager, LoggerInterface \$logger = null)
+    public function __construct(
+        RequestContext \$context,
+        RequestStack \$requestStack,
+        NodeManager \$nodeManager,
+        ReadSiteRepositoryInterface \$siteRepository,
+        CurrentSiteIdInterface \$currentSiteManager,
+        LoggerInterface \$logger = null)
     {
         \$this->context = \$context;
         \$this->request = \$requestStack->getMasterRequest();
         \$this->logger = \$logger;
+        \$this->siteRepository = \$siteRepository;
+        \$this->currentSiteManager = \$currentSiteManager;
         \$this->nodeManager = \$nodeManager;
     }
 
@@ -150,7 +160,11 @@ EOF;
         if (!is_null(\$aliasId)) {
             \$this->aliasId = \$aliasId;
         } else if (\$this->aliasId === null) {
-            \$this->aliasId = 0;
+            \$site = \$this->siteRepository->findOneBySiteId(\$this->currentSiteManager->getCurrentSiteId());
+            if (null === \$site) {
+                throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', \$name));
+            }
+            \$aliasId = \$site->getMainAliasId();
             if (\$this->request) {
                 \$this->aliasId = \$this->request->get('aliasId', 0);
             }
