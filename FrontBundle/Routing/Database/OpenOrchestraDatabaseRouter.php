@@ -158,10 +158,10 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
         if (!$this->generator instanceof UrlGeneratorInterface) {
             $generatorClass = $this->options['generator_class'];
             $this->generator = new $generatorClass(
-                $this->siteRepository,
-                $this->currentSiteManager,
                 $this->routeDocumentRepository,
+                $this->siteRepository,
                 $this->routeDocumentToValueObjectTransformer,
+                $this->currentSiteManager,
                 $this->requestStack,
                 $this->nodeManager,
                 $this->context
