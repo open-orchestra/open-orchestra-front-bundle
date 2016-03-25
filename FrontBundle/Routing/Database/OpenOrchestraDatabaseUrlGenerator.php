@@ -7,6 +7,8 @@ use OpenOrchestra\FrontBundle\Manager\NodeManager;
 use OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentToValueObjectTransformer;
 use OpenOrchestra\ModelInterface\Model\RouteDocumentInterface;
 use OpenOrchestra\ModelInterface\Repository\RouteDocumentRepositoryInterface;
+use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
+use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
@@ -23,14 +25,18 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
     protected $request;
     protected $nodeManager;
     protected $routeDocumentRepository;
+    protected $siteRepository;
     protected $routeDocumentToValueObjectTransformer;
+    protected $currentSiteManager;
     const REDIRECT_TO_LANGUAGE = 'redirect_to_language';
 
     /**
      * Constructor.
      *
      * @param RouteDocumentRepositoryInterface      $routeDocumentRepository
+     * @param ReadSiteRepositoryInterface           $siteRepository
      * @param RouteDocumentToValueObjectTransformer $routeDocumentToValueObjectTransformer
+     * @param CurrentSiteIdInterface                $currentSiteManager
      * @param RequestStack                          $requestStack
      * @param NodeManager                           $nodeManager
      * @param RequestContext                        $context The context
@@ -38,7 +44,9 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
      */
     public function __construct(
         RouteDocumentRepositoryInterface $routeDocumentRepository,
+        ReadSiteRepositoryInterface $siteRepository,
         RouteDocumentToValueObjectTransformer $routeDocumentToValueObjectTransformer,
+        CurrentSiteIdInterface $currentSiteManager,
         RequestStack $requestStack,
         NodeManager $nodeManager,
         RequestContext $context,
@@ -46,6 +54,8 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
     {
         $this->routeDocumentToValueObjectTransformer = $routeDocumentToValueObjectTransformer;
         $this->routeDocumentRepository = $routeDocumentRepository;
+        $this->siteRepository = $siteRepository;
+        $this->currentSiteManager = $currentSiteManager;
         $this->request = $requestStack->getMasterRequest();
         $this->nodeManager = $nodeManager;
         $this->context = $context;
@@ -76,7 +86,13 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
             }
             unset($parameters[self::REDIRECT_TO_LANGUAGE]);
         } else {
-            $aliasId = 0;
+            $site = $this->siteRepository->findOneBySiteId($this->currentSiteManager->getCurrentSiteId());
+            foreach ($site->getAliases() as $key => $alias) {
+                $aliasId = $key;
+                if ($alias->isMain()) {
+                    break;
+                }
+            }
             if ($this->request) {
                 $aliasId = $this->request->get('aliasId', $aliasId);
             }
