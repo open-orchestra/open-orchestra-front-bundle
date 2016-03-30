@@ -84,7 +84,7 @@ class OpenOrchestraDatabaseUrlGeneratorTest extends AbstractBaseTestCase
         $routeDocument = Phake::mock('OpenOrchestra\ModelInterface\Model\RouteDocumentInterface');
         Phake::when($this->routeDocumentRepository)->findOneByName($this->routeFullName)->thenReturn($routeDocument);
 
-        $this->setExpectedException('Symfony\Component\Routing\Exception\RouteNotFoundException');
+        $this->setExpectedException('OpenOrchestra\FrontBundle\Tests\Routing\Database\GeneratedRouteCompiledException');
         $this->generator->generate($this->routeName);
     }
 
