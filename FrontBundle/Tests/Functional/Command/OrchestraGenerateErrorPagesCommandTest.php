@@ -3,24 +3,25 @@
 use OpenOrchestra\FrontBundle\Command\OrchestraGenerateErrorPagesCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractKernelTestCase;
+use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractWebTestCase;
 
 /**
  * Class OrchestraGenerateErrorPagesCommandTest
  */
-class OrchestraGenerateErrorPagesCommandTest extends AbstractKernelTestCase
+class OrchestraGenerateErrorPagesCommandTest extends AbstractWebTestCase
 {
-    protected $command;
+
+    protected $application;
 
     /**
      * Set Up
      */
     public function setUp()
     {
-        static::bootKernel();
-        $application = new Application(static::$kernel);
-        $application->add(new OrchestraGenerateErrorPagesCommand());
-        $this->command = $application->find('orchestra:errorpages:generate');
+        $client = self::createClient();
+        $this->application = new Application($client->getKernel());
+        $this->application->setAutoExit(false);
+        $this->application->add(new OrchestraGenerateErrorPagesCommand());
     }
 
     /**
@@ -32,8 +33,9 @@ class OrchestraGenerateErrorPagesCommandTest extends AbstractKernelTestCase
      */
     public function testExecute($siteId)
     {
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute(array('command' => $this->command->getName()));
+        $command = $this->application->find('orchestra:errorpages:generate');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(array('command' => $command->getName()));
         $this->assertRegExp(
             '/Generating error pages for siteId ' . $siteId . '/',
             $commandTester->getDisplay()

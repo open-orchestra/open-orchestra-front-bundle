@@ -10,13 +10,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 abstract class AbstractRequestSubQueryStrategy implements SubQueryGeneratorInterface
 {
-    protected $request;
+    protected $requestStack;
 
     /**
      * @param RequestStack $requestStack
      */
     public function __construct(RequestStack $requestStack)
     {
-        $this->request = $requestStack->getMasterRequest();
+        $this->requestStack = $requestStack;
     }
 }

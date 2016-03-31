@@ -24,9 +24,11 @@ class CurrentRouteSubQueryStrategy extends AbstractRequestSubQueryStrategy
      */
     public function generate($blockParameter)
     {
+        $request = $this->requestStack->getMasterRequest();
+
         return array(
-            'currentRouteName' => $this->extractRouteName($this->request->get('_route')),
-            'aliasId' => $this->request->get('aliasId'),
+            'currentRouteName' => $this->extractRouteName($request->get('_route')),
+            'aliasId' => $request->get('aliasId'),
         );
     }
 
