@@ -90,7 +90,6 @@ class ErrorPagesManager
 
         $filepath = $siteId . '/alias-' . $aliasId . '/' . $errorNode->getName() . '.html';
         $crawler = $this->client->request('GET', $url);
-
         $this->filesystem->dumpFile('web/' . $filepath, $crawler->html());
 
         return $filepath;
