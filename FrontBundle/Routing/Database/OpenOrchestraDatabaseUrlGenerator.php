@@ -22,7 +22,7 @@ use Symfony\Component\Routing\RequestContext;
  */
 class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
 {
-    protected $request;
+    protected $requestStack;
     protected $nodeManager;
     protected $routeDocumentRepository;
     protected $siteRepository;
@@ -56,7 +56,7 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
         $this->routeDocumentRepository = $routeDocumentRepository;
         $this->siteRepository = $siteRepository;
         $this->currentSiteManager = $currentSiteManager;
-        $this->request = $requestStack->getMasterRequest();
+        $this->requestStack = $requestStack;
         $this->nodeManager = $nodeManager;
         $this->context = $context;
         $this->logger = $logger;
@@ -78,6 +78,7 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
      */
     public function  generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
+        $request = $this->requestStack->getMasterRequest();
         if (isset($parameters[self::REDIRECT_TO_LANGUAGE])) {
             try {
                 $fullName = $this->nodeManager->getNodeRouteName($name, $parameters[self::REDIRECT_TO_LANGUAGE]);
@@ -86,12 +87,12 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
             }
             unset($parameters[self::REDIRECT_TO_LANGUAGE]);
         } else {
-            if (null === $this->request) {
+            if (null === $request) {
                 throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', $name));
             }
 
-            if (null !== $this->request->get('aliasId')) {
-                $aliasId = $this->request->get('aliasId');
+            if (null !== $request->get('aliasId')) {
+                $aliasId = $request->get('aliasId');
             } else {
                 $site = $this->siteRepository->findOneBySiteId($this->currentSiteManager->getCurrentSiteId());
                 if (null === $site) {
