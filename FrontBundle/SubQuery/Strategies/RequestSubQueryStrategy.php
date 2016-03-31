@@ -25,8 +25,9 @@ class RequestSubQueryStrategy extends AbstractRequestSubQueryStrategy
     public function generate($blockParameter)
     {
         $parameter = str_replace('request.', '', $blockParameter);
+        $request = $this->requestStack->getMasterRequest();
 
-        return array($parameter => $this->request->get($parameter));
+        return array($parameter => $request->get($parameter));
     }
 
     /**

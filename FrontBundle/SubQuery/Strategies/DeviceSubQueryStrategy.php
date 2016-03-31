@@ -41,7 +41,9 @@ class DeviceSubQueryStrategy extends AbstractRequestSubQueryStrategy
      */
     public function generate($blockParameter)
     {
-        if ($device = $this->request->headers->get($this->deviceTypeField)) {
+        $request = $this->requestStack->getMasterRequest();
+
+        if ($device = $request->headers->get($this->deviceTypeField)) {
             return array($this->deviceTypeField => $device);
         }
 

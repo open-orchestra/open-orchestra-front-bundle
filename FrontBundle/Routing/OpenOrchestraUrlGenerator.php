@@ -19,7 +19,7 @@ use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 class OpenOrchestraUrlGenerator extends UrlGenerator
 {
     protected $nodeRepository;
-    protected $request;
+    protected $requestStack;
     protected $siteManager;
     protected $nodeManager;
     protected $siteRepository;
@@ -50,7 +50,7 @@ class OpenOrchestraUrlGenerator extends UrlGenerator
         parent::__construct($routes, $context, $logger);
         $this->siteRepository = $siteRepository;
         $this->currentSiteManager = $currentSiteManager;
-        $this->request = $requestStack->getMasterRequest();
+        $this->requestStack = $requestStack;
         $this->nodeManager = $nodeManager;
     }
 

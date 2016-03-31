@@ -24,7 +24,9 @@ class PostDataSubQueryStrategy extends AbstractRequestSubQueryStrategy
      */
     public function generate($blockParameter)
     {
-        return $this->request->request->all();
+        $request = $this->requestStack->getMasterRequest();
+
+        return $request->request->all();
     }
 
     /**
