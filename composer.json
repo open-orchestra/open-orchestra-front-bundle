@@ -13,7 +13,9 @@
     "open-orchestra/open-orchestra-display-bundle": "1.1.*@dev",
     "open-orchestra/open-orchestra-model-interface": "1.1.*@dev",
     "open-orchestra/open-orchestra-theme-bundle": "1.1.*@dev",
-    "symfony-cmf/routing-bundle": "*"
+    "symfony-cmf/routing-bundle": "*",
+
+    "open-orchestra/open-orchestra-bbcode-bundle": "@dev"
   },
   "require-dev": {
     "open-orchestra/open-orchestra-model-bundle": "1.1.*@dev",
