@@ -1,34 +1,38 @@
 {
-    "name": "open-orchestra/open-orchestra-front-bundle",
-    "description": "A bundle for the frontend part of an OpenOrchestra project",
-    "license": "Apache-2.0",
-    "authors": [
-        {
-            "name": "OpenOrchestra community",
-            "homepage": "https://github.com/open-orchestra/open-orchestra-front-bundle/graphs/contributors"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-        "open-orchestra/open-orchestra-base-bundle": "*",
-        "open-orchestra/open-orchestra-display-bundle": "*",
-        "open-orchestra/open-orchestra-model-interface": "*",
-        "open-orchestra/open-orchestra-theme-bundle": "*",
-        "symfony-cmf/routing-bundle": "*"
-    },
-    "require-dev": {
-        "open-orchestra/open-orchestra-model-bundle": "*",
-        "phpunit/phpunit" : "4.7.2",
-        "psr/log": "1.0.0",
-        "codeclimate/php-test-reporter": "dev-master",
-        "phake/phake": "2.1.0"
-    },
-    "config" : {
-        "bin-dir" : "bin"
-    },
-    "autoload": {
-        "psr-4": {
-            "OpenOrchestra\\FrontBundle\\": "FrontBundle/"
-        }
+  "name": "open-orchestra/open-orchestra-front-bundle",
+  "description": "A bundle for the frontend part of an OpenOrchestra project",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "OpenOrchestra community",
+      "homepage": "https://github.com/open-orchestra/open-orchestra-front-bundle/graphs/contributors"
     }
+  ],
+  "require": {
+    "open-orchestra/open-orchestra-base-bundle": "1.1.*@dev",
+    "open-orchestra/open-orchestra-display-bundle": "1.1.*@dev",
+    "open-orchestra/open-orchestra-model-interface": "1.1.*@dev",
+    "open-orchestra/open-orchestra-theme-bundle": "1.1.*@dev",
+    "symfony-cmf/routing-bundle": "*"
+  },
+  "require-dev": {
+    "open-orchestra/open-orchestra-model-bundle": "1.1.*@dev",
+    "phpunit/phpunit" : "4.7.2",
+    "psr/log": "1.0.0",
+    "codeclimate/php-test-reporter": "dev-master",
+    "phake/phake": "2.1.0"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.1.x-dev"
+    }
+  },
+  "config" : {
+    "bin-dir" : "bin"
+  },
+  "autoload": {
+    "psr-4": {
+      "OpenOrchestra\\FrontBundle\\": "FrontBundle/"
+    }
+  }
 }
