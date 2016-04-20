@@ -16,6 +16,7 @@
     "symfony-cmf/routing-bundle": "*",
 
     "open-orchestra/open-orchestra-bbcode-bundle": "@dev",
+    "open-orchestra/open-orchestra-libs": "@dev",
     "innocead/captcha-bundle": "@dev"
   },
   "require-dev": {
