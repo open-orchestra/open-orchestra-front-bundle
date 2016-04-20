@@ -24,7 +24,9 @@
     "phpunit/phpunit" : "4.7.2",
     "psr/log": "1.0.0",
     "codeclimate/php-test-reporter": "dev-master",
-    "phake/phake": "2.1.0"
+    "phake/phake": "2.1.0",
+
+    "open-orchestra/open-orchestra-mongo-libs": "@dev"
   },
   "extra": {
     "branch-alias": {
