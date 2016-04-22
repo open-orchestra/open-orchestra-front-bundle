@@ -1,6 +1,6 @@
 {
   "name": "open-orchestra/open-orchestra-front-bundle",
-  "description": "A bundle for the frontend part of an OpenOrchestra project",
+  "description": "A bundle for the Front End part of an Open Orchestra project",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -26,9 +26,7 @@
     "codeclimate/php-test-reporter": "dev-master",
     "phake/phake": "2.1.0",
 
-    "open-orchestra/open-orchestra-mongo-libs": "@dev",
-    "solution/mongo-odm-aggregation-bundle": "dev-master",
-    "solution/pipeline-builder": "dev-master"
+    "open-orchestra/open-orchestra-mongo-libs": "@dev"
   },
   "extra": {
     "branch-alias": {
