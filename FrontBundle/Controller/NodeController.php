@@ -75,7 +75,8 @@ class NodeController extends Controller
             $response = $cacheableManager->setResponseCacheParameters(
                 $response,
                 $node->getMaxAge(),
-                CacheableInterface::CACHE_PUBLIC
+                CacheableInterface::CACHE_PUBLIC,
+                true
             );
         } else {
             $cacheInfo = $this->get('open_orchestra_front.manager.node_response_manager')->getNodeCacheInfo($node);
