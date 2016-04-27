@@ -13,7 +13,8 @@
     "open-orchestra/open-orchestra-display-bundle": "~1.1.0",
     "open-orchestra/open-orchestra-model-interface": "~1.1.0",
     "open-orchestra/open-orchestra-theme-bundle": "~1.1.0",
-    "symfony-cmf/routing-bundle": "*"
+    "symfony-cmf/routing-bundle": "*",
+    "innocead/captcha-bundle": "@dev"
   },
   "require-dev": {
     "open-orchestra/open-orchestra-model-bundle": "~1.1.0",
