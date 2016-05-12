@@ -45,7 +45,6 @@ class BlockController extends Controller
             $response = $this->get('open_orchestra_display.display_block_manager')->show($block, $hasEsi);
 
             $this->tagResponse($response, $block, $nodeId, $siteId, $request->getLocale());
-            $this->get('open_orchestra_display.manager.cacheable')->addCacheTags(array('es-'.$hasEsi));
 
             return $response;
         } catch (NonExistingBlockException $e) {
