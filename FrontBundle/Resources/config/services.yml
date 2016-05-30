@@ -2,7 +2,6 @@ parameters:
     open_orchestra_front.manager.sitemap.class: OpenOrchestra\FrontBundle\Manager\SitemapManager
     open_orchestra_front.manager.robots.class: OpenOrchestra\FrontBundle\Manager\RobotsManager
     open_orchestra_front.manager.error_pages.class: OpenOrchestra\FrontBundle\Manager\ErrorPagesManager
-    open_orchestra_front.manager.sub_query_parameters.class: OpenOrchestra\FrontBundle\Manager\SubQueryParametersManager
     open_orchestra_front.manager.node.class: OpenOrchestra\FrontBundle\Manager\NodeManager
     open_orchestra_front.symfony.client.class: Symfony\Component\HttpKernel\Client
     open_orchestra_front.manager.node_response_manager.class: OpenOrchestra\FrontBundle\Manager\NodeResponseManager
@@ -27,8 +26,6 @@ services:
             - @open_orchestra_front.symfony.client
             - @router
             - @open_orchestra_base.manager.encryption
-    open_orchestra_front.manager.sub_query_parameters:
-        class: %open_orchestra_front.manager.sub_query_parameters.class%
     open_orchestra_front.manager.node:
         class: %open_orchestra_front.manager.node.class%
         arguments:
