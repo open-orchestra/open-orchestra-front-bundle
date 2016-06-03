@@ -11,6 +11,9 @@
             {{- node.metaFollow ? 'FOLLOW': 'NOFOLLOW' -}},
             {{- node.metaIndex ? 'INDEX': 'NOINDEX' -}}
         ">
+        <meta name="description" content="{{ node.metaDescription(parameters._locale) }} ">
+        <meta name="keywords" content="{{ node.metaKeyword(parameters._locale) }} ">
+
     </head>
     <body>
         {% for area in node.areas %}
