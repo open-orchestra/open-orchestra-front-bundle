@@ -35,7 +35,16 @@ class DatabaseRouteLoaderTest extends AbstractBaseTestCase
 
         $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface');
 
-        $this->loader = new DatabaseRouteLoader($this->nodeRepository, $this->siteRepository);
+        $route = Phake::mock('Symfony\Component\Routing\Route');
+        Phake::when($route)->getDefaults()->thenReturn(array('_controller' => 'OpenOrchestra\FrontBundle\Controller\NodeController::showAction'));
+
+        $routeCollection = Phake::mock('Symfony\Component\Routing\RouteCollection');
+        Phake::when($routeCollection)->get('open_orchestra_front_node')->thenReturn($route);
+
+        $router = Phake::mock('Symfony\Component\Routing\RouterInterface');
+        Phake::when($router)->getRouteCollection()->thenReturn($routeCollection);
+
+        $this->loader = new DatabaseRouteLoader($this->nodeRepository, $this->siteRepository, $router);
     }
 
     /**
