@@ -36,9 +36,9 @@ class DatabaseRouteLoader extends Loader
     ){
         $this->nodeRepository = $nodeRepository;
         $this->siteRepository = $siteRepository;
-        $defaults = $router->getRouteCollection()->get('open_orchestra_front_node')->getDefaults();
-        if (is_array($defaults) && array_key_exists('_controller', $defaults)) {
-            $this->logicalName = $defaults['_controller'];
+        $route = $router->getRouteCollection()->get('open_orchestra_front_node');
+        if (!is_null($route) && !is_null($route->getDefault('_controller'))) {
+            $this->logicalName = $route->getDefault('_controller');
         } else {
             throw new NoRenderingMethodForNodeException();
         }
