@@ -14,6 +14,9 @@ class RouteDocumentToValueObjectTransformer
 {
     protected $logicalName;
 
+    /**
+     * @param RouterInterface $router
+     */
     public function __construct(RouterInterface $router)
     {
         $route = $router->getRouteCollection()->get('open_orchestra_front_node');
