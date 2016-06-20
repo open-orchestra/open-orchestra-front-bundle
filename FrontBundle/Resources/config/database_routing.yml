@@ -7,6 +7,8 @@ parameters:
 services:
     open_orchestra_front.router.document_to_value_object:
         class: %open_orchestra_front.router.document_to_value_object.class%
+        arguments:
+            - @router
     open_orchestra_front.router.collection_to_array:
         class: %open_orchestra_front.router.collection_to_array.class%
         arguments:

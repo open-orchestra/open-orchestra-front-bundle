@@ -11,6 +11,8 @@ use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouterInterface;
+use OpenOrchestra\FrontBundle\Exception\NoRenderingMethodForNodeException;
 
 /**
  * Class DatabaseRouteLoader
@@ -19,16 +21,27 @@ class DatabaseRouteLoader extends Loader
 {
     protected $nodeRepository;
     protected $siteRepository;
+    protected $logicalName;
     protected $orderedNodes = array();
 
     /**
      * @param ReadNodeRepositoryInterface $nodeRepository
      * @param ReadSiteRepositoryInterface $siteRepository
+     * @param RouterInterface             $router
      */
-    public function __construct(ReadNodeRepositoryInterface $nodeRepository, ReadSiteRepositoryInterface $siteRepository)
-    {
+    public function __construct(
+        ReadNodeRepositoryInterface $nodeRepository,
+        ReadSiteRepositoryInterface $siteRepository,
+        RouterInterface $router
+    ){
         $this->nodeRepository = $nodeRepository;
         $this->siteRepository = $siteRepository;
+        $route = $router->getRouteCollection()->get('open_orchestra_front_node');
+        if (!is_null($route) && !is_null($route->getDefault('_controller'))) {
+            $this->logicalName = $route->getDefault('_controller');
+        } else {
+            throw new NoRenderingMethodForNodeException();
+        }
     }
 
     /**
@@ -167,7 +180,7 @@ class DatabaseRouteLoader extends Loader
         $route = new Route(
             $pattern,
             array(
-                '_controller' => 'OpenOrchestra\FrontBundle\Controller\NodeController::showAction',
+                '_controller' => $this->logicalName,
                 '_locale' => $nodeLanguage,
                 'nodeId' => $nodeId,
                 'siteId' => $siteId,

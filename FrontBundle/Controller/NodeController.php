@@ -95,7 +95,7 @@ class NodeController extends Controller
 
     /**
      * Render the node version given by encoded $token
-     * 
+     *
      * @param string  $token
      *
      * @return Response
