@@ -4,18 +4,18 @@ parameters:
 
 services:
     open_orchestra_front.subscriber.check_routing_cache:
-        class: %open_orchestra_front.subscriber.check_routing_cache.class%
+        class: '%open_orchestra_front.subscriber.check_routing_cache.class%'
         arguments:
-            - @router
-            - @open_orchestra_model.repository.node
+            - '@router'
+            - '@open_orchestra_model.repository.node'
         tags:
             - { name: kernel.event_subscriber }
     open_orchestra_front.subscriber.kernel_exception:
-        class: %open_orchestra_front.subscriber.kernel_exception.class%
+        class: '%open_orchestra_front.subscriber.kernel_exception.class%'
         arguments:
-            - @open_orchestra_model.repository.site
-            - @open_orchestra_model.repository.node
-            - @templating
-            - @request_stack
+            - '@open_orchestra_model.repository.site'
+            - '@open_orchestra_model.repository.node'
+            - '@templating'
+            - '@request_stack'
         tags:
             - { name: kernel.event_subscriber }

@@ -7,30 +7,30 @@ parameters:
 
 services:
     open_orchestra_front.sub_query.manager:
-        class: %open_orchestra_front.sub_query.manager.class%
+        class: '%open_orchestra_front.sub_query.manager.class%'
 
     open_orchestra_front.sub_query.request:
-        class: %open_orchestra_front.sub_query.request.class%
+        class: '%open_orchestra_front.sub_query.request.class%'
         arguments:
-            - @request_stack
+            - '@request_stack'
         tags:
             - { name: open_orchestra_front.sub_query.strategy }
     open_orchestra_front.sub_query.current_route:
-        class: %open_orchestra_front.sub_query.current_route.class%
+        class: '%open_orchestra_front.sub_query.current_route.class%'
         arguments:
-            - @request_stack
+            - '@request_stack'
         tags:
             - { name: open_orchestra_front.sub_query.strategy }
     open_orchestra_front.sub_query.device:
-        class: %open_orchestra_front.sub_query.device.class%
+        class: '%open_orchestra_front.sub_query.device.class%'
         arguments:
-            - @request_stack
-            - %open_orchestra_front.device_type_field%
+            - '@request_stack'
+            - '%open_orchestra_front.device_type_field%'
         tags:
             - { name: open_orchestra_front.sub_query.strategy }
     open_orchestra_front.sub_query.post_data:
-        class: %open_orchestra_front.sub_query.post_data.class%
+        class: '%open_orchestra_front.sub_query.post_data.class%'
         arguments:
-            - @request_stack
+            - '@request_stack'
         tags:
             - { name: open_orchestra_front.sub_query.strategy }

@@ -8,36 +8,36 @@ parameters:
 
 services:
     open_orchestra_front.manager.sitemap:
-        class: %open_orchestra_front.manager.sitemap.class%
+        class: '%open_orchestra_front.manager.sitemap.class%'
         arguments:
-            - @open_orchestra_model.repository.node
-            - @router
-            - @serializer
-            - @filesystem
+            - '@open_orchestra_model.repository.node'
+            - '@router'
+            - '@serializer'
+            - '@filesystem'
     open_orchestra_front.manager.robots:
-        class: %open_orchestra_front.manager.robots.class%
+        class: '%open_orchestra_front.manager.robots.class%'
         arguments:
-            - @filesystem
+            - '@filesystem'
     open_orchestra_front.manager.error_pages:
-        class: %open_orchestra_front.manager.error_pages.class%
+        class: '%open_orchestra_front.manager.error_pages.class%'
         arguments:
-            - @open_orchestra_model.repository.node
-            - @filesystem
-            - @open_orchestra_front.symfony.client
-            - @router
-            - @open_orchestra_base.manager.encryption
+            - '@open_orchestra_model.repository.node'
+            - '@filesystem'
+            - '@open_orchestra_front.symfony.client'
+            - '@router'
+            - '@open_orchestra_base.manager.encryption'
     open_orchestra_front.manager.node:
-        class: %open_orchestra_front.manager.node.class%
+        class: '%open_orchestra_front.manager.node.class%'
         arguments:
-            - @open_orchestra_model.repository.node
-            - @open_orchestra_model.repository.site
-            - @open_orchestra_display.manager.site
+            - '@open_orchestra_model.repository.node'
+            - '@open_orchestra_model.repository.site'
+            - '@open_orchestra_display.manager.site'
     open_orchestra_front.symfony.client:
-        class: %open_orchestra_front.symfony.client.class%
+        class: '%open_orchestra_front.symfony.client.class%'
         arguments:
-            - @kernel
+            - '@kernel'
     open_orchestra_front.manager.node_response_manager:
-        class: %open_orchestra_front.manager.node_response_manager.class%
+        class: '%open_orchestra_front.manager.node_response_manager.class%'
         arguments:
-            - @open_orchestra_model.repository.node
-            - @open_orchestra_display.display_block_manager
+            - '@open_orchestra_model.repository.node'
+            - '@open_orchestra_display.display_block_manager'

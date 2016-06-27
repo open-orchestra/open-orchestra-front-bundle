@@ -1,4 +1,4 @@
 open_orchestra_base_node_preview:
-    path: %open_orchestra_base.preview_route_pattern%
+    path: '%open_orchestra_base.preview_route_pattern%'
     defaults:  { _controller: OpenOrchestraFrontBundle:Node:preview }
     methods: [GET]

@@ -1,45 +1,45 @@
 parameters:
-    open_orchestra_front.router.file.class : 'OpenOrchestra\FrontBundle\Routing\OpenOrchestraRouter'
-    open_orchestra_front.router.file.options.generator_class : 'OpenOrchestra\FrontBundle\Routing\OpenOrchestraUrlGenerator'
-    open_orchestra_front.router.file.options.generator_base_class : 'OpenOrchestra\FrontBundle\Routing\OpenOrchestraUrlGenerator'
+    open_orchestra_front.router.file.class : OpenOrchestra\FrontBundle\Routing\OpenOrchestraRouter
+    open_orchestra_front.router.file.options.generator_class : OpenOrchestra\FrontBundle\Routing\OpenOrchestraUrlGenerator
+    open_orchestra_front.router.file.options.generator_base_class : OpenOrchestra\FrontBundle\Routing\OpenOrchestraUrlGenerator
     open_orchestra_front.router.file.options.generator_dumper_class: OpenOrchestra\FrontBundle\Routing\Generator\Dumper\OpenOrchestraGeneratorDumper
     open_orchestra_front.database.route_loader.class: OpenOrchestra\FrontBundle\Routing\DatabaseRouteLoader
     open_orchestra_front.redirection.route_loader.class: OpenOrchestra\FrontBundle\Routing\RedirectionLoader
 
 services:
     open_orchestra_front.redirection.route_loader:
-        class: %open_orchestra_front.redirection.route_loader.class%
+        class: '%open_orchestra_front.redirection.route_loader.class%'
         arguments:
-            - @open_orchestra_model.repository.redirection
-            - @open_orchestra_model.repository.node
-            - @open_orchestra_model.repository.site
+            - '@open_orchestra_model.repository.redirection'
+            - '@open_orchestra_model.repository.node'
+            - '@open_orchestra_model.repository.site'
         tags:
             - { name: routing.loader }
     open_orchestra_front.database.link_loader:
-        class: %open_orchestra_front.database.route_loader.class%
+        class: '%open_orchestra_front.database.route_loader.class%'
         arguments:
-            - @open_orchestra_model.repository.node
-            - @open_orchestra_model.repository.site
-            - @router
+            - '@open_orchestra_model.repository.node'
+            - '@open_orchestra_model.repository.site'
+            - '@router'
         tags:
             - { name: routing.loader }
     open_orchestra_front.database.route_loader:
-        class: %open_orchestra_front.database.route_loader.class%
+        class: '%open_orchestra_front.database.route_loader.class%'
         arguments:
-            - @open_orchestra_model.repository.node
-            - @open_orchestra_model.repository.site
+            - '@open_orchestra_model.repository.node'
+            - '@open_orchestra_model.repository.site'
         tags:
             - { name: routing.loader }
     open_orchestra_front.router.file:
-        class: %open_orchestra_front.router.file.class%
+        class: '%open_orchestra_front.router.file.class%'
         arguments:
-            - @open_orchestra_model.repository.site
-            - @open_orchestra_display.manager.site
-            - @service_container
-            - %router.resource%
-            - { cache_dir: %kernel.cache_dir%, debug: %kernel.debug%, generator_class: %open_orchestra_front.router.file.options.generator_class%, generator_base_class: %open_orchestra_front.router.file.options.generator_base_class%, generator_cache_class: 'ProjectOpenOrchestraUrlGenerator', generator_dumper_class: %open_orchestra_front.router.file.options.generator_dumper_class%, matcher_class: %router.options.matcher_class%, matcher_base_class: %router.options.matcher_base_class%, matcher_dumper_class: %router.options.matcher_dumper_class%, matcher_cache_class: %router.options.matcher.cache_class% }
-            - @?router.request_context
-            - @?logger
+            - '@open_orchestra_model.repository.site'
+            - '@open_orchestra_display.manager.site'
+            - '@service_container'
+            - '%router.resource%'
+            - { cache_dir: '%kernel.cache_dir%', debug: '%kernel.debug%', generator_class: '%open_orchestra_front.router.file.options.generator_class%', generator_base_class: '%open_orchestra_front.router.file.options.generator_base_class%', generator_cache_class: 'ProjectOpenOrchestraUrlGenerator', generator_dumper_class: '%open_orchestra_front.router.file.options.generator_dumper_class%', matcher_class: '%router.options.matcher_class%', matcher_base_class: '%router.options.matcher_base_class%', matcher_dumper_class: '%router.options.matcher_dumper_class%', matcher_cache_class: '%router.options.matcher.cache_class%' }
+            - '@?router.request_context'
+            - '@?logger'
         tags:
             - { name: monolog.logger, channel: router }
             - { name: router, priority: 300 }
