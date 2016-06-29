@@ -12,7 +12,6 @@
   "require": {
     "php": "~5.6.0",
     "symfony-cmf/routing-bundle": "~1.4.0",
-    "innocead/captcha-bundle": "dev-master",
     "open-orchestra/open-orchestra-base-bundle": "self.version",
     "open-orchestra/open-orchestra-display-bundle": "self.version",
     "open-orchestra/open-orchestra-model-interface": "self.version",
