@@ -6,34 +6,34 @@ parameters:
 
 services:
     open_orchestra_front.router.document_to_value_object:
-        class: %open_orchestra_front.router.document_to_value_object.class%
+        class: '%open_orchestra_front.router.document_to_value_object.class%'
         arguments:
-            - @router
+            - '@router'
     open_orchestra_front.router.collection_to_array:
-        class: %open_orchestra_front.router.collection_to_array.class%
+        class: '%open_orchestra_front.router.collection_to_array.class%'
         arguments:
-            - @open_orchestra_front.router.document_to_value_object
+            - '@open_orchestra_front.router.document_to_value_object'
     open_orchestra_front.router.database_link:
-        class: %open_orchestra_front.router.database_link.class%
+        class: '%open_orchestra_front.router.database_link.class%'
         arguments:
-            - @open_orchestra_model.repository.route_document
-            - @open_orchestra_front.router.document_to_value_object
-            - @open_orchestra_front.router.collection_to_array
-            - @request_stack
-            - @open_orchestra_front.manager.node
+            - '@open_orchestra_model.repository.route_document'
+            - '@open_orchestra_front.router.document_to_value_object'
+            - '@open_orchestra_front.router.collection_to_array'
+            - '@request_stack'
+            - '@open_orchestra_front.manager.node'
         tags:
             - { name: monolog.logger, channel: router }
             - { name: router, priority: 400 }
     open_orchestra_front.router.database:
-        class: %open_orchestra_front.router.database.class%
+        class: '%open_orchestra_front.router.database.class%'
         arguments:
-            - @open_orchestra_model.repository.site
-            - @open_orchestra_display.manager.site
-            - @open_orchestra_model.repository.route_document
-            - @open_orchestra_front.router.document_to_value_object
-            - @open_orchestra_front.router.collection_to_array
-            - @request_stack
-            - @open_orchestra_front.manager.node
+            - '@open_orchestra_model.repository.site'
+            - '@open_orchestra_display.manager.site'
+            - '@open_orchestra_model.repository.route_document'
+            - '@open_orchestra_front.router.document_to_value_object'
+            - '@open_orchestra_front.router.collection_to_array'
+            - '@request_stack'
+            - '@open_orchestra_front.manager.node'
         tags:
             - { name: monolog.logger, channel: router }
             - { name: router, priority: 300 }

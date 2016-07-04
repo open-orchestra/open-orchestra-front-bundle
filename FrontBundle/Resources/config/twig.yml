@@ -4,17 +4,17 @@ parameters:
 
 services:
     open_orchestra_front.twig.orchestra_twig_engine:
-        class: %open_orchestra_front.twig.orchestra_twig_engine.class%
+        class: '%open_orchestra_front.twig.orchestra_twig_engine.class%'
         arguments:
-            - @twig
-            - @templating.name_parser
-            - @templating.locator
-            - @request_stack
-            - %open_orchestra_front.devices%
-            - %open_orchestra_front.device_type_field%
+            - '@twig'
+            - '@templating.name_parser'
+            - '@templating.locator'
+            - '@request_stack'
+            - '%open_orchestra_front.devices%'
+            - '%open_orchestra_front.device_type_field%'
     open_orchestra_front.extension.sub_query:
-        class: %open_orchestra_front.extension.sub_query.class%
+        class: '%open_orchestra_front.extension.sub_query.class%'
         arguments:
-            - @open_orchestra_front.sub_query.manager
+            - '@open_orchestra_front.sub_query.manager'
         tags:
             - { name: twig.extension }
