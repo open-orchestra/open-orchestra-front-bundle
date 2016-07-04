@@ -15,9 +15,7 @@
     "open-orchestra/open-orchestra-base-bundle": "self.version",
     "open-orchestra/open-orchestra-display-bundle": "self.version",
     "open-orchestra/open-orchestra-model-interface": "self.version",
-    "open-orchestra/open-orchestra-theme-bundle": "self.version",
-    "open-orchestra/open-orchestra-bbcode-bundle": "@dev",
-    "open-orchestra/open-orchestra-libs": "@dev"
+    "open-orchestra/open-orchestra-theme-bundle": "self.version"
   },
 
   "require-dev": {
@@ -26,7 +24,9 @@
     "codeclimate/php-test-reporter": "~0.3.2",
 
     "open-orchestra/open-orchestra-model-bundle": "self.version",
-    "open-orchestra/open-orchestra-mongo-libs": "self.version"
+    "open-orchestra/open-orchestra-mongo-libs": "self.version",
+    "open-orchestra/open-orchestra-bbcode-bundle": "self.version",
+    "open-orchestra/open-orchestra-libs": "self.version"
   },
 
   "config": {
