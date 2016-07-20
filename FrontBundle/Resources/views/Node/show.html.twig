@@ -12,9 +12,8 @@
         <meta name="keywords" content="{{ node.metaKeywords }}">
     </head>
     <body>
-        {% for area in node.areas %}
-            {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": area, 'nodeId': node.nodeId, 'parameters': parameters } only %}
-        {% endfor %}
+
+        {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": node.area, 'nodeId': node.nodeId, 'parameters': parameters } only %}
 
         {% block javascripts %}
             {{ openOrchestraJs(node.theme) }}
