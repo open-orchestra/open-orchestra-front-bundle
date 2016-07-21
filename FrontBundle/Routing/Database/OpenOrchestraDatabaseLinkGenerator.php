@@ -67,31 +67,25 @@ class OpenOrchestraDatabaseLinkGenerator extends UrlGenerator
      */
     public function  generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
-        if (array_key_exists('aliasId', $parameters)) {
-            $fullName = $parameters['aliasId'] . '_' . $name;
-            $routeDocument = $this->routeDocumentRepository->findOneByName($fullName);
+        $routeDocument = $this->routeDocumentRepository->findOneByName($name);
 
-            if (!$routeDocument instanceof RouteDocumentInterface) {
-                throw new RouteNotFoundException(sprintf('The route %s does not exists in the database', $fullName));
-            }
-
-            $route = $this->routeDocumentToValueObjectTransformer->transform($routeDocument);
-
-            $compiledRoute = $route->compile();
-
-            return $this->doGenerate(
-                $compiledRoute->getVariables(),
-                $route->getDefaults(),
-                $route->getRequirements(),
-                $compiledRoute->getTokens(),
-                $parameters,
-                $fullName,
-                $referenceType,
-                $compiledRoute->getHostTokens(),
-                $route->getSchemes()
-            );
+        if (!$routeDocument instanceof RouteDocumentInterface) {
+            throw new RouteNotFoundException(sprintf('The route %s does not exists in the database', $name));
         }
 
-        throw new RouteNotFoundException(sprintf('The route %s does not exists in the database', $name));
+        $route = $this->routeDocumentToValueObjectTransformer->transform($routeDocument);
+        $compiledRoute = $route->compile();
+
+        return $this->doGenerate(
+            $compiledRoute->getVariables(),
+            $route->getDefaults(),
+            $route->getRequirements(),
+            $compiledRoute->getTokens(),
+            $parameters,
+            $name,
+            $referenceType,
+            $compiledRoute->getHostTokens(),
+            $route->getSchemes()
+        );
     }
 }

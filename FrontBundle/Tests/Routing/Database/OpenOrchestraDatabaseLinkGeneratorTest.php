@@ -79,7 +79,7 @@ class OpenOrchestraDatabaseLinkGeneratorTest extends AbstractBaseTestCase
         Phake::when($this->routeDocumentRepository)->findOneByName($this->routeFullName)->thenReturn($routeDocument);
 
         $this->setExpectedException('OpenOrchestra\FrontBundle\Tests\Routing\Database\GeneratedRouteCompiledException');
-        $this->generator->generate($this->routeName, array('aliasId' => 0));
+        $this->generator->generate('0_' . $this->routeName, array());
     }
 
     /**
