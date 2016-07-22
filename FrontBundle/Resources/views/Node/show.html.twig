@@ -13,7 +13,7 @@
     </head>
     <body>
 
-        {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": node.area, 'nodeId': node.nodeId, 'parameters': parameters } only %}
+        {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": node.rootArea, 'nodeId': node.nodeId, 'parameters': parameters } only %}
 
         {% block javascripts %}
             {{ openOrchestraJs(node.theme) }}
