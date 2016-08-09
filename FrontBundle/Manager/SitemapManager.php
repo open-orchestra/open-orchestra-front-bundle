@@ -100,10 +100,8 @@ class SitemapManager
             try {
                 $nodeInfos = array(
                     'loc' => $this->router->generate(
-                        $node->getId(),
-                        array(
-                            'aliasId' => $site->getMainAliasId(),
-                        ),
+                        $site->getMainAliasId() . '_' . $node->getId(),
+                        array(),
                         UrlGeneratorInterface::ABSOLUTE_URL
                     ),
                     'lastmod' => $this->getLastModificationDate($node),
