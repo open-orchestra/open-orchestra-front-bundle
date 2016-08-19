@@ -96,10 +96,9 @@ class BlockController extends Controller
 
         if (is_array($areas)) {
             foreach($areas as $area) {
-                if (isset($area['nodeId'])) {
-                    $node = ($area['nodeId'] == 0) ? $nodeId : $area['nodeId'];
-                    if (!in_array($node, $nodes)) {
-                        $nodes[] = $node;
+                if (isset($area['nodeId']) && 0 === $area['nodeId']) {
+                    if (!in_array($nodeId, $nodes)) {
+                        $nodes[] = $nodeId;
                     }
                 }
             }
