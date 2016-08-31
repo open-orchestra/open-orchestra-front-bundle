@@ -26,7 +26,7 @@ class SubQueryGeneratorManager
     public function generate(array $block, array $baseSubQuery)
     {
         $subQuery = array_merge($baseSubQuery, $this->generateSubQueryCache($block));
-        if(isset($block['blockParameter'])) {
+        if (isset($block['blockParameter'])) {
             /** @var SubQueryGeneratorInterface $strategy */
             foreach ($this->strategies as $strategy) {
                 foreach ($block['blockParameter'] as $blockParameter) {
