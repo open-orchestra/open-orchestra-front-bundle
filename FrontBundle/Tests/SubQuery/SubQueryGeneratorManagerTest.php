@@ -57,11 +57,11 @@ class SubQueryGeneratorManagerTest extends AbstractBaseTestCase
         return array(
             array(false, array(), array(), array(), array()),
             array(true, array(), array(), array(), array()),
-            array(true, array('foo'), $fooBarArray, array(), $fooBarArray),
-            array(true, array('foo'), array(), $fooBarArray, $fooBarArray),
-            array(false, array('foo'), $fooBarArray, array(), array()),
-            array(true, array('foo'), $fooBarArray, array('foo' => 'foo'), $fooBarArray),
-            array(true, array('foo', 'bar'), $fooBarArray, array('foo' => 'foo'), $fooBarArray),
+            array(true, array('blockParameter' => array('foo')), $fooBarArray, array(), $fooBarArray),
+            array(true, array('blockParameter' => array('foo')), array(), $fooBarArray, $fooBarArray),
+            array(false, array('blockParameter' => array('foo')), $fooBarArray, array(), array()),
+            array(true, array('blockParameter' => array('foo')), $fooBarArray, array('foo' => 'foo'), $fooBarArray),
+            array(true, array('blockParameter' => array('foo', 'bar')), $fooBarArray, array('foo' => 'foo'), $fooBarArray),
         );
     }
 }

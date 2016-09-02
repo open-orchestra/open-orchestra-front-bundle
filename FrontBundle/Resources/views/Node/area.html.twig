@@ -9,8 +9,7 @@
         {% else %}
             {% set nodeReference = blockReference.nodeId %}
         {% endif %}
-        {% set blockParameter = blockReference.blockParameter is defined ? blockReference.blockParameter : [] %}
-        {% set queryParams = generate_subquery(blockParameter, parameters|merge({'nodeId': nodeReference, 'blockId': blockReference.blockId})) %}
+        {% set queryParams = generate_subquery(blockReference, parameters|merge({'nodeId': nodeReference, 'blockId': blockReference.blockId})) %}
         {{ render_esi(url('open_orchestra_front_block', queryParams)) }}
     {% endfor %}
 </div>
