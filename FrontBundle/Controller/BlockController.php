@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Controller;
 
+use OpenOrchestra\FrontBundle\Exception\BlockShowException;
 use OpenOrchestra\FrontBundle\Exception\NonExistingBlockException;
 use OpenOrchestra\FrontBundle\Exception\NonExistingNodeException;
 use OpenOrchestra\ModelInterface\Model\ReadBlockInterface;
@@ -47,10 +48,8 @@ class BlockController extends Controller
             $this->tagResponse($response, $block, $nodeId, $siteId, $request->getLocale());
 
             return $response;
-        } catch (NonExistingBlockException $e) {
-            throw new NotFoundHttpException(null, $e);
-        } catch (NonExistingNodeException $e) {
-            throw new NotFoundHttpException(null, $e);
+        } catch (\Exception $e) {
+            throw new BlockShowException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
