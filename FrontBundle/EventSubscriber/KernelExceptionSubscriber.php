@@ -2,7 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\EventSubscriber;
 
-use OpenOrchestra\FrontBundle\Exception\BlockShowException;
+use OpenOrchestra\FrontBundle\Exception\DisplayBlockException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
@@ -51,7 +51,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if ($event->getException() instanceof BlockShowException) {
+        if ($event->getException() instanceof DisplayBlockException) {
             $event->getRequest()->setRequestFormat('fragment.'. $event->getRequest()->getRequestFormat());
             $event->setException($event->getException()->getPrevious());
         } elseif ($event->getException() instanceof HttpExceptionInterface && '404' == $event->getException()->getStatusCode()) {
