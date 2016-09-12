@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\EventSubscriber;
 
+use OpenOrchestra\FrontBundle\Exception\DisplayBlockException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
@@ -23,7 +24,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     protected $siteRepository;
     protected $nodeRepository;
     protected $templating;
-    protected $request;
+    protected $requestStack;
 
     /**
      * @param ReadSiteRepositoryInterface $siteRepository
@@ -40,7 +41,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
         $this->siteRepository = $siteRepository;
         $this->nodeRepository = $nodeRepository;
         $this->templating = $templating;
-        $this->request = $requestStack->getMasterRequest();
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -50,11 +51,13 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if ($event->getException() instanceof HttpExceptionInterface && '404' == $event->getException()->getStatusCode()) {
-
+        if ($event->getException() instanceof DisplayBlockException) {
+            $event->getRequest()->setRequestFormat('fragment.'. $event->getRequest()->getRequestFormat());
+            $event->setException($event->getException()->getPrevious());
+        } elseif ($event->getException() instanceof HttpExceptionInterface && '404' == $event->getException()->getStatusCode()) {
             $siteInfo = $this->getCurrentSiteInfo(
-                trim($this->request->getHost(), '/'),
-                trim($this->request->getPathInfo(), '/')
+                trim($this->requestStack->getMasterRequest()->getHost(), '/'),
+                trim($this->requestStack->getMasterRequest()->getPathInfo(), '/')
             );
 
             if ($html = $this->getCustom404Html($siteInfo['site'], $siteInfo['language'])) {

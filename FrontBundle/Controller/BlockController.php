@@ -2,13 +2,11 @@
 
 namespace OpenOrchestra\FrontBundle\Controller;
 
-use OpenOrchestra\FrontBundle\Exception\NonExistingBlockException;
-use OpenOrchestra\FrontBundle\Exception\NonExistingNodeException;
+use OpenOrchestra\FrontBundle\Exception\DisplayBlockException;
 use OpenOrchestra\ModelInterface\Model\ReadBlockInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 
 /**
@@ -27,7 +25,7 @@ class BlockController extends Controller
      * @Config\Route("/block/{siteId}/{nodeId}/{blockId}/{_locale}", name="open_orchestra_front_block")
      * @Config\Method({"GET", "POST"})
      *
-     * @throws NotFoundHttpException
+     * @throws DisplayBlockException
      * @return Response
      */
     public function showAction(Request $request, $siteId, $nodeId, $blockId)
@@ -47,10 +45,8 @@ class BlockController extends Controller
             $this->tagResponse($response, $block, $nodeId, $siteId, $request->getLocale());
 
             return $response;
-        } catch (NonExistingBlockException $e) {
-            throw new NotFoundHttpException(null, $e);
-        } catch (NonExistingNodeException $e) {
-            throw new NotFoundHttpException(null, $e);
+        } catch (\Exception $e) {
+            throw new DisplayBlockException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
