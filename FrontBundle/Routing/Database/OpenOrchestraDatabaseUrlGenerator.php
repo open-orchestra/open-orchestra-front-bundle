@@ -76,7 +76,7 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
      * @throws InvalidParameterException           When a parameter value for a placeholder is not correct because
      *                                             it does not match the requirement
      */
-    public function  generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
         $request = $this->requestStack->getMasterRequest();
         if (isset($parameters[self::REDIRECT_TO_LANGUAGE])) {

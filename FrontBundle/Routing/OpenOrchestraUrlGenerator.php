@@ -57,7 +57,7 @@ class OpenOrchestraUrlGenerator extends UrlGenerator
     /**
      * @param string      $name
      * @param array       $parameters
-     * @param bool|string $referenceType
+     * @param int         $referenceType
      *
      * @return string
      */
