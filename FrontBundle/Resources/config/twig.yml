@@ -1,6 +1,7 @@
 parameters:
     open_orchestra_front.twig.orchestra_twig_engine.class: OpenOrchestra\FrontBundle\Twig\OrchestraTwigEngine
     open_orchestra_front.extension.sub_query.class: OpenOrchestra\FrontBundle\Twig\SubQueryGeneratorExtension
+    open_orchestra_front.extension.routing_node.class: OpenOrchestra\FrontBundle\Twig\RoutingNodeExtension
 
 services:
     open_orchestra_front.twig.orchestra_twig_engine:
@@ -16,5 +17,13 @@ services:
         class: '%open_orchestra_front.extension.sub_query.class%'
         arguments:
             - '@open_orchestra_front.sub_query.manager'
+        tags:
+            - { name: twig.extension }
+    open_orchestra_front.extension.routing_node:
+        class: '%open_orchestra_front.extension.routing_node.class%'
+        arguments:
+            - '@router'
+            - '@open_orchestra_display.manager.site'
+            - '@open_orchestra_model.repository.node'
         tags:
             - { name: twig.extension }
