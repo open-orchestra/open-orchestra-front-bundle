@@ -14,6 +14,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use OpenOrchestra\FrontBundle\Exception\NonExistingSiteException;
+use OpenOrchestra\DisplayBundle\Manager\SiteManager;
 
 /**
  * Class KernelExceptionSubscriber
@@ -24,23 +25,27 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     protected $nodeRepository;
     protected $templating;
     protected $request;
+    protected $currentSiteManager;
 
     /**
      * @param ReadSiteRepositoryInterface $siteRepository
      * @param ReadNodeRepositoryInterface $nodeRepository
      * @param EngineInterface             $templating
      * @param RequestStack                $requestStack
+     * @param SiteManager                 $currentSiteManager
      */
     public function __construct(
         ReadSiteRepositoryInterface $siteRepository,
         ReadNodeRepositoryInterface $nodeRepository,
         EngineInterface $templating,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        SiteManager $currentSiteManager
     ) {
         $this->siteRepository = $siteRepository;
         $this->nodeRepository = $nodeRepository;
         $this->templating = $templating;
         $this->request = $requestStack->getMasterRequest();
+        $this->currentSiteManager = $currentSiteManager;
     }
 
     /**
@@ -52,12 +57,9 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     {
         if ($event->getException() instanceof HttpExceptionInterface && '404' == $event->getException()->getStatusCode()) {
 
-            $siteInfo = $this->getCurrentSiteInfo(
-                trim($this->request->getHost(), '/'),
-                trim($this->request->getPathInfo(), '/')
-            );
+            $this->getCurrentSiteInfo(trim($this->request->getHost(), '/'), trim($this->request->getPathInfo(), '/'));
 
-            if ($html = $this->getCustom404Html($siteInfo['site'], $siteInfo['language'])) {
+            if ($html = $this->getCustom404Html()) {
                 $event->setResponse(new Response($html, 404));
             }
         }
@@ -70,7 +72,6 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      * @param string $path
      * 
      * @throws NonExistingSiteException
-     * @return array
      */
     protected function getCurrentSiteInfo($host, $path)
     {
@@ -100,7 +101,8 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
             throw new NonExistingSiteException();
         }
 
-        return array('site' => $possibleSite, 'language' => $possibleAlias->getLanguage());
+        $this->currentSiteManager->setSiteId($possibleSite->getSiteId());
+        $this->currentSiteManager->setCurrentLanguage($possibleAlias->getLanguage());
     }
 
     /**
@@ -124,20 +126,20 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     /**
      * Get the 404 custom page for the current site / language if it has been contributed
      * 
-     * @param ReadSiteInterface $site
-     * @param string            $language
-     * 
      * @return string | null
      */
-    protected function getCustom404Html(ReadSiteInterface $site, $language)
+    protected function getCustom404Html()
     {
-        if (!$site || !$language) {
+        if (!$this->currentSiteManager->getCurrentSiteId() || !$this->currentSiteManager->getCurrentSiteDefaultLanguage()) {
             return null;
         }
 
-        $siteId = $site->getSiteId();
         $nodeId = ReadNodeInterface::ERROR_404_NODE_ID;
-        $node = $this->nodeRepository->findOneCurrentlyPublished($nodeId, $language, $siteId);
+        $node = $this->nodeRepository->findOneCurrentlyPublished(
+            $nodeId,
+            $this->currentSiteManager->getCurrentSiteDefaultLanguage(),
+            $this->currentSiteManager->getCurrentSiteId()
+        );
 
         if ($node) {
 
