@@ -32,8 +32,8 @@ class NodeResponseManagerTest extends AbstractBaseTestCase
      * Test getNodeCacheInfo
      *
      * @param NodeInterface                                                $node
-     * @param OpenOrchestra\DisplayBundle\DisplayBlock\DisplayBlockManager $displayBlockManager
-     * @param OpenOrchestra\ModelInterface\Model\BlockInterface            $blockTransverse
+     * @param \OpenOrchestra\DisplayBundle\DisplayBlock\DisplayBlockManager $displayBlockManager
+     * @param \OpenOrchestra\ModelInterface\Model\BlockInterface            $blockTransverse
      * @param bool                                                         $expectedPublicCache
      * @param int                                                          $expectedMaxage
      *
@@ -135,6 +135,8 @@ class NodeResponseManagerTest extends AbstractBaseTestCase
         Phake::when($areaPrivate)->getBlocks()
             ->thenReturn(array(array('nodeId'=> 0, 'blockId' => 'Private')));
 
+        $rootArea = Phake::mock('OpenOrchestra\ModelInterface\Model\AreaInterface');
+        Phake::when($rootArea)->getAreas()->thenReturn(new ArrayCollection(array($area1, $area2)));
         /* Public Node
          *  |
          *  |_ Area1
@@ -155,7 +157,7 @@ class NodeResponseManagerTest extends AbstractBaseTestCase
         $publicNode = Phake::mock('OpenOrchestra\ModelInterface\Model\NodeInterface');
         Phake::when($publicNode)->getNodeId()->thenReturn('public-node-id');
         Phake::when($publicNode)->getMaxAge()->thenReturn($maxAge['publicNode']);
-        Phake::when($publicNode)->getAreas()->thenReturn(new ArrayCollection(array($area1, $area2)));
+        Phake::when($publicNode)->getRootArea()->thenReturn($rootArea);
         Phake::when($publicNode)->getBlock('1')->thenReturn($block1);
         Phake::when($publicNode)->getBlock('2')->thenReturn($block2);
         Phake::when($publicNode)->getBlock('3')->thenReturn($block3);
@@ -180,10 +182,13 @@ class NodeResponseManagerTest extends AbstractBaseTestCase
          *          |_ bref(0:3)
          *          |_ bref(other-node-id:1)
          */
+        $rootAreaPrivate = Phake::mock('OpenOrchestra\ModelInterface\Model\AreaInterface');
+        Phake::when($rootAreaPrivate)->getAreas()->thenReturn(new ArrayCollection(array($area1, $areaPrivate, $area2)));
+
         $privateNode = Phake::mock('OpenOrchestra\ModelInterface\Model\NodeInterface');
         Phake::when($privateNode)->getNodeId()->thenReturn('private-node-id');
         Phake::when($privateNode)->getMaxAge()->thenReturn($maxAge['privateNode']);
-        Phake::when($privateNode)->getAreas()->thenReturn(new ArrayCollection(array($area1, $areaPrivate, $area2)));
+        Phake::when($privateNode)->getRootArea()->thenReturn($rootAreaPrivate);
         Phake::when($privateNode)->getBlock('1')->thenReturn($block1);
         Phake::when($privateNode)->getBlock('2')->thenReturn($block2);
         Phake::when($privateNode)->getBlock('3')->thenReturn($block3);
