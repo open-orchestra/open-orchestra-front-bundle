@@ -40,7 +40,7 @@ class NodeResponseManager
      */
     public function getNodeCacheInfo(ReadNodeInterface $node)
     {
-        return $this->getCacheInfoFromAreas($node->getAreas(), $node, $node->getMaxAge());
+        return $this->getCacheInfoFromAreas($node->getRootArea()->getAreas(), $node, $node->getMaxAge());
     }
 
     /**
