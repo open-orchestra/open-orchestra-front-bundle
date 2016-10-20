@@ -98,10 +98,6 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
                 }
             }
         }
-        $possibleAlias = $alias;
-        $possibleSite = $site;
-        $possibleAliasId = $aliasId;
-        $matchingLength = $splitLength;
 
         if (is_null($currentSiteId)) {
             throw new NonExistingSiteException();
