@@ -57,7 +57,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     {
         if ($event->getException() instanceof HttpExceptionInterface && '404' == $event->getException()->getStatusCode()) {
 
-            $this->getCurrentSiteInfo(trim($this->request->getHost(), '/'), trim($this->request->getPathInfo(), '/'));
+            $this->setCurrentSiteInfo(trim($this->request->getHost(), '/'), trim($this->request->getPathInfo(), '/'));
 
             if ($html = $this->getCustom404Html()) {
                 $event->setResponse(new Response($html, 404));
@@ -66,43 +66,53 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Try to find and set the current site and language
+     * Find and set the current site id, language, and alias id
      * 
      * @param string $host
      * @param string $path
      * 
      * @throws NonExistingSiteException
      */
-    protected function getCurrentSiteInfo($host, $path)
+    protected function setCurrentSiteInfo($host, $path)
     {
         $path = $this->formatPath($path);
-        $possibleSite = null;
-        $possibleAlias = null;
+        $currentSiteId = null;
+        $currentLanguage = null;
+        $currentAliasId = null;
         $matchingLength = -1;
 
         $matchingSites = $this->siteRepository->findByAliasDomain($host);
 
         /** @var ReadSiteInterface $site */
         foreach ($matchingSites as $site) {
-            foreach ($site->getAliases() as $alias) {
+            foreach ($site->getAliases() as $aliasId => $alias) {
                 $aliasPrefix = $this->formatPath($alias->getPrefix());
                 if ($host == $alias->getDomain() && strpos($path, $aliasPrefix) === 0) {
                     $splitLength = count(explode('/', $aliasPrefix));
                     if ($splitLength > $matchingLength) {
-                        $possibleAlias = $alias;
-                        $possibleSite = $site;
+                        $currentSiteId = $site->getSiteId();
+                        $currentLanguage = $alias->getLanguage();
+                        $currentAliasId = $aliasId;
                         $matchingLength = $splitLength;
                     }
                 }
             }
         }
+        $possibleAlias = $alias;
+        $possibleSite = $site;
+        $possibleAliasId = $aliasId;
+        $matchingLength = $splitLength;
 
-        if (is_null($possibleAlias)) {
+        if (is_null($currentSiteId)) {
             throw new NonExistingSiteException();
         }
 
-        $this->currentSiteManager->setSiteId($possibleSite->getSiteId());
-        $this->currentSiteManager->setCurrentLanguage($possibleAlias->getLanguage());
+        $this->currentSiteManager->setSiteId($currentSiteId);
+        $this->currentSiteManager->setCurrentLanguage($currentLanguage);
+
+        $this->request->attributes->set('siteId', $currentSiteId);
+        $this->request->attributes->set('_locale', $currentLanguage);
+        $this->request->attributes->set('aliasId', $currentAliasId);
     }
 
     /**
