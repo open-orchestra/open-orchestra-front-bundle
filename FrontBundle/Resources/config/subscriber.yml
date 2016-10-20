@@ -17,5 +17,6 @@ services:
             - @open_orchestra_model.repository.node
             - @templating
             - @request_stack
+            - @open_orchestra_display.manager.site
         tags:
             - { name: kernel.event_subscriber }
