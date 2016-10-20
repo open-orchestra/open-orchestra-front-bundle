@@ -3,6 +3,7 @@
 namespace OpenOrchestra\FrontBundle;
 
 use OpenOrchestra\FrontBundle\DependencyInjection\Compiler\SubQueryCompilerPass;
+use OpenOrchestra\FrontBundle\DependencyInjection\Compiler\TemplateCompilerPass;
 use OpenOrchestra\FrontBundle\DependencyInjection\Compiler\TwigTemplateLoaderCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -19,5 +20,6 @@ class OpenOrchestraFrontBundle extends Bundle
     {
         $container->addCompilerPass(new SubQueryCompilerPass());
         $container->addCompilerPass(new TwigTemplateLoaderCompilerPass());
+        $container->addCompilerPass(new TemplateCompilerPass());
     }
 }

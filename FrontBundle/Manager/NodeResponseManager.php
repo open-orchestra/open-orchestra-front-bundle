@@ -13,18 +13,12 @@ use Doctrine\Common\Collections\Collection;
  */
 class NodeResponseManager
 {
-    protected $nodeRepository;
     protected $displayBlockManager;
 
     /**
-     * @param NodeRepositoryInterface $nodeRepository
      * @param DisplayBlockManager     $displayBlockManager
      */
-    public function __construct(
-        NodeRepositoryInterface $nodeRepository,
-        DisplayBlockManager $displayBlockManager
-    ) {
-        $this->nodeRepository = $nodeRepository;
+    public function __construct(DisplayBlockManager $displayBlockManager) {
         $this->displayBlockManager = $displayBlockManager;
     }
 
@@ -36,11 +30,11 @@ class NodeResponseManager
      *
      * @param ReadNodeInterface $node
      *
-     * return array
+     * @return array
      */
     public function getNodeCacheInfo(ReadNodeInterface $node)
     {
-        return $this->getCacheInfoFromAreas($node->getRootArea()->getAreas(), $node, $node->getMaxAge());
+        return $this->getCacheInfoFromAreas($node->getAreas(), $node->getMaxAge());
     }
 
     /**
@@ -49,45 +43,21 @@ class NodeResponseManager
      * If a block is private, the result is private
      * The Max-age is the min of the Max-age of all blocks
      *
-     * @param Collection        $areaCollection
-     * @param ReadNodeInterface $node
-     * @param string            $defaultMaxAge
-     * @param string            $defaultIsPublic
+     * @param Collection        $areas
+     * @param integer           $defaultMaxAge
+     * @param boolean           $defaultIsPublic
      *
      * @return array
      */
     protected function getCacheInfoFromAreas(
-        Collection $areaCollection,
-        ReadNodeInterface $node,
+        Collection $areas,
         $defaultMaxAge = -1,
         $defaultIsPublic = true
     ) {
         $cacheInfo = $this->formatCacheInfo($defaultMaxAge, $defaultIsPublic);
 
-        foreach ($areaCollection as $area) {
-            $cacheInfo = $this->mergeCacheInfo($cacheInfo, $this->getAreaCacheInfo($area, $node));
-        }
-
-        return $cacheInfo;
-    }
-
-    /**
-     * Browse the $area to calculate the general cache policy of the $area
-     * according to the sub-areas and blocks.
-     * If a block is private, the $area becomes private
-     * The Max-age of the area is the min of the Max-age of all blocks
-     *
-     * @param AreaInterface     $area
-     * @param ReadNodeInterface $node
-     *
-     * return array
-     */
-    protected function getAreaCacheInfo(AreaInterface $area, ReadNodeInterface $node)
-    {
-        if (count($area->getAreas()) > 0 ) {
-            $cacheInfo = $this->getCacheInfoFromAreas($area->getAreas(), $node);
-        } else {
-            $cacheInfo = $this->getCacheInfoFromBlocks($area, $node);
+        foreach ($areas as $area) {
+            $cacheInfo = $this->mergeCacheInfo($cacheInfo, $this->getCacheInfoFromBlocks($area));
         }
 
         return $cacheInfo;
@@ -99,27 +69,15 @@ class NodeResponseManager
      * If a block is private, the $area becomes private
      * The Max-age of the area is the min of the Max-age of all blocks
      *
-     * @param AreaInterface $area
-     * @param ReadNodeInterface $node
+     * @param AreaInterface     $area
      *
-     * return array
+     * @return array
      */
-    protected function getCacheInfoFromBlocks(AreaInterface $area, ReadNodeInterface $node)
+    protected function getCacheInfoFromBlocks(AreaInterface $area)
     {
         $cacheInfo = $this->formatCacheInfo(-1, true);
 
-        foreach ($area->getBlocks() as $refBlock) {
-            if (!($node->getNodeId() === $refBlock['nodeId'] || 0 === $refBlock['nodeId'])) {
-                $otherNode = $this->nodeRepository->findInLastVersion(
-                    $refBlock['nodeId'],
-                    $node->getLanguage(),
-                    $node->getSiteId()
-                );
-                $block = $otherNode->getBlock($refBlock['blockId']);
-            } else {
-                $block = $node->getBlock($refBlock['blockId']);
-            }
-
+        foreach ($area->getBlocks() as $block) {
             $cacheInfo = $this->mergeCacheInfo(
                 $cacheInfo,
                 $this->formatCacheInfo(
@@ -152,8 +110,10 @@ class NodeResponseManager
     /**
      * Merge two CacheInfo
      *
-     * @param array $cacheInfogetCacheInfoFromAreas1
+     * @param array $cacheInfo1
      * @param array $cacheInfo2
+     *
+     * @return array
      */
     protected function mergeCacheInfo(array $cacheInfo1, array $cacheInfo2)
     {

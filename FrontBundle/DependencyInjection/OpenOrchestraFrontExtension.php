@@ -29,6 +29,7 @@ class OpenOrchestraFrontExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $config);
 
+        $container->setParameter('open_orchestra_front.template_set', $config['template_set']);
         $container->setParameter('open_orchestra_front.devices', $config['devices']);
         $container->setParameter('open_orchestra_front.device_type_field', $config['device_type_field']);
 
@@ -37,7 +38,6 @@ class OpenOrchestraFrontExtension extends Extension
         $loader->load('subscriber.yml');
         $loader->load('twig.yml');
         $loader->load('subquery.yml');
-        $loader->load('repository.yml');
 
         if ('file' == $config['routing_type']) {
             $loader->load('routing.yml');

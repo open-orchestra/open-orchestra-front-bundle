@@ -76,6 +76,8 @@ class ErrorPagesManager
      * @param ReadNodeInterface $errorNode
      * @param int               $aliasId
      * @param string            $siteId
+     *
+     * @return string
      */
     protected function dumpErrorPageForSiteAlias(ReadNodeInterface $errorNode, $aliasId, $siteId)
     {

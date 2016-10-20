@@ -58,9 +58,10 @@ class SubQueryGeneratorExtensionTest extends AbstractBaseTestCase
     public function testGenerateSubQuery()
     {
         $subQuery = array('foo' => 'bar');
+        $blockPrivate = false;
         Phake::when($this->manager)->generate(Phake::anyParameters())->thenReturn($subQuery);
 
-        $this->assertSame($subQuery, $this->extension->generateSubQuery(array('foo'), array('bar')));
-        Phake::verify($this->manager)->generate(array('foo'), array('bar'));
+        $this->assertSame($subQuery, $this->extension->generateSubQuery(array('foo'), $blockPrivate, array('bar')));
+        Phake::verify($this->manager)->generate(array('foo'), $blockPrivate, array('bar'));
     }
 }

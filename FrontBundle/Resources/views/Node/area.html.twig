@@ -1,15 +1,4 @@
-<div {% if area.areaId is defined and area.areaId is not null %}id="{{ area.areaId }}"{% endif %}
- {% if area.htmlClass is defined and area.htmlClass is not null%}class="{{ area.htmlClass }}"{% endif %}>
-    {% for subArea in area.areas %}
-        {% include "OpenOrchestraFrontBundle:Node:area.html.twig" with {"area": subArea, 'nodeId': nodeId, 'parameters': parameters} only %}
-    {% endfor %}
-    {% for blockReference in area.blocks %}
-        {% if blockReference.nodeId is same as(0) %}
-            {% set nodeReference = nodeId %}
-        {% else %}
-            {% set nodeReference = blockReference.nodeId %}
-        {% endif %}
-        {% set queryParams = generate_subquery(blockReference, parameters|merge({'nodeId': nodeReference, 'blockId': blockReference.blockId})) %}
-        {{ render_esi(url('open_orchestra_front_block', queryParams)) }}
-    {% endfor %}
-</div>
+{% for block in area.blocks %}
+    {% set queryParams = generate_subquery(block.parameter, block.private, parameters|merge({'blockId': block.id, 'nodeId': nodeId, 'siteId': siteId, '_locale': _locale})) %}
+    {{ render_esi(url('open_orchestra_front_block', queryParams)) }}
+{% endfor %}
