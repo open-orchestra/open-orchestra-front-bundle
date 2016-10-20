@@ -19,14 +19,20 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
     protected $subscriber;
 
     protected $siteRepository;
+    protected $currentSiteManager;
     protected $site;
     protected $mainAlias;
     protected $nodeRepository;
     protected $templating;
     protected $requestStack;
     protected $request;
+    protected $attributes;
     protected $event;
     protected $exception;
+
+    protected $currentLanguage = 'en';
+    protected $currentSiteId = 'siteId';
+    protected $currentAliasId = 'aliasId';
 
     /**
      * Set up the test
@@ -34,9 +40,10 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
     public function setUp()
     {
         $this->mainAlias = Phake::mock('OpenOrchestra\ModelInterface\Model\SiteAliasInterface');
-        Phake::when($this->mainAlias)->getLanguage()->thenReturn('en');
+        Phake::when($this->mainAlias)->getLanguage()->thenReturn($this->currentLanguage);
         $this->site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');
-        Phake::when($this->site)->getAliases()->thenReturn(array($this->mainAlias));
+        Phake::when($this->site)->getSiteId()->thenReturn($this->currentSiteId);
+        Phake::when($this->site)->getAliases()->thenReturn(array($this->currentAliasId => $this->mainAlias));
         $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface');
         Phake::when($this->siteRepository)->findByAliasDomain(Phake::anyParameters())->thenReturn(array($this->site));
 
@@ -45,6 +52,9 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
         Phake::when($this->templating)->render(Phake::anyParameters())->thenReturn('404 html page');
 
         $this->request = Phake::mock('Symfony\Component\HttpFoundation\Request');
+        $this->attributes = Phake::mock('Symfony\Component\HttpFoundation\ParameterBag');
+        $this->request->attributes = $this->attributes;
+
         $this->requestStack = Phake::mock('Symfony\Component\HttpFoundation\RequestStack');
         Phake::when($this->requestStack)->getMasterRequest()->thenReturn($this->request);
 
@@ -52,7 +62,15 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
         $this->event = Phake::mock('Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent');
         Phake::when($this->event)->getException()->thenReturn($this->exception);
 
-        $this->subscriber = new KernelExceptionSubscriber($this->siteRepository, $this->nodeRepository, $this->templating, $this->requestStack);
+        $this->currentSiteManager = Phake::mock('OpenOrchestra\DisplayBundle\Manager\SiteManager');
+
+        $this->subscriber = new KernelExceptionSubscriber(
+            $this->siteRepository,
+            $this->nodeRepository,
+            $this->templating,
+            $this->requestStack,
+            $this->currentSiteManager
+        );
     }
 
     /**
@@ -76,15 +94,26 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
      * @param string                 $status
      * @param ReadNodeInterface|null $node
      * @param int                    $expectedResponseCount
+     * @param int                    $expectedSiteFinding
      * 
      * @dataProvider getErrorContext
      */
-    public function testOnKernelException($status, ReadNodeInterface $node = null, $expectedResponseCount)
+    public function testOnKernelException($status, ReadNodeInterface $node = null, $expectedResponseCount, $expectedSiteFinding)
     {
         Phake::when($this->exception)->getStatusCode()->thenReturn($status);
         Phake::when($this->nodeRepository)->findOneCurrentlyPublished(Phake::anyParameters())->thenReturn($node);
+        if ($expectedResponseCount) {
+            Phake::when($this->currentSiteManager)->getCurrentSiteId()->thenReturn($this->currentSiteId);
+            Phake::when($this->currentSiteManager)->getCurrentSiteDefaultLanguage()->thenReturn($this->currentLanguage);
+        }
 
         $this->subscriber->onKernelException($this->event);
+
+        Phake::verify($this->currentSiteManager, Phake::times($expectedSiteFinding))->setSiteId($this->currentSiteId);
+        Phake::verify($this->currentSiteManager, Phake::times($expectedSiteFinding))->setCurrentLanguage($this->currentLanguage);
+        Phake::verify($this->attributes, Phake::times($expectedSiteFinding))->set('siteId', $this->currentSiteId);
+        Phake::verify($this->attributes, Phake::times($expectedSiteFinding))->set('_locale', $this->currentLanguage);
+        Phake::verify($this->attributes, Phake::times($expectedSiteFinding))->set('aliasId', $this->currentAliasId);
 
         Phake::verify($this->event, Phake::times($expectedResponseCount))->setResponse(Phake::anyParameters());
     }
@@ -97,10 +126,10 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
         $node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
 
         return array(
-            array('404', null, 0),
-            array('404', $node, 1),
-            array('500', null, 0),
-            array('500', $node, 0),
+            'Error 404 without 404 node' => array('404', null, 0, 1),
+            'Error 404 with 404 node'    => array('404', $node, 1, 1),
+            'Error 500 without 500 node' => array('500', null, 0, 0),
+            'Error 500 with 500 node'    => array('500', $node, 0, 0),
         );
     }
 
@@ -130,8 +159,8 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
         $node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
 
         return array(
-            array('404', true),
-            array('500', false),
+            'Error 404' => array('404', true),
+            'Error 500' => array('500', false),
         );
     }
 }
