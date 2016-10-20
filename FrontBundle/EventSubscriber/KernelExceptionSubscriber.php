@@ -15,6 +15,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use OpenOrchestra\FrontBundle\Exception\NonExistingSiteException;
+use OpenOrchestra\DisplayBundle\Manager\SiteManager;
 
 /**
  * Class KernelExceptionSubscriber
@@ -24,24 +25,28 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     protected $siteRepository;
     protected $nodeRepository;
     protected $templating;
-    protected $requestStack;
+    protected $request;
+    protected $currentSiteManager;
 
     /**
      * @param ReadSiteRepositoryInterface $siteRepository
      * @param ReadNodeRepositoryInterface $nodeRepository
      * @param EngineInterface             $templating
      * @param RequestStack                $requestStack
+     * @param SiteManager                 $currentSiteManager
      */
     public function __construct(
         ReadSiteRepositoryInterface $siteRepository,
         ReadNodeRepositoryInterface $nodeRepository,
         EngineInterface $templating,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        SiteManager $currentSiteManager
     ) {
         $this->siteRepository = $siteRepository;
         $this->nodeRepository = $nodeRepository;
         $this->templating = $templating;
-        $this->requestStack = $requestStack;
+        $this->request = $requestStack->getMasterRequest();
+        $this->currentSiteManager = $currentSiteManager;
     }
 
     /**
@@ -55,55 +60,58 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
             $event->getRequest()->setRequestFormat('fragment.'. $event->getRequest()->getRequestFormat());
             $event->setException($event->getException()->getPrevious());
         } elseif ($event->getException() instanceof HttpExceptionInterface && '404' == $event->getException()->getStatusCode()) {
-            $siteInfo = $this->getCurrentSiteInfo(
-                trim($this->requestStack->getMasterRequest()->getHost(), '/'),
-                trim($this->requestStack->getMasterRequest()->getPathInfo(), '/')
-            );
+            $this->setCurrentSiteInfo(trim($this->request->getHost(), '/'), trim($this->request->getPathInfo(), '/'));
 
-            if ($html = $this->getCustom404Html($siteInfo['site'], $siteInfo['language'])) {
+            if ($html = $this->getCustom404Html()) {
                 $event->setResponse(new Response($html, 404));
             }
         }
     }
 
     /**
-     * Try to find and set the current site and language
+     * Find and set the current site id, language, and alias id
      * 
      * @param string $host
      * @param string $path
      * 
      * @throws NonExistingSiteException
-     * @return array
      */
-    protected function getCurrentSiteInfo($host, $path)
+    protected function setCurrentSiteInfo($host, $path)
     {
         $path = $this->formatPath($path);
-        $possibleSite = null;
-        $possibleAlias = null;
+        $currentSiteId = null;
+        $currentLanguage = null;
+        $currentAliasId = null;
         $matchingLength = -1;
 
         $matchingSites = $this->siteRepository->findByAliasDomain($host);
 
         /** @var ReadSiteInterface $site */
         foreach ($matchingSites as $site) {
-            foreach ($site->getAliases() as $alias) {
+            foreach ($site->getAliases() as $aliasId => $alias) {
                 $aliasPrefix = $this->formatPath($alias->getPrefix());
                 if ($host == $alias->getDomain() && strpos($path, $aliasPrefix) === 0) {
                     $splitLength = count(explode('/', $aliasPrefix));
                     if ($splitLength > $matchingLength) {
-                        $possibleAlias = $alias;
-                        $possibleSite = $site;
+                        $currentSiteId = $site->getSiteId();
+                        $currentLanguage = $alias->getLanguage();
+                        $currentAliasId = $aliasId;
                         $matchingLength = $splitLength;
                     }
                 }
             }
         }
 
-        if (is_null($possibleAlias)) {
+        if (is_null($currentSiteId)) {
             throw new NonExistingSiteException();
         }
 
-        return array('site' => $possibleSite, 'language' => $possibleAlias->getLanguage());
+        $this->currentSiteManager->setSiteId($currentSiteId);
+        $this->currentSiteManager->setCurrentLanguage($currentLanguage);
+
+        $this->request->attributes->set('siteId', $currentSiteId);
+        $this->request->attributes->set('_locale', $currentLanguage);
+        $this->request->attributes->set('aliasId', $currentAliasId);
     }
 
     /**
@@ -127,20 +135,20 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     /**
      * Get the 404 custom page for the current site / language if it has been contributed
      * 
-     * @param ReadSiteInterface $site
-     * @param string            $language
-     * 
      * @return string | null
      */
-    protected function getCustom404Html(ReadSiteInterface $site, $language)
+    protected function getCustom404Html()
     {
-        if (!$site || !$language) {
+        if (!$this->currentSiteManager->getCurrentSiteId() || !$this->currentSiteManager->getCurrentSiteDefaultLanguage()) {
             return null;
         }
 
-        $siteId = $site->getSiteId();
         $nodeId = ReadNodeInterface::ERROR_404_NODE_ID;
-        $node = $this->nodeRepository->findOneCurrentlyPublished($nodeId, $language, $siteId);
+        $node = $this->nodeRepository->findOneCurrentlyPublished(
+            $nodeId,
+            $this->currentSiteManager->getCurrentSiteDefaultLanguage(),
+            $this->currentSiteManager->getCurrentSiteId()
+        );
 
         if ($node) {
 
