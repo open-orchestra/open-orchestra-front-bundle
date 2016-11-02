@@ -83,7 +83,6 @@ class ErrorPagesManager
             'open_orchestra_base_node_preview',
             array(
                 'token' => $this->encrypter->encrypt($errorNode->getId()),
-                'nodeId' => $errorNode->getNodeId(),
                 'aliasId' => $aliasId
             )
         );
