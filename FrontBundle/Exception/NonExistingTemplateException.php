@@ -7,5 +7,4 @@ namespace OpenOrchestra\FrontBundle\Exception;
  */
 class NonExistingTemplateException extends \Exception
 {
-
 }

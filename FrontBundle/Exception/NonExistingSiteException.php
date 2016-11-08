@@ -9,5 +9,4 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class NonExistingSiteException extends NotFoundHttpException
 {
-
 }
