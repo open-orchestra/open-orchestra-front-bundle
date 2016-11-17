@@ -82,7 +82,6 @@ class NodeController extends Controller
             );
         } else {
             $cacheInfo = $this->get('open_orchestra_front.manager.node_response_manager')->getNodeCacheInfo($node);
-
             $privacy = ($cacheInfo['isPublic']) ? CacheableInterface::CACHE_PUBLIC : CacheableInterface::CACHE_PRIVATE;
 
             $response = $cacheableManager->setResponseCacheParameters(
@@ -123,19 +122,32 @@ class NodeController extends Controller
      */
     protected function renderNode(ReadNodeInterface $node, array $parameters = array())
     {
-        $parameters = array_merge(
-            $parameters,
-            array('siteId' => $node->getSiteId(), '_locale' => $node->getLanguage())
-        );
-
         $response = $this->render(
             'OpenOrchestraFrontBundle:Node:show.html.twig',
             array(
                 'node' => $node,
+                'template' => $this->getTemplate($node),
                 'parameters' => $parameters,
             )
         );
 
         return $response;
+    }
+
+    /**
+     * @param ReadNodeInterface $node
+     *
+     * @return string
+     * @throws \OpenOrchestra\FrontBundle\Exception\NonExistingTemplateException
+     */
+    protected function getTemplate(ReadNodeInterface $node) {
+        $site = $this->get('open_orchestra_model.repository.site')->findOneBySiteId($node->getSiteId());
+
+        $template = $node->getTemplate();
+        $templateSet = $site->getTemplateSet();
+
+        $templateManager = $this->get('open_orchestra_front.manager.template');
+
+        return $templateManager->getTemplate($template, $templateSet);
     }
 }

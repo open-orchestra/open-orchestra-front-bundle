@@ -18,18 +18,19 @@ class SubQueryGeneratorManager
     }
 
     /**
-     * @param array $block
-     * @param array $baseSubQuery
+     * @param array   $blockParameters
+     * @param boolean $blockPrivate
+     * @param array   $baseSubQuery
      *
      * @return array
      */
-    public function generate(array $block, array $baseSubQuery)
+    public function generate(array $blockParameters, $blockPrivate, array $baseSubQuery)
     {
-        $subQuery = array_merge($baseSubQuery, $this->generateSubQueryCache($block));
-        if (isset($block['blockParameter'])) {
+        $subQuery = array_merge($baseSubQuery, $this->generateSubQueryCache($blockPrivate));
+        if (!empty($blockParameters)) {
             /** @var SubQueryGeneratorInterface $strategy */
             foreach ($this->strategies as $strategy) {
-                foreach ($block['blockParameter'] as $blockParameter) {
+                foreach ($blockParameters as $blockParameter) {
                     if ($strategy->support($blockParameter)) {
                         $subQuery = array_merge($subQuery, $strategy->generate($blockParameter));
                     }
@@ -41,14 +42,14 @@ class SubQueryGeneratorManager
     }
 
     /**
-     * @param $block
+     * @param boolean $blockPrivate
      *
      * @return array
      */
-    public function generateSubQueryCache($block)
+    public function generateSubQueryCache($blockPrivate)
     {
         $cacheQuery = array();
-        if (isset($block['blockPrivate']) && true === $block['blockPrivate']) {
+        if (true === $blockPrivate) {
             $cacheQuery = array('cache' => 'private');
         }
 

@@ -31,18 +31,11 @@ class BlockController extends Controller
     public function showAction(Request $request, $siteId, $nodeId, $blockId)
     {
         try {
-            $block = $this->get('open_orchestra_front.repository.block')->findBlock(
-                $blockId,
-                $nodeId,
-                $request->getLocale(),
-                $siteId,
-                $request->get('token')
-            );
+            $block = $this->get('open_orchestra_model.repository.block')->findById($blockId);
             $hasEsi = $this->has('esi') && $this->get('esi')->hasSurrogateCapability($request);
 
             $response = $this->get('open_orchestra_display.display_block_manager')->show($block, $hasEsi);
-
-            $this->tagResponse($response, $block, $nodeId, $siteId, $request->getLocale());
+            $this->tagResponse($block, $nodeId, $siteId, $request->getLocale());
 
             return $response;
         } catch (\Exception $e) {
@@ -53,54 +46,24 @@ class BlockController extends Controller
     /**
      * Tag response
      *
-     * @param Response           $response
      * @param ReadBlockInterface $block
      * @param string             $nodeId
      * @param string             $siteId
      * @param string             $language
      */
-    protected function tagResponse(Response $response, ReadBlockInterface $block, $nodeId, $siteId, $language)
+    protected function tagResponse(ReadBlockInterface $block, $nodeId, $siteId, $language)
     {
         $tagManager = $this->get('open_orchestra_base.manager.tag');
 
         $cacheTags = $this->get('open_orchestra_display.display_block_manager')->getCacheTags($block);
 
-        $nodes = $this->getNodesUsingBlock($block, $nodeId);
-        if (is_array($nodes)) {
-            foreach($nodes as $node) {
-                $cacheTags[] = $tagManager->formatNodeIdTag($node);
-            }
+        if (true === $block->isTransverse()) {
+            $cacheTags[] = $tagManager->formatNodeIdTag($nodeId);
         }
 
         $cacheTags[] = $tagManager->formatSiteIdTag($siteId);
         $cacheTags[] = $tagManager->formatLanguageTag($language);
 
         $this->get('open_orchestra_display.manager.cacheable')->addCacheTags($cacheTags);
-    }
-
-    /**
-     * Get a list of nodes using $block
-     *
-     * @param ReadBlockInterface $block
-     * @param string             $nodeId
-     *
-     * @return array
-     */
-    protected function getNodesUsingBlock(ReadBlockInterface $block, $nodeId)
-    {
-        $nodes = array();
-        $areas = $block->getAreas();
-
-        if (is_array($areas)) {
-            foreach($areas as $area) {
-                if (isset($area['nodeId']) && 0 === $area['nodeId']) {
-                    if (!in_array($nodeId, $nodes)) {
-                        $nodes[] = $nodeId;
-                    }
-                }
-            }
-        }
-
-        return $nodes;
     }
 }

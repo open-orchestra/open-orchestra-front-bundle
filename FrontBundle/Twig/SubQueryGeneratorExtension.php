@@ -30,14 +30,15 @@ class SubQueryGeneratorExtension extends \Twig_Extension
     }
 
     /**
-     * @param array $blockParameters
-     * @param array $baseSubQuery
+     * @param array   $blockParameters
+     * @param boolean $blockPrivate
+     * @param array   $baseSubQuery
      *
      * @return array
      */
-    public function generateSubQuery(array $blockParameters, array $baseSubQuery)
+    public function generateSubQuery(array $blockParameters, $blockPrivate, array $baseSubQuery)
     {
-        return $this->subQueryGeneratorManager->generate($blockParameters, $baseSubQuery);
+        return $this->subQueryGeneratorManager->generate($blockParameters, $blockPrivate, $baseSubQuery);
     }
 
     /**

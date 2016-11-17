@@ -6,9 +6,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * This is the class that validates and merges configuration from your app/config files
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
+ * Class Configuration
  */
 class Configuration implements ConfigurationInterface
 {
@@ -31,10 +29,42 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
+            ->append($this->addTemplateSetConfiguration())
             ->scalarNode('device_type_field')->defaultValue('x-ua-device')->end()
             ->enumNode('routing_type')->values(array('file', 'database'))->defaultValue('database')->end()
         ->end();
 
         return $treeBuilder;
+    }
+
+    /**
+     * @return \Symfony\Component\Config\Definition\Builder\NodeDefinition
+     */
+    public function addTemplateSetConfiguration()
+    {
+        $builder = new TreeBuilder();
+        $templateSet = $builder->root('template_set');
+
+        $templateSet
+            ->info('Array of template set to describe a template. Used to render a node')
+            ->useAttributeAsKey('name')
+            ->prototype('array')
+                ->children()
+                    ->arrayNode('templates')
+                        ->useAttributeAsKey('name')
+                        ->prototype('scalar')->end()
+                    ->end()
+                ->end()
+            ->end();
+
+        $templateSet->defaultValue(array(
+            'default'=>array(
+                'templates' => array(
+                    'default' => 'OpenOrchestraFrontBundle:Template:default.html.twig'
+                )
+            ),
+        ));
+
+        return $templateSet;
     }
 }

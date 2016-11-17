@@ -33,18 +33,19 @@ class SubQueryGeneratorManagerTest extends AbstractBaseTestCase
     /**
      * @param bool  $support
      * @param array $blockParameters
+     * @param bool  $blockPrivate
      * @param array $strategyResponse
      * @param array $baseSubQuery
      * @param array $expected
      *
      * @dataProvider provideGenerateData
      */
-    public function testGenerate($support, array $blockParameters, array $strategyResponse, array $baseSubQuery, array $expected)
+    public function testGenerate($support, array $blockParameters, $blockPrivate, array $strategyResponse, array $baseSubQuery, array $expected)
     {
         Phake::when($this->strategy)->support(Phake::anyParameters())->thenReturn($support);
         Phake::when($this->strategy)->generate(Phake::anyParameters())->thenReturn($strategyResponse);
 
-        $this->assertSame($expected, $this->manager->generate($blockParameters, $baseSubQuery));
+        $this->assertSame($expected, $this->manager->generate($blockParameters, $blockPrivate, $baseSubQuery));
     }
 
     /**
@@ -53,15 +54,16 @@ class SubQueryGeneratorManagerTest extends AbstractBaseTestCase
     public function provideGenerateData()
     {
         $fooBarArray = array('foo' => 'bar');
+        $fooBarArrayWithCache = array('foo' => 'bar', 'cache' => 'private');
 
         return array(
-            array(false, array(), array(), array(), array()),
-            array(true, array(), array(), array(), array()),
-            array(true, array('blockParameter' => array('foo')), $fooBarArray, array(), $fooBarArray),
-            array(true, array('blockParameter' => array('foo')), array(), $fooBarArray, $fooBarArray),
-            array(false, array('blockParameter' => array('foo')), $fooBarArray, array(), array()),
-            array(true, array('blockParameter' => array('foo')), $fooBarArray, array('foo' => 'foo'), $fooBarArray),
-            array(true, array('blockParameter' => array('foo', 'bar')), $fooBarArray, array('foo' => 'foo'), $fooBarArray),
+            array(false, array(), false, array(), array(), array()),
+            array(true, array(), false, array(), array(), array()),
+            array(true, array('foo'), false, $fooBarArray, array(), $fooBarArray),
+            array(true, array('foo'), false, array(), $fooBarArray, $fooBarArray),
+            array(false, array('foo'), false, $fooBarArray, array(), array()),
+            array(true, array('foo'), true, $fooBarArray, array('foo' => 'foo'), $fooBarArrayWithCache),
+            array(true, array('foo', 'bar'), true, $fooBarArray, array('foo' => 'foo'), $fooBarArrayWithCache),
         );
     }
 }

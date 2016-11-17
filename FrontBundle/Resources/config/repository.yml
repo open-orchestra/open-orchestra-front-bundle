@@ -1,9 +1,0 @@
-parameters:
-    open_orchestra_front.repository.block.class: OpenOrchestra\FrontBundle\Repository\BlockRepository
-
-services:
-    open_orchestra_front.repository.block:
-        class: '%open_orchestra_front.repository.block.class%'
-        arguments:
-            - '@open_orchestra_model.repository.node'
-            - '@open_orchestra_base.manager.encryption'

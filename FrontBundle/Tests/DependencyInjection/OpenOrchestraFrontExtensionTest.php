@@ -22,6 +22,14 @@ class OpenOrchestraFrontExtensionTest extends AbstractBaseTestCase
 
         $this->assertEquals(array(), $container->getParameter('open_orchestra_front.devices'));
         $this->assertEquals('x-ua-device', $container->getParameter('open_orchestra_front.device_type_field'));
+        $defaultTemplateSet = array(
+            'default'=>array(
+                'templates' => array(
+                    'default' => 'OpenOrchestraFrontBundle:Template:default.html.twig'
+                )
+            ),
+        );
+        $this->assertEquals($defaultTemplateSet, $container->getParameter('open_orchestra_front.template_set'));
     }
 
     /**
@@ -33,6 +41,14 @@ class OpenOrchestraFrontExtensionTest extends AbstractBaseTestCase
 
         $this->assertEquals(array("fake_name" => array("parent" => "fake_parent")), $container->getParameter('open_orchestra_front.devices'));
         $this->assertEquals('x-ua-fake', $container->getParameter('open_orchestra_front.device_type_field'));
+        $defaultTemplateSet = array(
+            'fake'=>array(
+                'templates' => array(
+                    'fake' => 'OpenOrchestraFrontBundle:Template:default.html.twig'
+                )
+            ),
+        );
+        $this->assertEquals($defaultTemplateSet, $container->getParameter('open_orchestra_front.template_set'));
     }
 
     /**
