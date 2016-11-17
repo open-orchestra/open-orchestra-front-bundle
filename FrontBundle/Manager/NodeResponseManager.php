@@ -2,7 +2,6 @@
 
 namespace OpenOrchestra\FrontBundle\Manager;
 
-use OpenOrchestra\ModelInterface\Repository\NodeRepositoryInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Model\AreaInterface;
 use OpenOrchestra\DisplayBundle\DisplayBlock\DisplayBlockManager;
