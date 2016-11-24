@@ -36,7 +36,7 @@ class RouteDocumentToValueObjectTransformer
     {
         $defaults = array_merge(array('_controller' => $this->logicalName), $routeDocument->getDefaults());
         return new Route(
-            $routeDocument->getPattern(),
+            rtrim($routeDocument->getPattern(), '/'),
             $defaults,
             $routeDocument->getRequirements(),
             $routeDocument->getOptions(),

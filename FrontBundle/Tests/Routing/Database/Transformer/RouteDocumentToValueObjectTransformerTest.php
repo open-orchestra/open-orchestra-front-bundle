@@ -36,10 +36,11 @@ class RouteDocumentToValueObjectTransformerTest extends AbstractBaseTestCase
 
     /**
      * @param string $pattern
+     * @param string $expectedRoutePath
      *
      * @dataProvider provideRouteDocumentParameters
      */
-    public function testTransform($pattern)
+    public function testTransform($pattern, $expectedRoutePath)
     {
         $routeDocument = Phake::mock('OpenOrchestra\ModelInterface\Model\RouteDocumentInterface');
         Phake::when($routeDocument)->getPattern()->thenReturn($pattern);
@@ -50,7 +51,7 @@ class RouteDocumentToValueObjectTransformerTest extends AbstractBaseTestCase
         $route = $this->transformer->transform($routeDocument);
 
         $this->assertInstanceOf('Symfony\Component\Routing\Route', $route);
-        $this->assertSame($pattern, $route->getPath());
+        $this->assertSame($expectedRoutePath, $route->getPath());
         Phake::verify($routeDocument)->getPattern();
         Phake::verify($routeDocument)->getDefaults();
         Phake::verify($routeDocument)->getRequirements();
@@ -67,7 +68,8 @@ class RouteDocumentToValueObjectTransformerTest extends AbstractBaseTestCase
     public function provideRouteDocumentParameters()
     {
         return array(
-            array('/foo'),
+            'With trailing slash' => array('/foo/', '/foo'),
+            'Without trailing slash' =>array('/bar', '/bar'),
         );
     }
 
