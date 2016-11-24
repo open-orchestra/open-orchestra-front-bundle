@@ -28,8 +28,7 @@ class OpenOrchestraDatabaseUrlMatcher extends UrlMatcher
         RequestContext $context,
         RouteDocumentCollectionToRouteCollectionTransformer $routeCollectionTransformer,
         RouteDocumentRepositoryInterface $routeRepository
-    )
-    {
+    ){
         $this->context = $context;
         $this->routeCollectionTransformer = $routeCollectionTransformer;
         $this->routeRepository = $routeRepository;
@@ -49,9 +48,13 @@ class OpenOrchestraDatabaseUrlMatcher extends UrlMatcher
     {
         $this->allow = array();
 
+        $pathinfo = rtrim(rawurldecode($pathinfo), '/');
         $routeCollection = $this->routeCollectionTransformer->transform($this->routeRepository->findByPathInfo($pathinfo));
 
-        if ($ret = $this->matchCollection(rawurldecode($pathinfo), $routeCollection)) {
+        if ('' == $pathinfo) {
+            $pathinfo = '/';
+        }
+        if ($ret = $this->matchCollection($pathinfo, $routeCollection)) {
             return $ret;
         }
 
