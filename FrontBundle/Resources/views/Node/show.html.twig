@@ -9,7 +9,9 @@
         <script src="{{ asset('/bundles/openorchestradisplay/requireConf.js') }}"></script>
         <meta name="robots" content="{{- node.metaFollow ? 'follow': 'nofollow' -}},{{- node.metaIndex ? 'index': 'noindex' -}}">
         <meta name="description" content="{{ node.metaDescription }}">
-        <meta name="keywords" content="{{ node.metaKeywords }}">
+        {% if node.canonicalPage is defined %}
+            <link rel="canonical" href="{{ url_node(node.canonicalPage) }}" />
+        {% endif %}
     </head>
     <body>
 
