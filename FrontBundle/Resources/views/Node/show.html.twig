@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{% block title %}{{ node.name }}{% endblock %}</title>
+        {% if not node.seoTitle is null %}
+            <title>{% block title %}{{ node.seoTitle }}{% endblock %}</title>
+        {% endif %}
         {% block stylesheets %}
             {{ openOrchestraCss(node.theme) }}
         {% endblock %}
@@ -9,7 +11,7 @@
         <script src="{{ asset('/bundles/openorchestradisplay/requireConf.js') }}"></script>
         <meta name="robots" content="{{- node.metaFollow ? 'follow': 'nofollow' -}},{{- node.metaIndex ? 'index': 'noindex' -}}">
         <meta name="description" content="{{ node.metaDescription }}">
-        {% if node.canonicalPage is defined %}
+        {% if not node.canonicalPage is null %}
             <link rel="canonical" href="{{ url_node(node.canonicalPage) }}" />
         {% endif %}
     </head>
