@@ -39,14 +39,6 @@ class NodeController extends Controller
             throw new NonExistingNodeException();
         }
 
-        if (
-            !is_null($node->getRole())
-            && !$this->get('security.authorization_checker')->isGranted($node->getRole())
-        ) {
-
-            return $this->redirect($this->get('request')->getBaseUrl());
-        }
-
         $response = $this->renderNode($node);
 
         return $this->updateNodeResponse($response, $node, $request);
