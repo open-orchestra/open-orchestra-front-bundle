@@ -96,22 +96,20 @@ class SitemapManager
     {
         $nodeInfos = array();
 
-        if (is_null($node->getRole())) {
-            try {
-                $nodeInfos = array(
-                    'loc' => $this->router->generate(
-                        $site->getMainAliasId() . '_' . $node->getId(),
-                        array(),
-                        UrlGeneratorInterface::ABSOLUTE_URL
-                    ),
-                    'lastmod' => $this->getLastModificationDate($node),
-                    'changefreq' => $this->getChangeFrequency($node, $site),
-                    'priority' => $this->getPriority($node, $site)
-                );
-            } catch (MissingMandatoryParametersException $e) {
+        try {
+            $nodeInfos = array(
+                'loc' => $this->router->generate(
+                    $site->getMainAliasId() . '_' . $node->getId(),
+                    array(),
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                ),
+                'lastmod' => $this->getLastModificationDate($node),
+                'changefreq' => $this->getChangeFrequency($node, $site),
+                'priority' => $this->getPriority($node, $site)
+            );
+        } catch (MissingMandatoryParametersException $e) {
 
-            }
-         }
+        }
 
         return $nodeInfos;
     }
