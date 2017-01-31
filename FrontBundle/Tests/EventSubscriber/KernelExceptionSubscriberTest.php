@@ -101,7 +101,7 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
     public function testOnKernelException($status, ReadNodeInterface $node = null, $expectedResponseCount, $expectedSiteFinding)
     {
         Phake::when($this->exception)->getStatusCode()->thenReturn($status);
-        Phake::when($this->nodeRepository)->findOneCurrentlyPublished(Phake::anyParameters())->thenReturn($node);
+        Phake::when($this->nodeRepository)->findOnePublished(Phake::anyParameters())->thenReturn($node);
         if ($expectedResponseCount) {
             Phake::when($this->currentSiteManager)->getCurrentSiteId()->thenReturn($this->currentSiteId);
             Phake::when($this->currentSiteManager)->getCurrentSiteDefaultLanguage()->thenReturn($this->currentLanguage);

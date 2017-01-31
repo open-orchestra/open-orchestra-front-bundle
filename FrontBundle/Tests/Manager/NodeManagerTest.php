@@ -48,7 +48,7 @@ class NodeManagerTest extends AbstractBaseTestCase
         $node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
         Phake::when($node)->getId()->thenReturn($mongoNodeId);
         Phake::when($this->nodeRepository)
-            ->findOneCurrentlyPublished(Phake::anyParameters())
+            ->findOnePublished(Phake::anyParameters())
             ->thenReturn($node);
 
         $site = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadSiteInterface');

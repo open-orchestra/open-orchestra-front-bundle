@@ -144,7 +144,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
         }
 
         $nodeId = ReadNodeInterface::ERROR_404_NODE_ID;
-        $node = $this->nodeRepository->findOneCurrentlyPublished(
+        $node = $this->nodeRepository->findOnePublished(
             $nodeId,
             $this->currentSiteManager->getCurrentSiteDefaultLanguage(),
             $this->currentSiteManager->getCurrentSiteId()

@@ -54,7 +54,7 @@ class ErrorPagesManager
         $filenames = array();
         $errorNodes = array();
 
-        $nodeCollection = $this->nodeRepository->findAllNodesOfTypeInLastPublishedVersionForSite(ReadNodeInterface::TYPE_ERROR, $site->getSiteId());
+        $nodeCollection = $this->nodeRepository->findPublishedByType($site->getSiteId(), ReadNodeInterface::TYPE_ERROR);
         foreach ($nodeCollection as $translatedError) {
             $errorNodes[$translatedError->getLanguage()][$translatedError->getNodeId()] = $translatedError;
         }

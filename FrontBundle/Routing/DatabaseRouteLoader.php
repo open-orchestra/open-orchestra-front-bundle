@@ -130,7 +130,7 @@ class DatabaseRouteLoader extends Loader
     protected function initializeNodes($language, ReadSiteInterface $site)
     {
         $this->orderedNodes = array();
-        $nodes = $this->nodeRepository->findCurrentlyPublishedVersion($language, $site->getSiteId());
+        $nodes = $this->nodeRepository->findOnePublishedByLanguageAndSiteId($language, $site->getSiteId());
         $this->orderNodes($nodes);
 
         return $nodes;

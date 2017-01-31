@@ -67,7 +67,7 @@ class RoutingNodeExtensionTest extends AbstractBaseTestCase
         $nodeId = 'nodeId';
         $node = Phake::mock(ReadNodeInterface::class);
         Phake::when($node)->getId()->thenReturn($id);
-        Phake::when($this->nodeRepository)->findOneCurrentlyPublished(Phake::anyParameters())->thenReturn($node);
+        Phake::when($this->nodeRepository)->findOnePublished(Phake::anyParameters())->thenReturn($node);
 
         $this->extension->getPathNode($nodeId);
 
@@ -80,7 +80,7 @@ class RoutingNodeExtensionTest extends AbstractBaseTestCase
     public function testGetPathNodeException()
     {
         $nodeId = 'nodeId';
-        Phake::when($this->nodeRepository)->findOneCurrentlyPublished(Phake::anyParameters())->thenReturn(null);
+        Phake::when($this->nodeRepository)->findOnePublished(Phake::anyParameters())->thenReturn(null);
 
         $this->expectException(NodeNotFoundException::class);
         $this->extension->getPathNode($nodeId);
@@ -95,7 +95,7 @@ class RoutingNodeExtensionTest extends AbstractBaseTestCase
         $nodeId = 'nodeId';
         $node = Phake::mock(ReadNodeInterface::class);
         Phake::when($node)->getId()->thenReturn($id);
-        Phake::when($this->nodeRepository)->findOneCurrentlyPublished(Phake::anyParameters())->thenReturn($node);
+        Phake::when($this->nodeRepository)->findOnePublished(Phake::anyParameters())->thenReturn($node);
 
         $this->extension->getUrlNode($nodeId);
 
@@ -108,7 +108,7 @@ class RoutingNodeExtensionTest extends AbstractBaseTestCase
     public function testGetUrlNodeException()
     {
         $nodeId = 'nodeId';
-        Phake::when($this->nodeRepository)->findOneCurrentlyPublished(Phake::anyParameters())->thenReturn(null);
+        Phake::when($this->nodeRepository)->findOnePublished(Phake::anyParameters())->thenReturn(null);
 
         $this->expectException(NodeNotFoundException::class);
         $this->extension->getUrlNode($nodeId);
