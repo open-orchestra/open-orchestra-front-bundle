@@ -44,7 +44,7 @@ class SitemapManagerTest extends AbstractBaseTestCase
         Phake::when($this->node)->getSitemapPriority()->thenReturn($this->priority);
         $this->nodeCollection = new ArrayCollection();
         $this->nodeCollection->add($this->node);
-        Phake::when($this->nodeRepository)->findOnePublishedByLanguageAndSiteId(Phake::anyParameters())->thenReturn($this->nodeCollection);
+        Phake::when($this->nodeRepository)->findPublishedByLanguageAndSiteId(Phake::anyParameters())->thenReturn($this->nodeCollection);
 
         $this->router = Phake::mock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         Phake::when($this->router)->generate(Phake::anyParameters())->thenReturn($this->domain.'/'.$this->prefix);
