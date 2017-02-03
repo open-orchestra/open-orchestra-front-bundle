@@ -80,7 +80,7 @@ class RoutingNodeExtension extends RoutingExtension
     {
         $language = $this->siteManager->getCurrentSiteDefaultLanguage();
         $siteId = $this->siteManager->getCurrentSiteId();
-        $node = $this->nodeRepository->findOneCurrentlyPublished($nodeId, $language, $siteId);
+        $node = $this->nodeRepository->findOnePublished($nodeId, $language, $siteId);
 
         if (!$node instanceof ReadNodeInterface) {
             throw new NodeNotFoundException();

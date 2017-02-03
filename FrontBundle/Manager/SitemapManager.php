@@ -72,7 +72,7 @@ class SitemapManager
     protected function getSitemapNodesFromSite(ReadSiteInterface $site)
     {
         $nodes = array();
-        $nodesCollection = $this->nodeRepository->findCurrentlyPublishedVersion($site->getMainAlias()->getLanguage(), $site->getSiteId());
+        $nodesCollection = $this->nodeRepository->findPublishedByLanguageAndSiteId($site->getMainAlias()->getLanguage(), $site->getSiteId());
 
         if ($nodesCollection) {
             /** @var ReadNodeInterface $node */

@@ -100,7 +100,7 @@ class RedirectionLoaderTest extends AbstractBaseTestCase
         Phake::when($node)->getId()->thenReturn($nodeMongoId);
         Phake::when($node)->getLanguage()->thenReturn($this->localeFr);
 
-        Phake::when($this->nodeRepository)->findOneCurrentlyPublished($nodeId, $this->localeFr, $siteId)->thenReturn($node);
+        Phake::when($this->nodeRepository)->findOnePublished($nodeId, $this->localeFr, $siteId)->thenReturn($node);
 
         $routes = $this->loader->load($this->resource);
 
@@ -133,7 +133,7 @@ class RedirectionLoaderTest extends AbstractBaseTestCase
         Phake::when($node)->getId()->thenReturn($nodeMongoId);
         Phake::when($node)->getLanguage()->thenReturn($this->localeFr);
 
-        Phake::when($this->nodeRepository)->findOneCurrentlyPublished($nodeId, $this->localeFr, $siteId)->thenReturn(null);
+        Phake::when($this->nodeRepository)->findOnePublished($nodeId, $this->localeFr, $siteId)->thenReturn(null);
 
         $routes = $this->loader->load($this->resource);
 
