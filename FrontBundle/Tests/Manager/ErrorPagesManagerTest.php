@@ -35,7 +35,7 @@ class ErrorPagesManagerTest extends AbstractBaseTestCase
         
         $this->nodeCollection = new ArrayCollection();
         $this->nodeCollection->add($this->node);
-        Phake::when($this->nodeRepository)->findAllNodesOfTypeInLastPublishedVersionForSite(Phake::anyParameters())->thenReturn($this->nodeCollection);
+        Phake::when($this->nodeRepository)->findPublishedByType(Phake::anyParameters())->thenReturn($this->nodeCollection);
 
         $this->filesystem = Phake::mock('Symfony\Component\Filesystem\Filesystem');
         $this->router = Phake::mock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
