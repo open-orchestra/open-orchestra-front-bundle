@@ -8,6 +8,8 @@ parameters:
 services:
     open_orchestra_front.sub_query.manager:
         class: '%open_orchestra_front.sub_query.manager.class%'
+        arguments:
+            - '@open_orchestra_display.display_block_manager'
 
     open_orchestra_front.sub_query.request:
         class: '%open_orchestra_front.sub_query.request.class%'

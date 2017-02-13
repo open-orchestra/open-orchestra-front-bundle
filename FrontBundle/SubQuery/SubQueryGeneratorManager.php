@@ -2,11 +2,24 @@
 
 namespace OpenOrchestra\FrontBundle\SubQuery;
 
+use OpenOrchestra\DisplayBundle\DisplayBlock\DisplayBlockManager;
+use OpenOrchestra\ModelInterface\Model\ReadBlockInterface;
+
 /**
  * Class SubQueryGeneratorManager
  */
 class SubQueryGeneratorManager
 {
+    protected $displayBlockManager;
+
+    /**
+     * @param DisplayBlockManager $displayBlockManager
+     */
+    public function __construct(DisplayBlockManager $displayBlockManager)
+    {
+        $this->displayBlockManager = $displayBlockManager;
+    }
+
     protected $strategies = array();
 
     /**
@@ -18,15 +31,17 @@ class SubQueryGeneratorManager
     }
 
     /**
-     * @param array   $blockParameters
-     * @param boolean $blockPrivate
-     * @param array   $baseSubQuery
+     * @param ReadBlockInterface $block
+     * @param array              $baseSubQuery
      *
      * @return array
      */
-    public function generate(array $blockParameters, $blockPrivate, array $baseSubQuery)
+    public function generate(ReadBlockInterface $block, array $baseSubQuery)
     {
+        $blockPrivate = !$this->displayBlockManager->isPublic($block);
+        $blockParameters = $this->displayBlockManager->getBlockParameter($block);
         $subQuery = array_merge($baseSubQuery, $this->generateSubQueryCache($blockPrivate));
+
         if (!empty($blockParameters)) {
             /** @var SubQueryGeneratorInterface $strategy */
             foreach ($this->strategies as $strategy) {
