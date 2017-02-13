@@ -58,10 +58,10 @@ class SubQueryGeneratorExtensionTest extends AbstractBaseTestCase
     public function testGenerateSubQuery()
     {
         $subQuery = array('foo' => 'bar');
-        $blockPrivate = false;
+        $block = Phake::mock('OpenOrchestra\ModelInterface\Model\BlockInterface');
         Phake::when($this->manager)->generate(Phake::anyParameters())->thenReturn($subQuery);
 
-        $this->assertSame($subQuery, $this->extension->generateSubQuery(array('foo'), $blockPrivate, array('bar')));
-        Phake::verify($this->manager)->generate(array('foo'), $blockPrivate, array('bar'));
+        $this->assertSame($subQuery, $this->extension->generateSubQuery($block, array('bar')));
+        Phake::verify($this->manager)->generate($block, array('bar'));
     }
 }

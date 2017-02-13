@@ -17,16 +17,18 @@ class SubQueryGeneratorManagerTest extends AbstractBaseTestCase
     protected $manager;
 
     protected $strategy;
+    protected $displayBlockManager;
 
     /**
      * Set up the test
      */
     public function setUp()
     {
+        $this->displayBlockManager = Phake::mock('OpenOrchestra\DisplayBundle\DisplayBlock\DisplayBlockManager');
         $this->strategy = Phake::mock('OpenOrchestra\FrontBundle\SubQuery\SubQueryGeneratorInterface');
         Phake::when($this->strategy)->getName()->thenReturn('foo');
 
-        $this->manager = new SubQueryGeneratorManager();
+        $this->manager = new SubQueryGeneratorManager($this->displayBlockManager);
         $this->manager->addStrategy($this->strategy);
     }
 
@@ -44,8 +46,11 @@ class SubQueryGeneratorManagerTest extends AbstractBaseTestCase
     {
         Phake::when($this->strategy)->support(Phake::anyParameters())->thenReturn($support);
         Phake::when($this->strategy)->generate(Phake::anyParameters())->thenReturn($strategyResponse);
+        $block = Phake::mock('OpenOrchestra\ModelInterface\Model\BlockInterface');
+        Phake::when($this->displayBlockManager)->isPublic($block)->thenReturn(!$blockPrivate);
+        Phake::when($this->displayBlockManager)->getBlockParameter($block)->thenReturn($blockParameters);
 
-        $this->assertSame($expected, $this->manager->generate($blockParameters, $blockPrivate, $baseSubQuery));
+        $this->assertSame($expected, $this->manager->generate($block, $baseSubQuery));
     }
 
     /**
