@@ -20,6 +20,7 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
 
     protected $siteRepository;
     protected $currentSiteManager;
+    protected $templateManager;
     protected $site;
     protected $mainAlias;
     protected $nodeRepository;
@@ -46,6 +47,7 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
         Phake::when($this->site)->getAliases()->thenReturn(array($this->currentAliasId => $this->mainAlias));
         $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface');
         Phake::when($this->siteRepository)->findByAliasDomain(Phake::anyParameters())->thenReturn(array($this->site));
+        Phake::when($this->siteRepository)->findOneBySiteId(Phake::anyParameters())->thenReturn($this->site);
 
         $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface');
         $this->templating = Phake::mock('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface');
@@ -63,13 +65,15 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
         Phake::when($this->event)->getException()->thenReturn($this->exception);
 
         $this->currentSiteManager = Phake::mock('OpenOrchestra\DisplayBundle\Manager\SiteManager');
+        $this->templateManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\TemplateManager');
 
         $this->subscriber = new KernelExceptionSubscriber(
             $this->siteRepository,
             $this->nodeRepository,
             $this->templating,
             $this->requestStack,
-            $this->currentSiteManager
+            $this->currentSiteManager,
+            $this->templateManager
         );
     }
 
@@ -145,7 +149,7 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
         Phake::when($this->siteRepository)->findByAliasDomain(Phake::anyParameters())->thenReturn(array());
 
         if ($expectedException) {
-            $this->setExpectedException('OpenOrchestra\FrontBundle\Exception\NonExistingSiteException');
+            $this->expectException('OpenOrchestra\FrontBundle\Exception\NonExistingSiteException');
         }
 
         $this->subscriber->onKernelException($this->event);
@@ -156,8 +160,6 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
      */
     public function getErrorContextWithException()
     {
-        $node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
-
         return array(
             'Error 404' => array('404', true),
             'Error 500' => array('500', false),

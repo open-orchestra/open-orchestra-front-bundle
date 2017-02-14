@@ -3,6 +3,7 @@
 namespace OpenOrchestra\FrontBundle\EventSubscriber;
 
 use OpenOrchestra\FrontBundle\Exception\DisplayBlockException;
+use OpenOrchestra\FrontBundle\Manager\TemplateManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
@@ -27,6 +28,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
     protected $templating;
     protected $request;
     protected $currentSiteManager;
+    protected $templateManager;
 
     /**
      * @param ReadSiteRepositoryInterface $siteRepository
@@ -34,19 +36,22 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      * @param EngineInterface             $templating
      * @param RequestStack                $requestStack
      * @param SiteManager                 $currentSiteManager
+     * @param TemplateManager             $templateManager
      */
     public function __construct(
         ReadSiteRepositoryInterface $siteRepository,
         ReadNodeRepositoryInterface $nodeRepository,
         EngineInterface $templating,
         RequestStack $requestStack,
-        SiteManager $currentSiteManager
+        SiteManager $currentSiteManager,
+        TemplateManager $templateManager
     ) {
         $this->siteRepository = $siteRepository;
         $this->nodeRepository = $nodeRepository;
         $this->templating = $templating;
         $this->request = $requestStack->getMasterRequest();
         $this->currentSiteManager = $currentSiteManager;
+        $this->templateManager = $templateManager;
     }
 
     /**
@@ -156,12 +161,28 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
                 'OpenOrchestraFrontBundle:Node:show.html.twig',
                 array(
                     'node' => $node,
+                    'template' => $this->getTemplate($node),
                     'parameters' => array('siteId' => $node->getSiteId(), '_locale' => $node->getLanguage())
                 )
             );
         }
 
         return null;
+    }
+
+    /**
+     * @param ReadNodeInterface $node
+     *
+     * @return string
+     * @throws \OpenOrchestra\FrontBundle\Exception\NonExistingTemplateException
+     */
+    protected function getTemplate(ReadNodeInterface $node) {
+        $site = $this->siteRepository->findOneBySiteId($node->getSiteId());
+
+        $template = $node->getTemplate();
+        $templateSet = $site->getTemplateSet();
+
+        return $this->templateManager->getTemplate($template, $templateSet);
     }
 
     /**

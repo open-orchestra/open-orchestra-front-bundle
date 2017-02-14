@@ -2,15 +2,17 @@
 
 namespace OpenOrchestra\FrontBundle\Twig;
 
+use Symfony\Component\HttpFoundation\RequestStack;
+
 /**
  * trait Renderable
  */
 trait Renderable
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var RequestStack
      */
-    protected $request;
+    protected $requestStack;
 
     /**
      * @var array
@@ -30,7 +32,7 @@ trait Renderable
      */
     public function render($name, array $parameters = array())
     {
-        $device = $this->request->get($this->deviceTypeField);
+        $device = $this->requestStack->getMasterRequest()->get($this->deviceTypeField);
 
         if (!is_null($device) && '' !== $device) {
             $name = $this->getTemplate($name, $device);
