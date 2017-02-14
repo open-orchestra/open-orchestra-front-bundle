@@ -1,0 +1,25 @@
+/** Css used by template in template set default **/
+
+/* ===================================================================
+ * Style available
+ * =================================================================*/
+.col-33 {display: inline-block; width: 33%;}
+
+.col-30 {display: inline-block; width: 30%;}
+
+.col-55 {display: inline-block; width: 55%;}
+
+.col-70 {display: inline-block; width: 70%;}
+
+
+/* ===================================================================
+ * HEADER
+ * =================================================================*/
+.header ul {
+    display: inline-block;
+    list-style: none;
+}
+
+.header ul  li  a{
+    display: inline-block;
+}

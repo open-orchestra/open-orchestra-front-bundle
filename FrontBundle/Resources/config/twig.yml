@@ -3,6 +3,8 @@ parameters:
     open_orchestra_front.extension.sub_query.class: OpenOrchestra\FrontBundle\Twig\SubQueryGeneratorExtension
     open_orchestra_front.extension.routing_node.class: OpenOrchestra\FrontBundle\Twig\RoutingNodeExtension
     open_orchestra_front.extension.render_area.class: OpenOrchestra\FrontBundle\Twig\RenderAreaExtension
+    open_orchestra_front.extension.create_block.class: OpenOrchestra\FrontBundle\Twig\CreateBlockExtension
+    open_orchestra_front.extension.get_special_page.class: OpenOrchestra\FrontBundle\Twig\GetSpecialPageExtension
 
 services:
     open_orchestra_front.twig.orchestra_twig_engine:
@@ -30,5 +32,20 @@ services:
             - { name: twig.extension }
     open_orchestra_front.extension.render_area:
         class: '%open_orchestra_front.extension.render_area.class%'
+        tags:
+            - { name: twig.extension }
+    open_orchestra_front.extension.create_block:
+        class: '%open_orchestra_front.extension.create_block.class%'
+        arguments:
+            - '%open_orchestra_model.document.block.class%'
+            - '@open_orchestra_display.display_block_manager'
+            - '@open_orchestra_display.manager.site'
+        tags:
+            - { name: twig.extension }
+    open_orchestra_front.extension.get_special_page:
+        class: '%open_orchestra_front.extension.get_special_page.class%'
+        arguments:
+            - '@open_orchestra_model.repository.node'
+            - '@open_orchestra_display.manager.site'
         tags:
             - { name: twig.extension }

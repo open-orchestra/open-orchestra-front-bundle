@@ -32,9 +32,37 @@ class BlockController extends Controller
     {
         try {
             $block = $this->get('open_orchestra_model.repository.block')->findById($blockId);
-            $hasEsi = $this->has('esi') && $this->get('esi')->hasSurrogateCapability($request);
 
-            $response = $this->get('open_orchestra_display.display_block_manager')->show($block, $hasEsi);
+            $response = $this->get('open_orchestra_display.display_block_manager')->show($block);
+            $this->tagResponse($block, $nodeId, $siteId, $request->getLocale());
+
+            return $response;
+        } catch (\Exception $e) {
+            throw new DisplayBlockException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+
+    /**
+     * Display a virtual block
+     *
+     * @param Request $request
+     * @param string  $siteId
+     * @param string  $nodeId
+     * @param string  $blockId
+     *
+     * @Config\Route("/block/{siteId}/{nodeId}/{blockId}/{_locale}", name="open_orchestra_front_block")
+     * @Config\Method({"GET", "POST"})
+     *
+     * @throws DisplayBlockException
+     * @return Response
+     */
+    public function showVirtualAction(Request $request, $siteId, $nodeId, $blockId)
+    {
+        try {
+            $block = $this->get('open_orchestra_model.repository.block')->findById($blockId);
+
+            $response = $this->get('open_orchestra_display.display_block_manager')->show($block);
             $this->tagResponse($block, $nodeId, $siteId, $request->getLocale());
 
             return $response;

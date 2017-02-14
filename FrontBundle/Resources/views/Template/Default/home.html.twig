@@ -1,0 +1,13 @@
+{% extends 'OpenOrchestraFrontBundle:Template/Default:base_default.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% include 'OpenOrchestraFrontBundle:Template/Default:_header.html.twig' %}
+
+        <main class="row">
+            {{ render_area('main', node, {'parameters': parameters }) }}
+        </main>
+
+        {% include 'OpenOrchestraFrontBundle:Template/Default:_footer.html.twig' %}
+    </div>
+{% endblock %}

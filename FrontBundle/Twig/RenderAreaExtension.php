@@ -1,10 +1,10 @@
 <?php
 
 namespace OpenOrchestra\FrontBundle\Twig;
+
 use OpenOrchestra\FrontBundle\Exception\NonExistingAreaException;
 use OpenOrchestra\ModelInterface\Model\ReadAreaInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
-
 
 /**
  * Class RenderAreaExtension

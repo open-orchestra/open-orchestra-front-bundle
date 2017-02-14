@@ -1,0 +1,26 @@
+{% extends 'OpenOrchestraFrontBundle:Template/Default:base_default.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% include 'OpenOrchestraFrontBundle:Template/Default:_header.html.twig' %}
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="row">
+                    {{ create_block('menu') }}
+                </div>
+                <div class="row">
+                    {{ render_area('left_column', node, {'parameters': parameters }) }}
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="row">
+                    {{ render_area('main', node, {'parameters': parameters }) }}
+                </div>
+            </div>
+        </div>
+
+        {% include 'OpenOrchestraFrontBundle:Template/Default:_footer.html.twig' %}
+
+    </div>
+{% endblock %}
