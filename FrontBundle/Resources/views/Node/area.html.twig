@@ -1,4 +1,4 @@
 {% for block in area.blocks %}
-    {% set queryParams = generate_subquery(block.parameter, block.private, parameters|merge({'blockId': block.id, 'nodeId': nodeId, 'siteId': siteId, '_locale': _locale})) %}
+    {% set queryParams = generate_subquery(block, parameters|merge({'blockId': block.id, 'nodeId': nodeId, 'siteId': siteId, '_locale': _locale})) %}
     {{ render_esi(url('open_orchestra_front_block', queryParams)) }}
 {% endfor %}

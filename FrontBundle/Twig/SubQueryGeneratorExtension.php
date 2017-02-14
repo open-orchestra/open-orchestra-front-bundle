@@ -3,6 +3,8 @@
 namespace OpenOrchestra\FrontBundle\Twig;
 
 use OpenOrchestra\FrontBundle\SubQuery\SubQueryGeneratorManager;
+use OpenOrchestra\ModelInterface\Model\BlockInterface;
+use OpenOrchestra\ModelInterface\Model\ReadBlockInterface;
 
 /**
  * Class SubQueryGeneratorExtension
@@ -30,15 +32,14 @@ class SubQueryGeneratorExtension extends \Twig_Extension
     }
 
     /**
-     * @param array   $blockParameters
-     * @param boolean $blockPrivate
-     * @param array   $baseSubQuery
+     * @param ReadBlockInterface $block
+     * @param array              $baseSubQuery
      *
      * @return array
      */
-    public function generateSubQuery(array $blockParameters, $blockPrivate, array $baseSubQuery)
+    public function generateSubQuery(ReadBlockInterface $block, array $baseSubQuery)
     {
-        return $this->subQueryGeneratorManager->generate($blockParameters, $blockPrivate, $baseSubQuery);
+        return $this->subQueryGeneratorManager->generate($block, $baseSubQuery);
     }
 
     /**
