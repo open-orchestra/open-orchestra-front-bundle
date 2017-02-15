@@ -71,12 +71,12 @@ class GetSpecialPageExtensionTest extends AbstractBaseTestCase
         $specialPage2 = Phake::mock(ReadNodeInterface::class);
         Phake::when($specialPage2)->getSpecialPageName()->thenReturn($specialPageName2);
         $specialPages = array($specialPage1, $specialPage2);
-        Phake::when($this->nodeRepository)->findPublishedSpecialPage(Phake::anyParameters())->thenReturn($specialPages);
+        Phake::when($this->nodeRepository)->findAllPublishedSpecialPage(Phake::anyParameters())->thenReturn($specialPages);
 
         $specialPage1Expected = $this->extension->getSpecialPage($this->twigEnvironment, $specialPageName1);
         $specialPage2Expected = $this->extension->getSpecialPage($this->twigEnvironment, $specialPageName2);
 
-        Phake::verify($this->nodeRepository, Phake::times(1))->findPublishedSpecialPage(Phake::anyParameters());
+        Phake::verify($this->nodeRepository, Phake::times(1))->findAllPublishedSpecialPage(Phake::anyParameters());
         $this->assertSame($specialPage1Expected, $specialPage1);
         $this->assertSame($specialPage2Expected, $specialPage2);
     }
