@@ -70,7 +70,7 @@ class GetSpecialPageExtension extends \Twig_Extension
     {
         $language = $this->siteManager->getCurrentSiteDefaultLanguage();
         $siteId = $this->siteManager->getCurrentSiteId();
-        $this->specialPages = $this->nodeRepository->findPublishedSpecialPage($language, $siteId);
+        $this->specialPages = $this->nodeRepository->findAllPublishedSpecialPage($language, $siteId);
     }
 
     /**
