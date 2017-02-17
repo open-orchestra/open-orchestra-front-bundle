@@ -118,7 +118,6 @@ class NodeController extends Controller
             $this->getTemplate($node),
             array(
                 'node' => $node,
-                'template' => $this->getTemplate($node),
                 'parameters' => $parameters,
             )
         );

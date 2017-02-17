@@ -18,8 +18,8 @@ services:
             - '%open_orchestra_front.device_type_field%'
     open_orchestra_front.extension.sub_query:
         class: '%open_orchestra_front.extension.sub_query.class%'
-        arguments:
-            - '@open_orchestra_front.sub_query.manager'
+        calls:
+            - [ setContainer,[ '@service_container' ] ]
         tags:
             - { name: twig.extension }
     open_orchestra_front.extension.routing_node:
@@ -36,10 +36,8 @@ services:
             - { name: twig.extension }
     open_orchestra_front.extension.create_block:
         class: '%open_orchestra_front.extension.create_block.class%'
-        arguments:
-            - '%open_orchestra_model.document.block.class%'
-            - '@open_orchestra_display.display_block_manager'
-            - '@open_orchestra_display.manager.site'
+        calls:
+            - [ setContainer,[ '@service_container' ] ]
         tags:
             - { name: twig.extension }
     open_orchestra_front.extension.get_special_page:

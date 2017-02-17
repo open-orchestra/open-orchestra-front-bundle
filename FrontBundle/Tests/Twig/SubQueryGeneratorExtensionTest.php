@@ -24,8 +24,11 @@ class SubQueryGeneratorExtensionTest extends AbstractBaseTestCase
     public function setUp()
     {
         $this->manager = Phake::mock('OpenOrchestra\FrontBundle\SubQuery\SubQueryGeneratorManager');
+        $container = Phake::mock('Symfony\Component\DependencyInjection\Container');
+        Phake::when($container)->get('open_orchestra_front.sub_query.manager')->thenReturn($this->manager);
 
-        $this->extension = new SubQueryGeneratorExtension($this->manager);
+        $this->extension = new SubQueryGeneratorExtension();
+        $this->extension->setContainer($container);
     }
 
     /**
