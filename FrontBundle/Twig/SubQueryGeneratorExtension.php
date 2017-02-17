@@ -2,23 +2,16 @@
 
 namespace OpenOrchestra\FrontBundle\Twig;
 
-use OpenOrchestra\FrontBundle\SubQuery\SubQueryGeneratorManager;
 use OpenOrchestra\ModelInterface\Model\ReadBlockInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Class SubQueryGeneratorExtension
  */
-class SubQueryGeneratorExtension extends \Twig_Extension
+class SubQueryGeneratorExtension extends \Twig_Extension implements ContainerAwareInterface
 {
-    protected $subQueryGeneratorManager;
-
-    /**
-     * @param SubQueryGeneratorManager $subQueryGeneratorManager
-     */
-    public function __construct(SubQueryGeneratorManager $subQueryGeneratorManager)
-    {
-        $this->subQueryGeneratorManager = $subQueryGeneratorManager;
-    }
+    use ContainerAwareTrait;
 
     /**
      * @return array
@@ -38,7 +31,9 @@ class SubQueryGeneratorExtension extends \Twig_Extension
      */
     public function generateSubQuery(ReadBlockInterface $block, array $baseSubQuery)
     {
-        return $this->subQueryGeneratorManager->generate($block, $baseSubQuery);
+        $subQueryGeneratorManager = $this->container->get('open_orchestra_front.sub_query.manager');
+
+        return $subQueryGeneratorManager->generate($block, $baseSubQuery);
     }
 
     /**

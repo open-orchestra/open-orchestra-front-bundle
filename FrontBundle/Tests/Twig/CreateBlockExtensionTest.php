@@ -14,7 +14,6 @@ class CreateBlockExtensionTest extends AbstractBaseTestCase
      * @var CreateBlockExtension
      */
     protected $extension;
-    protected $twigEnvironment;
     protected $displayBlockManager;
     protected $siteManager;
 
@@ -23,14 +22,19 @@ class CreateBlockExtensionTest extends AbstractBaseTestCase
      */
     public function setUp()
     {
-        $this->twigEnvironment = Phake::mock(\Twig_Environment::class);
         $blockClass = get_class(Phake::mock('OpenOrchestra\ModelInterface\Model\BlockInterface'));
         $this->displayBlockManager = Phake::mock('OpenOrchestra\DisplayBundle\DisplayBlock\DisplayBlockManager');
         Phake::when($this->displayBlockManager)->show(Phake::anyParameters())->thenReturn(Phake::mock('Symfony\Component\HttpFoundation\Response'));
 
         $this->siteManager = Phake::mock('OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
 
-        $this->extension = new CreateBlockExtension($blockClass, $this->displayBlockManager, $this->siteManager);
+        $container = Phake::mock('Symfony\Component\DependencyInjection\Container');
+        Phake::when($container)->get('open_orchestra_display.manager.site')->thenReturn($this->siteManager);
+        Phake::when($container)->get('open_orchestra_display.display_block_manager')->thenReturn($this->displayBlockManager);
+        Phake::when($container)->getParameter('open_orchestra_model.document.block.class')->thenReturn($blockClass);
+
+        $this->extension = new CreateBlockExtension();
+        $this->extension->setContainer($container);
     }
 
     /**
@@ -69,7 +73,7 @@ class CreateBlockExtensionTest extends AbstractBaseTestCase
         Phake::when($this->siteManager)->getCurrentSiteId()->thenReturn($siteId);
         Phake::when($this->siteManager)->getCurrentSiteDefaultLanguage()->thenReturn($language);
 
-        $this->extension->createBlock($this->twigEnvironment, $component);
+        $this->extension->createBlock($component);
 
         Phake::verify($this->displayBlockManager)->show(Phake::anyParameters());
     }
