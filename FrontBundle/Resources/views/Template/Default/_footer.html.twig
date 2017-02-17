@@ -1,0 +1,6 @@
+<footer class="row well text-center">
+    {% set defaultSpecialPage = get_special_page('DEFAULT') %}
+    {% if defaultSpecialPage is not null %}
+        <a href="{{ url_node(defaultSpecialPage.nodeId) }}">{{ defaultSpecialPage.name }}</a>
+    {% endif %}
+</footer>

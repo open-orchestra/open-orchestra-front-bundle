@@ -5,7 +5,6 @@
             <title>{% block title %}{{ node.seoTitle }}{% endblock %}</title>
         {% endif %}
         {% block stylesheets %}
-            {{ openOrchestraCss(node.theme) }}
         {% endblock %}
         <script src="{{ asset('/bundles/openorchestradisplay/libs/require.js') }}"></script>
         <script src="{{ asset('/bundles/openorchestradisplay/requireConf.js') }}"></script>
@@ -16,11 +15,10 @@
         {% endif %}
     </head>
     <body>
-
-        {% include template with {'node' : node, 'parameters': parameters } only %}
+        {% block body %}
+        {% endblock %}
 
         {% block javascripts %}
-            {{ openOrchestraJs(node.theme) }}
         {% endblock %}
     </body>
 </html>

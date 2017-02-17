@@ -35,7 +35,7 @@ class OrchestraTwigEngine extends TwigEngine
     {
         parent::__construct($environment, $parser, $locator);
 
-        $this->request = $requestStack->getMasterRequest();
+        $this->requestStack = $requestStack;
         $this->devices = $devices;
         $this->deviceTypeField = $deviceTypeField;
     }

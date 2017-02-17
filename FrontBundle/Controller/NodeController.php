@@ -115,7 +115,7 @@ class NodeController extends Controller
     protected function renderNode(ReadNodeInterface $node, array $parameters = array())
     {
         $response = $this->render(
-            'OpenOrchestraFrontBundle:Node:show.html.twig',
+            $this->getTemplate($node),
             array(
                 'node' => $node,
                 'template' => $this->getTemplate($node),

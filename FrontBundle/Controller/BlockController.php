@@ -32,9 +32,8 @@ class BlockController extends Controller
     {
         try {
             $block = $this->get('open_orchestra_model.repository.block')->findById($blockId);
-            $hasEsi = $this->has('esi') && $this->get('esi')->hasSurrogateCapability($request);
 
-            $response = $this->get('open_orchestra_display.display_block_manager')->show($block, $hasEsi);
+            $response = $this->get('open_orchestra_display.display_block_manager')->show($block);
             $this->tagResponse($block, $nodeId, $siteId, $request->getLocale());
 
             return $response;

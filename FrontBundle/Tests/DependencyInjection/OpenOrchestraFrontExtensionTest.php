@@ -25,7 +25,10 @@ class OpenOrchestraFrontExtensionTest extends AbstractBaseTestCase
         $defaultTemplateSet = array(
             'default'=>array(
                 'templates' => array(
-                    'default' => 'OpenOrchestraFrontBundle:Template:default.html.twig'
+                    'default' => 'OpenOrchestraFrontBundle:Template/Default:default.html.twig',
+                    'home' => 'OpenOrchestraFrontBundle:Template/Default:home.html.twig',
+                    'column_left' => 'OpenOrchestraFrontBundle:Template/Default:column_left.html.twig',
+                    'column_right' => 'OpenOrchestraFrontBundle:Template/Default:column_right.html.twig'
                 )
             ),
         );

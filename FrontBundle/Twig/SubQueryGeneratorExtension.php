@@ -3,7 +3,6 @@
 namespace OpenOrchestra\FrontBundle\Twig;
 
 use OpenOrchestra\FrontBundle\SubQuery\SubQueryGeneratorManager;
-use OpenOrchestra\ModelInterface\Model\BlockInterface;
 use OpenOrchestra\ModelInterface\Model\ReadBlockInterface;
 
 /**
