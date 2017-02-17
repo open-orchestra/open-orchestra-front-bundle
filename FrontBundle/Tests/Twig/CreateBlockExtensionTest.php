@@ -24,7 +24,7 @@ class CreateBlockExtensionTest extends AbstractBaseTestCase
     public function setUp()
     {
         $this->twigEnvironment = Phake::mock(\Twig_Environment::class);
-        $blockClass = 'OpenOrchestra\ModelBundle\Document\Block';
+        $blockClass = get_class(Phake::mock('OpenOrchestra\ModelInterface\Model\BlockInterface'));
         $this->displayBlockManager = Phake::mock('OpenOrchestra\DisplayBundle\DisplayBlock\DisplayBlockManager');
         Phake::when($this->displayBlockManager)->show(Phake::anyParameters())->thenReturn(Phake::mock('Symfony\Component\HttpFoundation\Response'));
 
