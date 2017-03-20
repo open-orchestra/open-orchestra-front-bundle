@@ -3,6 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Controller;
 
 use OpenOrchestra\FrontBundle\Exception\NonExistingNodeException;
+use OpenOrchestra\FrontBundle\Security\ContributionActionInterface;
 use OpenOrchestra\ModelInterface\Model\NodeInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use OpenOrchestra\ModelInterface\Model\CacheableInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * Class NodeController
@@ -37,6 +39,15 @@ class NodeController extends Controller
 
         if (!($node instanceof ReadNodeInterface)) {
             throw new NonExistingNodeException();
+        }
+
+        if (!empty($node->getFrontRoles())) {
+            if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+                $this->denyAccessUnlessGranted(ContributionActionInterface::READ, $node);
+            } else {
+                throw new AuthenticationException();
+
+            }
         }
 
         $response = $this->renderNode($node);
