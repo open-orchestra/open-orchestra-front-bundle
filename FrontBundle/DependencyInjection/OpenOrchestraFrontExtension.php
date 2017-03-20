@@ -38,12 +38,7 @@ class OpenOrchestraFrontExtension extends Extension
         $loader->load('subscriber.yml');
         $loader->load('twig.yml');
         $loader->load('subquery.yml');
-
-        if ('file' == $config['routing_type']) {
-            $loader->load('routing.yml');
-        } else {
-            $loader->load('database_routing.yml');
-        }
+        $loader->load('database_routing.yml');
 
         $container->setAlias('templating', 'open_orchestra_front.twig.orchestra_twig_engine');
     }

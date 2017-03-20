@@ -1,15 +1,7 @@
 parameters:
-    open_orchestra_front.subscriber.check_routing_cache.class: OpenOrchestra\FrontBundle\EventSubscriber\CheckRoutingCacheViabilitySubscriber
     open_orchestra_front.subscriber.kernel_exception.class: OpenOrchestra\FrontBundle\EventSubscriber\KernelExceptionSubscriber
 
 services:
-    open_orchestra_front.subscriber.check_routing_cache:
-        class: '%open_orchestra_front.subscriber.check_routing_cache.class%'
-        arguments:
-            - '@router'
-            - '@open_orchestra_model.repository.node'
-        tags:
-            - { name: kernel.event_subscriber }
     open_orchestra_front.subscriber.kernel_exception:
         class: '%open_orchestra_front.subscriber.kernel_exception.class%'
         arguments:
