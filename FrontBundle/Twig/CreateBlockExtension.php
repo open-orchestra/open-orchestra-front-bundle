@@ -46,6 +46,7 @@ class CreateBlockExtension extends \Twig_Extension implements ContainerAwareInte
         /** @var BlockInterface $block */
         $block = new $blockClass;
         $block->setComponent($component);
+        $block->setId(uniqid(BlockInterface::TEMP_ID_PREFIX));
         $block->setTransverse(false);
         $block->setSiteId($siteManager->getCurrentSiteId());
         $block->setLanguage($siteManager->getCurrentSiteDefaultLanguage());
