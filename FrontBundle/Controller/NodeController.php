@@ -46,7 +46,6 @@ class NodeController extends Controller
                 $this->denyAccessUnlessGranted(ContributionActionInterface::READ, $node);
             } else {
                 throw new AuthenticationException();
-
             }
         }
 
