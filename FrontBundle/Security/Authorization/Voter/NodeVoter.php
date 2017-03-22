@@ -5,10 +5,11 @@ namespace OpenOrchestra\FrontBundle\Security\Authorization\Voter;
 use OpenOrchestra\FrontBundle\Security\ContributionActionInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * Class NodeVoter
@@ -18,11 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 class NodeVoter extends Voter implements ContainerAwareInterface
 {
 
-    /**
-     * @var ContainerInterface
-     */
     private $container;
-
     /**
      * {@inheritDoc}
      */
@@ -62,8 +59,15 @@ class NodeVoter extends Voter implements ContainerAwareInterface
      */
     protected function containsRole(TokenInterface $token, ReadNodeInterface $subject)
     {
+        $tokenRoles = $this->get('security.role_hierarchy')->getReachableRoles($token->getRoles());;
+        foreach ($tokenRoles as $key => $role) {
+            if ($role instanceof RoleInterface) {
+                $tokenRoles[$key] = $role->getRole();
+            }
+        }
+
         return empty($subject->getFrontRoles())
             || ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')
-                && !empty(array_intersect($token->getRoles(), $subject->getFrontRoles())));
+                && !empty(array_intersect($tokenRoles, $subject->getFrontRoles())));
     }
 }
