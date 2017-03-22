@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
 /**
  * Class NodeVoter
  *
- * Voter checking rights on node management
+ * Voter checking rights on node
  */
 class NodeVoter extends Voter implements ContainerAwareInterface
 {
