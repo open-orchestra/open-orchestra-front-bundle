@@ -4,7 +4,7 @@ parameters:
 services:
     open_orchestra_backoffice.voter.node:
         class: '%open_orchestra_backoffice.voter.node.class%'
-        arguments:
-            - '@security.access.decision_manager'
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
         tags:
             - { name: security.voter }

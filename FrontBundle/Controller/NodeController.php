@@ -41,13 +41,7 @@ class NodeController extends Controller
             throw new NonExistingNodeException();
         }
 
-        if (!empty($node->getFrontRoles())) {
-            if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-                $this->denyAccessUnlessGranted(ContributionActionInterface::READ, $node);
-            } else {
-                throw new AuthenticationException();
-            }
-        }
+        $this->denyAccessUnlessGranted(ContributionActionInterface::READ, $node);
 
         $response = $this->renderNode($node);
 
