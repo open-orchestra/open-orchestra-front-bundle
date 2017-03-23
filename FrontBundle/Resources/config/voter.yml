@@ -1,0 +1,11 @@
+parameters:
+    open_orchestra_backoffice.voter.node.class: OpenOrchestra\FrontBundle\Security\Authorization\Voter\NodeVoter
+
+services:
+    open_orchestra_backoffice.voter.node:
+        class: '%open_orchestra_backoffice.voter.node.class%'
+        arguments:
+            - '@security.access.decision_manager'
+            - '@security.role_hierarchy'
+        tags:
+            - { name: security.voter }

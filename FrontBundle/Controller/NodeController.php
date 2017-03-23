@@ -3,6 +3,7 @@
 namespace OpenOrchestra\FrontBundle\Controller;
 
 use OpenOrchestra\FrontBundle\Exception\NonExistingNodeException;
+use OpenOrchestra\FrontBundle\Security\ContributionActionInterface;
 use OpenOrchestra\ModelInterface\Model\NodeInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,6 +39,8 @@ class NodeController extends Controller
         if (!($node instanceof ReadNodeInterface)) {
             throw new NonExistingNodeException();
         }
+
+        $this->denyAccessUnlessGranted(ContributionActionInterface::READ, $node);
 
         $response = $this->renderNode($node);
 
