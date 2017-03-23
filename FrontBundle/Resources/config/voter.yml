@@ -4,7 +4,8 @@ parameters:
 services:
     open_orchestra_backoffice.voter.node:
         class: '%open_orchestra_backoffice.voter.node.class%'
-        calls:
-            - [ setContainer, [ '@service_container' ] ]
+        arguments:
+            - '@security.access.decision_manager'
+            - '@security.role_hierarchy'
         tags:
             - { name: security.voter }
