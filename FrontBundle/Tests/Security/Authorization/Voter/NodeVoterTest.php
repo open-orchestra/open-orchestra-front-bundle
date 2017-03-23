@@ -17,6 +17,7 @@ class NodeVoterTest  extends AbstractBaseTestCase
 {
     protected $token;
     protected $accessDecisionManager;
+    protected $roleHierarchy;
     protected $voter;
 
     /**
@@ -26,9 +27,11 @@ class NodeVoterTest  extends AbstractBaseTestCase
     {
         parent::setUp();
         $this->accessDecisionManager = Phake::mock('Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface');
+        $this->roleHierarchy = Phake::mock('Symfony\Component\Security\Core\Role\RoleHierarchyInterface');
         $this->token = Phake::mock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        Phake::when($this->accessDecisionManager)->decide($this->token, array('IS_AUTHENTICATED_FULLY'))->thenReturn(true);
 
-        $this->voter = new NodeVoter($this->accessDecisionManager);
+        $this->voter = new NodeVoter($this->accessDecisionManager, $this->roleHierarchy);
     }
 
     /**
@@ -43,6 +46,7 @@ class NodeVoterTest  extends AbstractBaseTestCase
     public function testVote($subject, $attribute, array $tokenRoles, array $subjectRoles, $expectedVote)
     {
         Phake::when($this->token)->getRoles()->thenReturn($tokenRoles);
+        Phake::when($this->roleHierarchy)->getReachableRoles($tokenRoles)->thenReturn($tokenRoles);
         if ($subject instanceof ReadNodeInterface) {
             Phake::when($subject)->getFrontRoles()->thenReturn($subjectRoles);
         }
