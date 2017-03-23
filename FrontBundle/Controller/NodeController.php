@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use OpenOrchestra\ModelInterface\Model\CacheableInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * Class NodeController
