@@ -1,5 +1,6 @@
 <header class="row well header">
     <div class="pull-left">
+        {{ render_shared_block('logo', app.request.locale) }}
         {{ create_block('menu') }}
     </div>
 

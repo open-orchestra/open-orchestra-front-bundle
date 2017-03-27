@@ -2,17 +2,16 @@
 
 namespace OpenOrchestra\FrontBundle\Twig;
 
-use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
-use OpenOrchestra\DisplayBundle\DisplayBlock\DisplayBlockManager;
 use OpenOrchestra\FrontBundle\Exception\NonExistingAreaException;
 use OpenOrchestra\ModelInterface\Model\BlockInterface;
+use OpenOrchestra\ModelInterface\Model\ReadBlockInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
- * Class CreateBlockExtension
+ * Class BlockExtension
  */
-class CreateBlockExtension extends \Twig_Extension implements ContainerAwareInterface
+class BlockExtension extends \Twig_Extension implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
@@ -25,6 +24,11 @@ class CreateBlockExtension extends \Twig_Extension implements ContainerAwareInte
             new \Twig_SimpleFunction(
                 'create_block',
                 array($this, 'createBlock'),
+                array('is_safe' => array('html'))
+            ),
+            new \Twig_SimpleFunction(
+                'render_shared_block',
+                array($this, 'renderSharedBlock'),
                 array('is_safe' => array('html'))
             ),
         );
@@ -56,10 +60,31 @@ class CreateBlockExtension extends \Twig_Extension implements ContainerAwareInte
     }
 
     /**
+     * @param string $code
+     * @param string $language
+     * @return string
+     *
+     * @throws \OpenOrchestra\DisplayBundle\Exception\DisplayBlockStrategyNotFoundException
+     */
+    public function renderSharedBlock($code, $language)
+    {
+        $blockRepository = $this->container->get('open_orchestra_model.repository.block');
+        $block = $blockRepository->findTransverseBlockByCodeAndLanguage($code, $language);
+
+        if ($block instanceof ReadBlockInterface) {
+            $displayBlockManager = $this->container->get('open_orchestra_display.display_block_manager');
+
+            return $displayBlockManager->show($block)->getContent();
+        }
+
+        return '';
+    }
+
+    /**
      * @return string
      */
     public function getName()
     {
-        return 'create_block';
+        return 'oo_block';
     }
 }
