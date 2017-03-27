@@ -87,7 +87,7 @@ class BlockExtensionTest extends AbstractBaseTestCase
     public function testRenderSharedBlock()
     {
         $block = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadBlockInterface');
-        Phake::when($this->blockRepository)->findTransverseBlockByCodeAndLanguage(Phake::anyParameters())->thenReturn($block);
+        Phake::when($this->blockRepository)->findOneTransverseBlockByCodeAndLanguage(Phake::anyParameters())->thenReturn($block);
 
         $this->extension->renderSharedBlock('fakeCode', 'fakeLanguage');
 
@@ -99,7 +99,7 @@ class BlockExtensionTest extends AbstractBaseTestCase
      */
     public function testRenderSharedBlockWithoutBlock()
     {
-        Phake::when($this->blockRepository)->findTransverseBlockByCodeAndLanguage(Phake::anyParameters())->thenReturn(null);
+        Phake::when($this->blockRepository)->findOneTransverseBlockByCodeAndLanguage(Phake::anyParameters())->thenReturn(null);
 
         $this->assertEquals('', $this->extension->renderSharedBlock('fakeCode', 'fakeLanguage'));
     }

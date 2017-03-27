@@ -69,7 +69,7 @@ class BlockExtension extends \Twig_Extension implements ContainerAwareInterface
     public function renderSharedBlock($code, $language)
     {
         $blockRepository = $this->container->get('open_orchestra_model.repository.block');
-        $block = $blockRepository->findTransverseBlockByCodeAndLanguage($code, $language);
+        $block = $blockRepository->findOneTransverseBlockByCodeAndLanguage($code, $language);
 
         if ($block instanceof ReadBlockInterface) {
             $displayBlockManager = $this->container->get('open_orchestra_display.display_block_manager');
