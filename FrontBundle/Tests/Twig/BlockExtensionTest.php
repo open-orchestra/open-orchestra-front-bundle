@@ -6,16 +6,17 @@ use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use Phake;
 
 /**
- * Class CreateBlockExtensionTest
+ * Class BlockExtensionTest
  */
-class CreateBlockExtensionTest extends AbstractBaseTestCase
+class BlockExtensionTest extends AbstractBaseTestCase
 {
     /**
-     * @var CreateBlockExtension
+     * @var BlockExtension
      */
     protected $extension;
     protected $displayBlockManager;
     protected $siteManager;
+    protected $blockRepository;
 
     /**
      * Set up
@@ -27,13 +28,15 @@ class CreateBlockExtensionTest extends AbstractBaseTestCase
         Phake::when($this->displayBlockManager)->show(Phake::anyParameters())->thenReturn(Phake::mock('Symfony\Component\HttpFoundation\Response'));
 
         $this->siteManager = Phake::mock('OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
+        $this->blockRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\BlockRepositoryInterface');
 
         $container = Phake::mock('Symfony\Component\DependencyInjection\Container');
         Phake::when($container)->get('open_orchestra_display.manager.site')->thenReturn($this->siteManager);
         Phake::when($container)->get('open_orchestra_display.display_block_manager')->thenReturn($this->displayBlockManager);
         Phake::when($container)->getParameter('open_orchestra_model.document.block.class')->thenReturn($blockClass);
+        Phake::when($container)->get('open_orchestra_model.repository.block')->thenReturn($this->blockRepository);
 
-        $this->extension = new CreateBlockExtension();
+        $this->extension = new BlockExtension();
         $this->extension->setContainer($container);
     }
 
@@ -50,7 +53,7 @@ class CreateBlockExtensionTest extends AbstractBaseTestCase
      */
     public function testGetName()
     {
-        $this->assertSame('create_block', $this->extension->getName());
+        $this->assertSame('oo_block', $this->extension->getName());
     }
 
     /**
@@ -58,7 +61,7 @@ class CreateBlockExtensionTest extends AbstractBaseTestCase
      */
     public function testFunction()
     {
-        $this->assertCount(1, $this->extension->getFunctions());
+        $this->assertCount(2, $this->extension->getFunctions());
     }
 
     /**
@@ -76,5 +79,28 @@ class CreateBlockExtensionTest extends AbstractBaseTestCase
         $this->extension->createBlock($component);
 
         Phake::verify($this->displayBlockManager)->show(Phake::anyParameters());
+    }
+
+    /**
+     * Test render shared block
+     */
+    public function testRenderSharedBlock()
+    {
+        $block = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadBlockInterface');
+        Phake::when($this->blockRepository)->findOneTransverseBlockByCodeAndLanguage(Phake::anyParameters())->thenReturn($block);
+
+        $this->extension->renderSharedBlock('fakeCode', 'fakeLanguage');
+
+        Phake::verify($this->displayBlockManager)->show(Phake::anyParameters());
+    }
+
+    /**
+     * Test render shared block without block
+     */
+    public function testRenderSharedBlockWithoutBlock()
+    {
+        Phake::when($this->blockRepository)->findOneTransverseBlockByCodeAndLanguage(Phake::anyParameters())->thenReturn(null);
+
+        $this->assertEquals('', $this->extension->renderSharedBlock('fakeCode', 'fakeLanguage'));
     }
 }
