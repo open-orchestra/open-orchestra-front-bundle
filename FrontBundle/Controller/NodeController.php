@@ -68,20 +68,20 @@ class NodeController extends Controller
         );
         $cacheableManager->addCacheTags($cacheTags);
 
+        $cacheInfo = $this->get('open_orchestra_front.manager.node_response_manager')->getNodeCacheInfo($node);
+        $privacy = ($cacheInfo['isPublic']) ? CacheableInterface::CACHE_PUBLIC : CacheableInterface::CACHE_PRIVATE;
+
         if ($this->has('esi') && $this->get('esi')->hasSurrogateCapability($request)) {
             $response = $cacheableManager->setResponseCacheParameters(
                 $response,
-                $node->getMaxAge(),
-                CacheableInterface::CACHE_PUBLIC,
+                (CacheableInterface::CACHE_PUBLIC === $privacy) ? $node->getMaxAge() : 0,
+                $privacy,
                 true
             );
         } else {
-            $cacheInfo = $this->get('open_orchestra_front.manager.node_response_manager')->getNodeCacheInfo($node);
-            $privacy = ($cacheInfo['isPublic']) ? CacheableInterface::CACHE_PUBLIC : CacheableInterface::CACHE_PRIVATE;
-
             $response = $cacheableManager->setResponseCacheParameters(
                 $response,
-                $cacheInfo['MaxAge'],
+                (CacheableInterface::CACHE_PUBLIC === $privacy) ? $cacheInfo['MaxAge'] : 0,
                 $privacy
             );
         }
