@@ -12,6 +12,9 @@ use Doctrine\Common\Collections\Collection;
  */
 class NodeResponseManager
 {
+    const MAX_AGE = 'MaxAge';
+    const IS_PUBLIC = 'isPublic';
+
     protected $displayBlockManager;
 
     /**
@@ -103,7 +106,7 @@ class NodeResponseManager
             $MaxAge = 0;
         }
 
-        return array('MaxAge' => $MaxAge, 'isPublic' => $isPublic);
+        return array(self::MAX_AGE => $MaxAge, self::IS_PUBLIC => $isPublic);
     }
 
     /**
@@ -116,13 +119,13 @@ class NodeResponseManager
      */
     protected function mergeCacheInfo(array $cacheInfo1, array $cacheInfo2)
     {
-        $maxAge = $cacheInfo1['MaxAge'];
+        $maxAge = $cacheInfo1[self::MAX_AGE];
 
-        if ($maxAge < 0 || (($cacheInfo2['MaxAge'] < $maxAge)) && (-1 < $cacheInfo2['MaxAge'])) {
-            $maxAge = $cacheInfo2['MaxAge'];
+        if ($maxAge < 0 || (($cacheInfo2[self::MAX_AGE] < $maxAge)) && (-1 < $cacheInfo2[self::MAX_AGE])) {
+            $maxAge = $cacheInfo2[self::MAX_AGE];
         }
 
-        $isPublic = $cacheInfo1['isPublic'] && $cacheInfo2['isPublic'];
+        $isPublic = $cacheInfo1[self::IS_PUBLIC] && $cacheInfo2[self::IS_PUBLIC];
 
         return $this->formatCacheInfo($maxAge, $isPublic);
     }
