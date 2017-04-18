@@ -9,7 +9,12 @@
         <script src="{{ asset('/bundles/openorchestradisplay/libs/require.js') }}"></script>
         <script src="{{ asset('/bundles/openorchestradisplay/requireConf.js') }}"></script>
         <meta name="robots" content="{{- node.metaFollow ? 'follow': 'nofollow' -}},{{- node.metaIndex ? 'index': 'noindex' -}}">
-        <meta name="description" content="{{ node.metaDescription }}">
+        {% if not site.metaAuthor is null %}
+            <meta name="author" content="{{ site.metaAuthor }}">
+        {% endif %}
+        {% if not node.metaDescription is null %}
+            <meta name="description" content="{{ node.metaDescription }}">
+        {% endif %}
         {% if not node.canonicalPage is null %}
             <link rel="canonical" href="{{ url_node(node.canonicalPage) }}" />
         {% endif %}
