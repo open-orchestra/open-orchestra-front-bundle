@@ -96,11 +96,12 @@ class NodeController extends Controller
     /**
      * Render the node version given by encoded $token
      *
-     * @param string  $token
+     * @param Request  $request
+     * @param string   $token
      *
      * @return Response
      */
-    public function previewAction($token)
+    public function previewAction(Request $request, $token)
     {
         $decryptedToken = $this->get('open_orchestra_base.manager.encryption')->decrypt($token);
         /** @var NodeInterface $node */
@@ -110,8 +111,29 @@ class NodeController extends Controller
         $siteManager->setSiteId($node->getSiteId());
         $siteManager->setCurrentLanguage($node->getLanguage());
         $site = $this->get('open_orchestra_model.repository.site')->findOneBySiteId($node->getSiteId());
+        $this->updatePreviewRequestParameters($request, $node);
 
         return $this->renderNode($node, $site, array('token' => $token));
+    }
+
+    /**
+     * @param Request           $request
+     * @param ReadNodeInterface $node
+     */
+    protected function updatePreviewRequestParameters(Request $request, ReadNodeInterface $node)
+    {
+        $routeParams = $request->get('_route_params');
+        $routeParams = array_merge(array(
+            'siteId' => $node->getSiteId(),
+            'nodeId' => $node->getNodeId(),
+            '_locale' => $node->getLanguage()
+        ),
+            $routeParams
+        );
+        $request->attributes->set('_route_params', $routeParams);
+        $request->request->set('nodeId', $node->getNodeId());
+        $request->request->set('siteId', $node->getSiteId());
+        $request->request->set('_locale', $node->getLanguage());
     }
 
     /**
