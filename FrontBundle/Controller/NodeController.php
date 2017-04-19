@@ -122,7 +122,7 @@ class NodeController extends Controller
      */
     protected function updatePreviewRequestParameters(Request $request, ReadNodeInterface $node)
     {
-        $routeParams = $request->get('_route_params');
+        $routeParams = $request->get('_route_params', array());
         $routeParams = array_merge(array(
             'siteId' => $node->getSiteId(),
             'nodeId' => $node->getNodeId(),
