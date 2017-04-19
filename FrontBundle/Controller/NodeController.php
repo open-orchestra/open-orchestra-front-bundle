@@ -7,6 +7,7 @@ use OpenOrchestra\FrontBundle\Manager\NodeResponseManager;
 use OpenOrchestra\FrontBundle\Security\ContributionActionInterface;
 use OpenOrchestra\ModelInterface\Model\NodeInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
+use OpenOrchestra\ModelInterface\Model\ReadSiteInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +34,8 @@ class NodeController extends Controller
     public function showAction(Request $request, $nodeId)
     {
         $siteId = $this->get('open_orchestra_display.manager.site')->getCurrentSiteId();
+        $site = $this->get('open_orchestra_model.repository.site')->findOneBySiteId($siteId);
+
         /** @var ReadNodeInterface $node */
         $node = $this->get('open_orchestra_model.repository.node')
             ->findOnePublished($nodeId, $request->getLocale(), $siteId);
@@ -43,7 +46,7 @@ class NodeController extends Controller
 
         $this->denyAccessUnlessGranted(ContributionActionInterface::READ, $node);
 
-        $response = $this->renderNode($node);
+        $response = $this->renderNode($node, $site);
 
         return $this->updateNodeResponse($response, $node, $request);
     }
@@ -106,22 +109,25 @@ class NodeController extends Controller
         $siteManager = $this->get('open_orchestra_display.manager.site');
         $siteManager->setSiteId($node->getSiteId());
         $siteManager->setCurrentLanguage($node->getLanguage());
+        $site = $this->get('open_orchestra_model.repository.site')->findOneBySiteId($node->getSiteId());
 
-        return $this->renderNode($node, array('token' => $token));
+        return $this->renderNode($node, $site, array('token' => $token));
     }
 
     /**
      * @param ReadNodeInterface $node
+     * @param ReadSiteInterface $site
      * @param array             $parameters
      *
      * @return Response
      */
-    protected function renderNode(ReadNodeInterface $node, array $parameters = array())
+    protected function renderNode(ReadNodeInterface $node, ReadSiteInterface $site, array $parameters = array())
     {
         $response = $this->render(
             $this->getTemplate($node),
             array(
                 'node' => $node,
+                'site' => $site,
                 'parameters' => $parameters,
             )
         );
