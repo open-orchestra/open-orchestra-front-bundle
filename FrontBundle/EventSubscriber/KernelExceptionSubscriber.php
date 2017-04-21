@@ -157,6 +157,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
 
         if ($node) {
             $site = $this->siteRepository->findOneBySiteId($node->getSiteId());
+
             return $this->templating->render(
                 $this->getTemplate($node),
                 array(
