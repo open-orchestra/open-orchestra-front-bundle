@@ -62,14 +62,16 @@ class BlockExtension extends \Twig_Extension implements ContainerAwareInterface
     /**
      * @param string $code
      * @param string $language
+     * @param string $siteId
+     *
      * @return string
      *
      * @throws \OpenOrchestra\DisplayBundle\Exception\DisplayBlockStrategyNotFoundException
      */
-    public function renderSharedBlock($code, $language)
+    public function renderSharedBlock($code, $language, $siteId)
     {
         $blockRepository = $this->container->get('open_orchestra_model.repository.block');
-        $block = $blockRepository->findOneTransverseBlockByCodeAndLanguage($code, $language);
+        $block = $blockRepository->findOneTransverseBlockByCode($code, $language, $siteId);
 
         if ($block instanceof ReadBlockInterface) {
             $displayBlockManager = $this->container->get('open_orchestra_display.display_block_manager');

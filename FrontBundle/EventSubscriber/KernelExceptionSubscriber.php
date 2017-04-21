@@ -156,11 +156,12 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
         );
 
         if ($node) {
-
+            $site = $this->siteRepository->findOneBySiteId($node->getSiteId());
             return $this->templating->render(
                 $this->getTemplate($node),
                 array(
                     'node' => $node,
+                    'site' => $site,
                     'parameters' => array('siteId' => $node->getSiteId(), '_locale' => $node->getLanguage())
                 )
             );
