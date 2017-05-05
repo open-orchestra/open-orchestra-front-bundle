@@ -17,10 +17,12 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
  */
 class NodeVoter extends Voter
 {
+    private $accessDecisionManger;
+    private $roleHierarchy;
 
-    private $decisionManger;
     /**
-     *
+     * @param AccessDecisionManagerInterface $accessDecisionManger
+     * @param RoleHierarchyInterface         $roleHierarchy
      */
     public function __construct(
         AccessDecisionManagerInterface $accessDecisionManger,
