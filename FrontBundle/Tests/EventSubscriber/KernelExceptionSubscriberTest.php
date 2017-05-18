@@ -64,7 +64,7 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
         $this->event = Phake::mock('Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent');
         Phake::when($this->event)->getException()->thenReturn($this->exception);
 
-        $this->currentSiteManager = Phake::mock('OpenOrchestra\DisplayBundle\Manager\SiteManager');
+        $this->currentSiteManager = Phake::mock('OpenOrchestra\DisplayBundle\Manager\ContextInterface');
         $this->templateManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\TemplateManager');
 
         $this->subscriber = new KernelExceptionSubscriber(
@@ -108,7 +108,7 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
         Phake::when($this->nodeRepository)->findOnePublished(Phake::anyParameters())->thenReturn($node);
         if ($expectedResponseCount) {
             Phake::when($this->currentSiteManager)->getCurrentSiteId()->thenReturn($this->currentSiteId);
-            Phake::when($this->currentSiteManager)->getCurrentSiteDefaultLanguage()->thenReturn($this->currentLanguage);
+            Phake::when($this->currentSiteManager)->getCurrentSiteLanguage()->thenReturn($this->currentLanguage);
         }
 
         $this->subscriber->onKernelException($this->event);

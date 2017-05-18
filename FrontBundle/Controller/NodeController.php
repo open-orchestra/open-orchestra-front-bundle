@@ -33,7 +33,7 @@ class NodeController extends Controller
      */
     public function showAction(Request $request, $nodeId)
     {
-        $siteId = $this->get('open_orchestra_display.manager.site')->getCurrentSiteId();
+        $siteId = $this->get('open_orchestra_display.manager.context')->getCurrentSiteId();
         $site = $this->get('open_orchestra_model.repository.site')->findOneBySiteId($siteId);
 
         /** @var ReadNodeInterface $node */
@@ -107,7 +107,7 @@ class NodeController extends Controller
         /** @var NodeInterface $node */
         $node = $this->get('open_orchestra_model.repository.node')->findVersionByDocumentId($decryptedToken);
 
-        $siteManager = $this->get('open_orchestra_display.manager.site');
+        $siteManager = $this->get('open_orchestra_display.manager.context');
         $siteManager->setSiteId($node->getSiteId());
         $siteManager->setCurrentLanguage($node->getLanguage());
         $site = $this->get('open_orchestra_model.repository.site')->findOneBySiteId($node->getSiteId());

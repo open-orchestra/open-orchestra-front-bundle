@@ -27,11 +27,11 @@ class BlockExtensionTest extends AbstractBaseTestCase
         $this->displayBlockManager = Phake::mock('OpenOrchestra\DisplayBundle\DisplayBlock\DisplayBlockManager');
         Phake::when($this->displayBlockManager)->show(Phake::anyParameters())->thenReturn(Phake::mock('Symfony\Component\HttpFoundation\Response'));
 
-        $this->siteManager = Phake::mock('OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
+        $this->siteManager = Phake::mock('OpenOrchestra\DisplayBundle\Manager\ContextInterface');
         $this->blockRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\BlockRepositoryInterface');
 
         $container = Phake::mock('Symfony\Component\DependencyInjection\Container');
-        Phake::when($container)->get('open_orchestra_display.manager.site')->thenReturn($this->siteManager);
+        Phake::when($container)->get('open_orchestra_display.manager.context')->thenReturn($this->siteManager);
         Phake::when($container)->get('open_orchestra_display.display_block_manager')->thenReturn($this->displayBlockManager);
         Phake::when($container)->getParameter('open_orchestra_model.document.block.class')->thenReturn($blockClass);
         Phake::when($container)->get('open_orchestra_model.repository.block')->thenReturn($this->blockRepository);
@@ -74,7 +74,7 @@ class BlockExtensionTest extends AbstractBaseTestCase
         $siteId = 'fakeSiteId';
 
         Phake::when($this->siteManager)->getCurrentSiteId()->thenReturn($siteId);
-        Phake::when($this->siteManager)->getCurrentSiteDefaultLanguage()->thenReturn($language);
+        Phake::when($this->siteManager)->getCurrentSiteLanguage()->thenReturn($language);
 
         $this->extension->createBlock($component);
 

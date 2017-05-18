@@ -3,12 +3,12 @@
 namespace OpenOrchestra\FrontBundle\Routing\Database;
 
 use OpenOrchestra\DisplayBundle\Exception\NodeNotFoundException;
+use OpenOrchestra\DisplayBundle\Manager\ContextInterface;
 use OpenOrchestra\FrontBundle\Manager\NodeManager;
 use OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentToValueObjectTransformer;
 use OpenOrchestra\ModelInterface\Model\RouteDocumentInterface;
 use OpenOrchestra\ModelInterface\Repository\RouteDocumentRepositoryInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
-use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
@@ -36,7 +36,7 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
      * @param RouteDocumentRepositoryInterface      $routeDocumentRepository
      * @param ReadSiteRepositoryInterface           $siteRepository
      * @param RouteDocumentToValueObjectTransformer $routeDocumentToValueObjectTransformer
-     * @param CurrentSiteIdInterface                $currentSiteManager
+     * @param ContextInterface                      $currentSiteManager
      * @param RequestStack                          $requestStack
      * @param NodeManager                           $nodeManager
      * @param RequestContext                        $context The context
@@ -46,7 +46,7 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
         RouteDocumentRepositoryInterface $routeDocumentRepository,
         ReadSiteRepositoryInterface $siteRepository,
         RouteDocumentToValueObjectTransformer $routeDocumentToValueObjectTransformer,
-        CurrentSiteIdInterface $currentSiteManager,
+        ContextInterface $currentSiteManager,
         RequestStack $requestStack,
         NodeManager $nodeManager,
         RequestContext $context,

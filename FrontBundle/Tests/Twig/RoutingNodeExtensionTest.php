@@ -2,9 +2,9 @@
 
 namespace OpenOrchestra\FrontBundle\Twig;
 
-use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 use OpenOrchestra\BaseBundle\Tests\AbstractTest\AbstractBaseTestCase;
 use OpenOrchestra\DisplayBundle\Exception\NodeNotFoundException;
+use OpenOrchestra\DisplayBundle\Manager\ContextInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -30,7 +30,7 @@ class RoutingNodeExtensionTest extends AbstractBaseTestCase
     {
         $this->generatorUrl = Phake::mock(UrlGeneratorInterface::class);
         $this->nodeRepository = Phake::mock(ReadNodeRepositoryInterface::class);
-        $siteManager = Phake::mock(CurrentSiteIdInterface::class);
+        $siteManager = Phake::mock(ContextInterface::class);
         $this->extension = new RoutingNodeExtension($this->generatorUrl, $siteManager, $this->nodeRepository);
     }
 

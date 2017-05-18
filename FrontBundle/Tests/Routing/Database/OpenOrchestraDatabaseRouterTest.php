@@ -30,7 +30,7 @@ class OpenOrchestraDatabaseRouterTest extends AbstractBaseTestCase
     public function setUp()
     {
         $this->siteRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface');
-        $this->currentSiteManager = Phake::mock('OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
+        $this->currentSiteManager = Phake::mock('OpenOrchestra\DisplayBundle\Manager\ContextInterface');
         $this->context = Phake::mock('Symfony\Component\Routing\RequestContext');
         $this->routeDocumentRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\RouteDocumentRepositoryInterface');
         $this->routeDocumentToValueObjectTransformer = Phake::mock('OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentToValueObjectTransformer');
