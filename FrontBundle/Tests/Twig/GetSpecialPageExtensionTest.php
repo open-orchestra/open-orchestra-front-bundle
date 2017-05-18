@@ -29,8 +29,8 @@ class GetSpecialPageExtensionTest extends AbstractBaseTestCase
         $this->siteManager = Phake::mock('OpenOrchestra\DisplayBundle\Manager\ContextInterface');
         $language = 'fakeLanguage';
         $siteId = 'fakeSiteId';
-        Phake::when($this->siteManager)->getCurrentSiteId()->thenReturn($siteId);
-        Phake::when($this->siteManager)->getCurrentSiteLanguage()->thenReturn($language);
+        Phake::when($this->siteManager)->getSiteId()->thenReturn($siteId);
+        Phake::when($this->siteManager)->getSiteLanguage()->thenReturn($language);
 
         $this->extension = new GetSpecialPageExtension($this->nodeRepository, $this->siteManager);
     }

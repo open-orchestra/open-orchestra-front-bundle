@@ -43,7 +43,7 @@ class NodeManagerTest extends AbstractBaseTestCase
      */
     public function testGetNodeRouteName($nodeId, $language, $mongoNodeId, $siteId, $aliasId)
     {
-        Phake::when($this->currentSiteManager)->getCurrentSiteId()->thenReturn($siteId);
+        Phake::when($this->currentSiteManager)->getSiteId()->thenReturn($siteId);
 
         $node = Phake::mock('OpenOrchestra\ModelInterface\Model\ReadNodeInterface');
         Phake::when($node)->getId()->thenReturn($mongoNodeId);

@@ -41,7 +41,7 @@ class NodeManager
      */
     public function getNodeRouteName($nodeId, $language)
     {
-        $siteId = $this->currentSiteManager->getCurrentSiteId();
+        $siteId = $this->currentSiteManager->getSiteId();
 
         $node = $this->nodeRepository->findOnePublished($nodeId, $language, $siteId);
         if (!$node instanceof ReadNodeInterface) {

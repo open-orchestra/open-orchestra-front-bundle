@@ -94,7 +94,7 @@ class OpenOrchestraDatabaseUrlGenerator extends UrlGenerator
             if (null !== $request->get('aliasId')) {
                 $aliasId = $request->get('aliasId');
             } else {
-                $site = $this->siteRepository->findOneBySiteId($this->currentSiteManager->getCurrentSiteId());
+                $site = $this->siteRepository->findOneBySiteId($this->currentSiteManager->getSiteId());
                 if (null === $site) {
                     throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', $name));
                 }

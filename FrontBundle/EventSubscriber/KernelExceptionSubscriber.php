@@ -112,7 +112,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
         }
 
         $this->currentSiteManager->setSiteId($currentSiteId);
-        $this->currentSiteManager->setCurrentLanguage($currentLanguage);
+        $this->currentSiteManager->setLanguage($currentLanguage);
 
         $this->request->attributes->set('siteId', $currentSiteId);
         $this->request->attributes->set('_locale', $currentLanguage);
@@ -144,15 +144,15 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      */
     protected function getCustom404Html()
     {
-        if (!$this->currentSiteManager->getCurrentSiteId() || !$this->currentSiteManager->getCurrentSiteLanguage()) {
+        if (!$this->currentSiteManager->getSiteId() || !$this->currentSiteManager->getSiteLanguage()) {
             return null;
         }
 
         $nodeId = ReadNodeInterface::ERROR_404_NODE_ID;
         $node = $this->nodeRepository->findOnePublished(
             $nodeId,
-            $this->currentSiteManager->getCurrentSiteLanguage(),
-            $this->currentSiteManager->getCurrentSiteId()
+            $this->currentSiteManager->getSiteLanguage(),
+            $this->currentSiteManager->getSiteId()
         );
 
         if ($node) {

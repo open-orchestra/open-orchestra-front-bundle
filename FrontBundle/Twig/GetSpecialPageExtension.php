@@ -68,8 +68,8 @@ class GetSpecialPageExtension extends \Twig_Extension
      */
     protected function loadSpecialPages()
     {
-        $language = $this->siteManager->getCurrentSiteLanguage();
-        $siteId = $this->siteManager->getCurrentSiteId();
+        $language = $this->siteManager->getSiteLanguage();
+        $siteId = $this->siteManager->getSiteId();
         $this->specialPages = $this->nodeRepository->findAllPublishedSpecialPage($language, $siteId);
     }
 

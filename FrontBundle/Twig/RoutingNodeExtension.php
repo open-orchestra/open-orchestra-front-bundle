@@ -78,8 +78,8 @@ class RoutingNodeExtension extends RoutingExtension
      */
     protected function getNode($nodeId)
     {
-        $language = $this->siteManager->getCurrentSiteLanguage();
-        $siteId = $this->siteManager->getCurrentSiteId();
+        $language = $this->siteManager->getSiteLanguage();
+        $siteId = $this->siteManager->getSiteId();
         $node = $this->nodeRepository->findOnePublished($nodeId, $language, $siteId);
 
         if (!$node instanceof ReadNodeInterface) {

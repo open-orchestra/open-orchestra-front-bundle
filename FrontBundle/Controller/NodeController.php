@@ -33,7 +33,7 @@ class NodeController extends Controller
      */
     public function showAction(Request $request, $nodeId)
     {
-        $siteId = $this->get('open_orchestra_display.manager.context')->getCurrentSiteId();
+        $siteId = $this->get('open_orchestra_display.manager.context')->getSiteId();
         $site = $this->get('open_orchestra_model.repository.site')->findOneBySiteId($siteId);
 
         /** @var ReadNodeInterface $node */
@@ -109,7 +109,7 @@ class NodeController extends Controller
 
         $siteManager = $this->get('open_orchestra_display.manager.context');
         $siteManager->setSiteId($node->getSiteId());
-        $siteManager->setCurrentLanguage($node->getLanguage());
+        $siteManager->setLanguage($node->getLanguage());
         $site = $this->get('open_orchestra_model.repository.site')->findOneBySiteId($node->getSiteId());
         $this->updatePreviewRequestParameters($request, $node);
 

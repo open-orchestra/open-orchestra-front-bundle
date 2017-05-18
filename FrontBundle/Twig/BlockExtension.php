@@ -52,8 +52,8 @@ class BlockExtension extends \Twig_Extension implements ContainerAwareInterface
         $block->setComponent($component);
         $block->setId(uniqid(BlockInterface::TEMP_ID_PREFIX));
         $block->setTransverse(false);
-        $block->setSiteId($siteManager->getCurrentSiteId());
-        $block->setLanguage($siteManager->getCurrentSiteLanguage());
+        $block->setSiteId($siteManager->getSiteId());
+        $block->setLanguage($siteManager->getSiteLanguage());
         $block->setAttributes($attributes);
 
         return $displayBlockManager->show($block)->getContent();
