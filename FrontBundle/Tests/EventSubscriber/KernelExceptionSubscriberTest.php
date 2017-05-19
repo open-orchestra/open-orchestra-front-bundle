@@ -64,7 +64,7 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
         $this->event = Phake::mock('Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent');
         Phake::when($this->event)->getException()->thenReturn($this->exception);
 
-        $this->currentSiteManager = Phake::mock('OpenOrchestra\DisplayBundle\Manager\SiteManager');
+        $this->currentSiteManager = Phake::mock('OpenOrchestra\DisplayBundle\Manager\ContextInterface');
         $this->templateManager = Phake::mock('OpenOrchestra\FrontBundle\Manager\TemplateManager');
 
         $this->subscriber = new KernelExceptionSubscriber(
@@ -107,14 +107,14 @@ class KernelExceptionSubscriberTest extends AbstractBaseTestCase
         Phake::when($this->exception)->getStatusCode()->thenReturn($status);
         Phake::when($this->nodeRepository)->findOnePublished(Phake::anyParameters())->thenReturn($node);
         if ($expectedResponseCount) {
-            Phake::when($this->currentSiteManager)->getCurrentSiteId()->thenReturn($this->currentSiteId);
-            Phake::when($this->currentSiteManager)->getCurrentSiteDefaultLanguage()->thenReturn($this->currentLanguage);
+            Phake::when($this->currentSiteManager)->getSiteId()->thenReturn($this->currentSiteId);
+            Phake::when($this->currentSiteManager)->getSiteLanguage()->thenReturn($this->currentLanguage);
         }
 
         $this->subscriber->onKernelException($this->event);
 
         Phake::verify($this->currentSiteManager, Phake::times($expectedSiteFinding))->setSiteId($this->currentSiteId);
-        Phake::verify($this->currentSiteManager, Phake::times($expectedSiteFinding))->setCurrentLanguage($this->currentLanguage);
+        Phake::verify($this->currentSiteManager, Phake::times($expectedSiteFinding))->setLanguage($this->currentLanguage);
         Phake::verify($this->attributes, Phake::times($expectedSiteFinding))->set('siteId', $this->currentSiteId);
         Phake::verify($this->attributes, Phake::times($expectedSiteFinding))->set('_locale', $this->currentLanguage);
         Phake::verify($this->attributes, Phake::times($expectedSiteFinding))->set('aliasId', $this->currentAliasId);

@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Routing\Database;
 
+use OpenOrchestra\DisplayBundle\Manager\ContextInterface;
 use OpenOrchestra\FrontBundle\Manager\NodeManager;
 use OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentCollectionToRouteCollectionTransformer;
 use OpenOrchestra\FrontBundle\Routing\Database\Transformer\RouteDocumentToValueObjectTransformer;
@@ -18,7 +19,6 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
-use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 
 /**
  * Class OpenOrchestraDatabaseRouter
@@ -44,7 +44,7 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
 
     /**
      * @param ReadSiteRepositoryInterface                         $siteRepository
-     * @param CurrentSiteIdInterface                              $currentSiteManager
+     * @param ContextInterface                                    $currentSiteManager
      * @param RouteDocumentRepositoryInterface                    $routeDocumentRepository
      * @param RouteDocumentToValueObjectTransformer               $routeDocumentToValueObjectTransformer
      * @param RouteDocumentCollectionToRouteCollectionTransformer $routeDocumentCollectionToRouteCollectionTransformer
@@ -54,7 +54,7 @@ class OpenOrchestraDatabaseRouter implements RouterInterface
      */
     public function __construct(
         ReadSiteRepositoryInterface $siteRepository,
-        CurrentSiteIdInterface $currentSiteManager,
+        ContextInterface $currentSiteManager,
         RouteDocumentRepositoryInterface $routeDocumentRepository,
         RouteDocumentToValueObjectTransformer $routeDocumentToValueObjectTransformer,
         RouteDocumentCollectionToRouteCollectionTransformer $routeDocumentCollectionToRouteCollectionTransformer,

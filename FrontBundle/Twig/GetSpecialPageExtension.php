@@ -2,7 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\Twig;
 
-use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
+use OpenOrchestra\DisplayBundle\Manager\ContextInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
 
@@ -17,11 +17,11 @@ class GetSpecialPageExtension extends \Twig_Extension
 
     /**
      * @param ReadNodeRepositoryInterface $nodeRepository
-     * @param CurrentSiteIdInterface      $siteManager
+     * @param ContextInterface            $siteManager
      */
     public function __construct(
         ReadNodeRepositoryInterface $nodeRepository,
-        CurrentSiteIdInterface $siteManager
+        ContextInterface $siteManager
     ) {
         $this->nodeRepository = $nodeRepository;
         $this->siteManager = $siteManager;
@@ -68,8 +68,8 @@ class GetSpecialPageExtension extends \Twig_Extension
      */
     protected function loadSpecialPages()
     {
-        $language = $this->siteManager->getCurrentSiteDefaultLanguage();
-        $siteId = $this->siteManager->getCurrentSiteId();
+        $language = $this->siteManager->getSiteLanguage();
+        $siteId = $this->siteManager->getSiteId();
         $this->specialPages = $this->nodeRepository->findAllPublishedSpecialPage($language, $siteId);
     }
 

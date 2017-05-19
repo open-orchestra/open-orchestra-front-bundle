@@ -26,11 +26,11 @@ class GetSpecialPageExtensionTest extends AbstractBaseTestCase
     {
         $this->twigEnvironment = Phake::mock(\Twig_Environment::class);
         $this->nodeRepository = Phake::mock('OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface');
-        $this->siteManager = Phake::mock('OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface');
+        $this->siteManager = Phake::mock('OpenOrchestra\DisplayBundle\Manager\ContextInterface');
         $language = 'fakeLanguage';
         $siteId = 'fakeSiteId';
-        Phake::when($this->siteManager)->getCurrentSiteId()->thenReturn($siteId);
-        Phake::when($this->siteManager)->getCurrentSiteDefaultLanguage()->thenReturn($language);
+        Phake::when($this->siteManager)->getSiteId()->thenReturn($siteId);
+        Phake::when($this->siteManager)->getSiteLanguage()->thenReturn($language);
 
         $this->extension = new GetSpecialPageExtension($this->nodeRepository, $this->siteManager);
     }

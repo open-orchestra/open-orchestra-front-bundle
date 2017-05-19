@@ -2,8 +2,8 @@
 
 namespace OpenOrchestra\FrontBundle\Twig;
 
-use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 use OpenOrchestra\DisplayBundle\Exception\NodeNotFoundException;
+use OpenOrchestra\DisplayBundle\Manager\ContextInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
 use Symfony\Bridge\Twig\Extension\RoutingExtension;
@@ -19,12 +19,12 @@ class RoutingNodeExtension extends RoutingExtension
 
     /**
      * @param UrlGeneratorInterface       $generator
-     * @param CurrentSiteIdInterface      $siteManager
+     * @param ContextInterface            $siteManager
      * @param ReadNodeRepositoryInterface $nodeRepository
      */
     public function __construct(
         UrlGeneratorInterface $generator,
-        CurrentSiteIdInterface $siteManager,
+        ContextInterface $siteManager,
         ReadNodeRepositoryInterface $nodeRepository
     ) {
         parent::__construct($generator);
@@ -78,8 +78,8 @@ class RoutingNodeExtension extends RoutingExtension
      */
     protected function getNode($nodeId)
     {
-        $language = $this->siteManager->getCurrentSiteDefaultLanguage();
-        $siteId = $this->siteManager->getCurrentSiteId();
+        $language = $this->siteManager->getSiteLanguage();
+        $siteId = $this->siteManager->getSiteId();
         $node = $this->nodeRepository->findOnePublished($nodeId, $language, $siteId);
 
         if (!$node instanceof ReadNodeInterface) {

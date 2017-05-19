@@ -2,6 +2,7 @@
 
 namespace OpenOrchestra\FrontBundle\EventSubscriber;
 
+use OpenOrchestra\DisplayBundle\Manager\ContextInterface;
 use OpenOrchestra\FrontBundle\Exception\DisplayBlockException;
 use OpenOrchestra\FrontBundle\Manager\TemplateManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -16,7 +17,6 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use OpenOrchestra\FrontBundle\Exception\NonExistingSiteException;
-use OpenOrchestra\DisplayBundle\Manager\SiteManager;
 
 /**
  * Class KernelExceptionSubscriber
@@ -35,7 +35,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      * @param ReadNodeRepositoryInterface $nodeRepository
      * @param EngineInterface             $templating
      * @param RequestStack                $requestStack
-     * @param SiteManager                 $currentSiteManager
+     * @param ContextInterface            $currentSiteManager
      * @param TemplateManager             $templateManager
      */
     public function __construct(
@@ -43,7 +43,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
         ReadNodeRepositoryInterface $nodeRepository,
         EngineInterface $templating,
         RequestStack $requestStack,
-        SiteManager $currentSiteManager,
+        ContextInterface $currentSiteManager,
         TemplateManager $templateManager
     ) {
         $this->siteRepository = $siteRepository;
@@ -112,7 +112,7 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
         }
 
         $this->currentSiteManager->setSiteId($currentSiteId);
-        $this->currentSiteManager->setCurrentLanguage($currentLanguage);
+        $this->currentSiteManager->setLanguage($currentLanguage);
 
         $this->request->attributes->set('siteId', $currentSiteId);
         $this->request->attributes->set('_locale', $currentLanguage);
@@ -144,15 +144,15 @@ class KernelExceptionSubscriber implements EventSubscriberInterface
      */
     protected function getCustom404Html()
     {
-        if (!$this->currentSiteManager->getCurrentSiteId() || !$this->currentSiteManager->getCurrentSiteDefaultLanguage()) {
+        if (!$this->currentSiteManager->getSiteId() || !$this->currentSiteManager->getSiteLanguage()) {
             return null;
         }
 
         $nodeId = ReadNodeInterface::ERROR_404_NODE_ID;
         $node = $this->nodeRepository->findOnePublished(
             $nodeId,
-            $this->currentSiteManager->getCurrentSiteDefaultLanguage(),
-            $this->currentSiteManager->getCurrentSiteId()
+            $this->currentSiteManager->getSiteLanguage(),
+            $this->currentSiteManager->getSiteId()
         );
 
         if ($node) {

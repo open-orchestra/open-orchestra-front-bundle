@@ -3,10 +3,10 @@
 namespace OpenOrchestra\FrontBundle\Manager;
 
 use OpenOrchestra\DisplayBundle\Exception\NodeNotFoundException;
+use OpenOrchestra\DisplayBundle\Manager\ContextInterface;
 use OpenOrchestra\ModelInterface\Model\ReadNodeInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadNodeRepositoryInterface;
 use OpenOrchestra\ModelInterface\Repository\ReadSiteRepositoryInterface;
-use OpenOrchestra\BaseBundle\Context\CurrentSiteIdInterface;
 
 /**
  * Class NodeManager
@@ -20,14 +20,13 @@ class NodeManager
     /**
      * @param ReadNodeRepositoryInterface $nodeRepository
      * @param ReadSiteRepositoryInterface $siteRepository
-     * @param CurrentSiteIdInterface      $currentSiteManager
+     * @param ContextInterface            $currentSiteManager
      */
     public function __construct(
         ReadNodeRepositoryInterface $nodeRepository,
         ReadSiteRepositoryInterface $siteRepository,
-        CurrentSiteIdInterface      $currentSiteManager
-    )
-    {
+        ContextInterface $currentSiteManager
+    ) {
         $this->nodeRepository = $nodeRepository;
         $this->siteRepository = $siteRepository;
         $this->currentSiteManager = $currentSiteManager;
@@ -42,7 +41,7 @@ class NodeManager
      */
     public function getNodeRouteName($nodeId, $language)
     {
-        $siteId = $this->currentSiteManager->getCurrentSiteId();
+        $siteId = $this->currentSiteManager->getSiteId();
 
         $node = $this->nodeRepository->findOnePublished($nodeId, $language, $siteId);
         if (!$node instanceof ReadNodeInterface) {

@@ -43,7 +43,7 @@ class BlockExtension extends \Twig_Extension implements ContainerAwareInterface
      */
     public function createBlock($component, array $attributes = array())
     {
-        $siteManager = $this->container->get('open_orchestra_display.manager.site');
+        $siteManager = $this->container->get('open_orchestra_display.manager.context');
         $displayBlockManager = $this->container->get('open_orchestra_display.display_block_manager');
         $blockClass = $this->container->getParameter('open_orchestra_model.document.block.class');
 
@@ -52,8 +52,8 @@ class BlockExtension extends \Twig_Extension implements ContainerAwareInterface
         $block->setComponent($component);
         $block->setId(uniqid(BlockInterface::TEMP_ID_PREFIX));
         $block->setTransverse(false);
-        $block->setSiteId($siteManager->getCurrentSiteId());
-        $block->setLanguage($siteManager->getCurrentSiteDefaultLanguage());
+        $block->setSiteId($siteManager->getSiteId());
+        $block->setLanguage($siteManager->getSiteLanguage());
         $block->setAttributes($attributes);
 
         return $displayBlockManager->show($block)->getContent();
