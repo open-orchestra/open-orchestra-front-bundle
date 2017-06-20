@@ -21,9 +21,9 @@ class HealthCheckController extends Controller
         $result = $healthCheck->run();
         if ($result->isSuccess()) {
             return new Response('HealthCheck-Success');
-        } else {
-            return new Response('HealthCheck-Failure');
         }
+
+        return new Response('HealthCheck-Failure');
     }
 
     /**
