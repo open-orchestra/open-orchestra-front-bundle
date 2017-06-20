@@ -6,6 +6,8 @@ parameters:
     open_orchestra_front.manager.template.class: OpenOrchestra\FrontBundle\Manager\TemplateManager
     open_orchestra_front.symfony.client.class: Symfony\Component\HttpKernel\Client
     open_orchestra_front.manager.node_response_manager.class: OpenOrchestra\FrontBundle\Manager\NodeResponseManager
+    open_orchestra_front.health_check.writable_dir.class: OpenOrchestra\FrontBundle\HealthCheck\WritableDirTest
+    open_orchestra_front.health_check.esi.class: OpenOrchestra\FrontBundle\HealthCheck\EsiTest
 
 services:
     open_orchestra_front.manager.sitemap:
@@ -43,3 +45,18 @@ services:
         class: '%open_orchestra_front.manager.node_response_manager.class%'
         arguments:
             - '@open_orchestra_display.display_block_manager'
+
+    open_orchestra_front.health_check.writable_dir:
+        class: '%open_orchestra_front.health_check.writable_dir.class%'
+        arguments:
+            - '%kernel.cache_dir%'
+            - '%kernel.logs_dir%'
+        tags:
+            - { name: open_orchestra_base.health_check.test }
+
+    open_orchestra_front.health_check.esi:
+        class: '%open_orchestra_front.health_check.esi.class%'
+        arguments:
+            - '@request_stack'
+        tags:
+            - { name: open_orchestra_base.health_check.test }

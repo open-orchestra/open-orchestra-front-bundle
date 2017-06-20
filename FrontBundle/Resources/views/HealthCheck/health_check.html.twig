@@ -1,0 +1,20 @@
+{% for testResult in result.results %}
+    <p>
+        {{ testResult.label }}:
+        {% set text = "OK" %}
+        {% set color = "green" %}
+        {% set level = "" %}
+
+        {% if testResult.error == true %}
+            {% set text = "KO" %}
+            {% if testResult.level == 2 %}
+                {% set level = "(Error)" %}
+                {% set color = "red" %}
+            {% elseif testResult.level == 1  %}
+                {% set level = "(Warning)" %}
+                {% set color = "orange" %}
+            {% endif %}
+        {% endif %}
+        <span style="color:{{ color }}">{{ text }} {{ level }}</span>
+    </p>
+{% endfor %}
